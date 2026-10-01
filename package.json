@@ -1,0 +1,64 @@
+{
+  "name": "@foliag/bloom",
+  "version": "0.1.0",
+  "description": "Styled Solid 2 components for generic products",
+  "keywords": [
+    "solid",
+    "components",
+    "ui",
+    "styled"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foli-ag/bloom.git"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "format": "biome format --write .",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@solidjs/web": "^2.0.0-rc.9",
+    "solid-js": "^2.0.0-rc.9"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@solidjs/testing-library": "1.0.0-beta.3",
+    "@solidjs/vite-plugin": "3.0.0-next.44",
+    "@solidjs/web": "2.0.0-rc.9",
+    "@storybook/addon-docs": "10.6.1",
+    "@storybook/addon-vitest": "10.6.1",
+    "@types/node": "25.9.5",
+    "@vitest/browser-playwright": "4.1.11",
+    "playwright": "1.63.0",
+    "solid-js": "2.0.0-rc.9",
+    "storybook": "10.6.1",
+    "storybook-solidjs-vite": "10.7.2",
+    "typescript": "6.0.3",
+    "vite": "8.2.1",
+    "vitest": "4.1.11"
+  },
+  "overrides": {
+    "vite-plugin-solid": "npm:@solidjs/vite-plugin@3.0.0-next.44",
+    "@solidjs/signals": "2.0.0-rc.9",
+    "@solidjs/compiler": "2.0.0-rc.9",
+    "@solidjs/babel-plugin": "2.0.0-rc.9"
+  }
+}
