@@ -1,8 +1,9 @@
-import { Dialog as Seed } from "@foliag/seeds/dialog"
+import { Drawer as Seed } from "@foliag/seeds/drawer"
 import { omit, type Element } from "solid-js"
 import { DialogLookContext, lookOf, type DialogPhone, type DialogSize } from "./dialog-look.js"
+import { closesOnInteractOutside, type SwipeProp } from "./use-dialog.js"
 
-export type DialogRootProps = Omit<Seed.RootProps, "lazyMount" | "unmountOnExit"> & {
+export type DialogRootProps = Omit<Seed.RootProps, "lazyMount" | "unmountOnExit" | SwipeProp> & {
   /**
    * How wide the card is from 640px: `sm` (28rem) for a question, `md` (32rem, the default) for a short form, `lg`
    * (48rem) for a table or a long text. On a phone it is the width of the screen whatever its size.
@@ -18,12 +19,13 @@ export type DialogRootProps = Omit<Seed.RootProps, "lazyMount" | "unmountOnExit"
 
 /**
  * A question or a short task that has to be dealt with before going back to the page. On a phone it rises from the
- * bottom as a sheet, with its buttons under the thumb; from 640px it is a card in the middle of the screen. Focus
- * moves into it and stays there, and the page behind neither scrolls nor reads out. Its parts mount when it opens and
- * leave once it has closed.
+ * bottom as a sheet, with its buttons under the thumb, and a swipe down on the grabber along its top closes it, as on
+ * a `Drawer`; from 640px it is a card in the middle of the screen. Focus moves into it and stays there, and the page
+ * behind neither scrolls nor reads out. Its parts mount when it opens and leave once it has closed.
  *
  * `role="alertdialog"` is for a question that interrupts, such as confirming a deletion. A tap on the dim then does
- * not close it, so a stray tap cannot answer it, and focus starts on its `Trigger.Close`. Escape still closes it.
+ * not close it, so a stray tap cannot answer it, and focus starts on its `Trigger.Close`. Escape still closes it, and
+ * so does a swipe, which is as deliberate.
  *
  * @example
  * <Dialog.Root role="alertdialog" size="sm">
@@ -46,7 +48,13 @@ export type DialogRootProps = Omit<Seed.RootProps, "lazyMount" | "unmountOnExit"
 export function DialogRoot(props: DialogRootProps): Element {
   return (
     <DialogLookContext value={lookOf(props)}>
-      <Seed.Root {...omit(props, "size", "phone")} lazyMount unmountOnExit />
+      <Seed.Root
+        {...omit(props, "size", "phone", "closeOnInteractOutside")}
+        swipeDirection="down"
+        closeOnInteractOutside={closesOnInteractOutside(props)}
+        lazyMount
+        unmountOnExit
+      />
     </DialogLookContext>
   )
 }

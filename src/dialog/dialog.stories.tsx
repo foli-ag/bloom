@@ -3,6 +3,7 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test"
 import type { Meta, StoryObj } from "storybook-solidjs-vite"
 import { Button } from "../button/index.js"
 import { settled } from "../foundations/settled.js"
+import { frame, swipe } from "../foundations/swipe.js"
 import { Input } from "../input/index.js"
 import { createListCollection, Select } from "../select/index.js"
 import { Dialog } from "./index.js"
@@ -102,6 +103,7 @@ export const TestAsAnAlertDialog: Story = {
     await settled()
     const { top, bottom } = dialog.getBoundingClientRect()
     expect((top + bottom) / 2).toBeCloseTo(innerHeight / 2, 0)
+    expect(grabber()).not.toBeVisible()
 
     await userEvent.click(document.documentElement)
     await waitFor(() => expect(dialog.parentElement!.getAnimations()).not.toEqual([]))
@@ -145,6 +147,51 @@ export const TestOnAPhone: Story = {
     const confirm = page.getByRole("button", { name: "Supprimer" }).getBoundingClientRect()
     expect(confirm.top).toBeGreaterThan(cancel.bottom)
     expect(confirm.width).toBeCloseTo(cancel.width, 0)
+  },
+}
+
+const grabber = () => document.querySelector<HTMLElement>('[data-scope="drawer"][data-part="grabber"]')
+
+/**
+ * On a phone the sheet has the drawer's grabber. Swiped down a little it settles back, swiped far enough it goes on
+ * down from where the thumb left it and closes, even as an alert dialog, as a swipe is as deliberate as Escape.
+ */
+export const TestSwipedAwayOnAPhone: Story = {
+  name: "Test: Swiped away on a phone",
+  args: { defaultOpen: true },
+  globals: { viewport: { value: "mobile2", isRotated: false } },
+  play: async ({ args }) => {
+    const page = within(document.body)
+    const dialog = await page.findByRole("alertdialog")
+    await settled()
+    const top = dialog.getBoundingClientRect().top
+    expect(grabber()).toBeVisible()
+
+    await swipe(grabber()!, 30)
+    await settled()
+    expect(dialog.getBoundingClientRect().top).toBeCloseTo(top, 0)
+
+    await swipe(grabber()!, 400)
+    const tops = [Math.round(dialog.getBoundingClientRect().top)]
+    for (let count = 0; count < 120 && dialog.isConnected; count++) {
+      await frame()
+      if (dialog.isConnected) tops.push(Math.round(dialog.getBoundingClientRect().top))
+    }
+    expect(tops[0]).toBeGreaterThan(top + 100)
+    expect(tops).toEqual([...tops].sort((a, b) => a - b))
+    await waitFor(() => expect(page.queryByRole("alertdialog")).toBeNull())
+    expect(args.onOpenChange).toHaveBeenLastCalledWith({ open: false })
+  },
+}
+
+/** A dialog that takes the whole screen of a phone has nothing above it to be swiped toward, so it has no grabber */
+export const TestFullScreenHasNoGrabber: Story = {
+  name: "Test: Full screen has no grabber",
+  render: (args) => <EditParcel phone="full-screen" fields={1} defaultOpen onOpenChange={args.onOpenChange} />,
+  globals: { viewport: { value: "mobile2", isRotated: false } },
+  play: async () => {
+    await within(document.body).findByRole("dialog")
+    expect(grabber()).toBeNull()
   },
 }
 
@@ -199,10 +246,6 @@ export const TestClosedWhileOpening: Story = {
       root.style.removeProperty("--duration-smooth")
     }
   },
-}
-
-function frame() {
-  return new Promise((resolve) => requestAnimationFrame(resolve))
 }
 
 export const TestOpenInDarkTheme: Story = {

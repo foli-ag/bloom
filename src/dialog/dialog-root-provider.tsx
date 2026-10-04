@@ -1,4 +1,4 @@
-import { Dialog as Seed } from "@foliag/seeds/dialog"
+import { Drawer as Seed } from "@foliag/seeds/drawer"
 import { omit, type Element } from "solid-js"
 import { DialogLookContext, lookOf, type DialogPhone, type DialogSize } from "./dialog-look.js"
 

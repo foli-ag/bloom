@@ -1,2 +1,3 @@
 export * as Dialog from "./dialog.js"
-export { useDialog, useDialogContext, type UseDialogProps, type UseDialogReturn } from "@foliag/seeds/dialog"
+export { useDrawerContext as useDialogContext } from "@foliag/seeds/drawer"
+export { useDialog, type UseDialogProps, type UseDialogReturn } from "./use-dialog.js"

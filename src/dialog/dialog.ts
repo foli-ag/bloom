@@ -1,4 +1,4 @@
-import { Dialog as Seed } from "@foliag/seeds/dialog"
+import { Drawer as Seed } from "@foliag/seeds/drawer"
 import type { ValidComponent } from "@foliag/seeds/polymorphic"
 
 export { DialogActions as Actions, type DialogActionsProps as ActionsProps } from "./dialog-actions.jsx"
@@ -22,6 +22,6 @@ export type TriggerValueChangeDetails = Seed.TriggerValueChangeDetails
 export type TriggerProps<As extends ValidComponent = "button"> = Seed.TriggerProps<As>
 export type TriggerCloseProps<As extends ValidComponent = "button"> = Seed.TriggerCloseProps<As>
 
-// Seeds' own, with no look: render them as a `Button`
+// Seeds' own, with no look: render them as a `Button`. A dialog runs zag's drawer, so they are the drawer's.
 export const Trigger: typeof Seed.Trigger = Seed.Trigger
 export const Context: typeof Seed.Context = Seed.Context

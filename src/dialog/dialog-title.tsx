@@ -1,4 +1,4 @@
-import { Dialog as Seed } from "@foliag/seeds/dialog"
+import { Drawer as Seed } from "@foliag/seeds/drawer"
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
 import { tv } from "../internal/variants.js"

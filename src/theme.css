@@ -534,25 +534,54 @@
   animation: bloom-presence-drift var(--presence-duration, var(--duration-smooth)) var(--ease-smooth) both;
 }
 
-/* A sheet comes from the bottom edge, or from the one `--sheet-from` names, written with `--sheet-distance` so reduced
+/*
+ * A sheet comes from the bottom edge, or from the one `--sheet-from` names, written with `--sheet-distance` so reduced
  * motion still zeroes it. It slides in solid (`--sheet-from-opacity`), as a sheet that faded too would cross the screen
- * as a pale ghost of itself, and it fades only under reduced motion, where it does not move. */
+ * as a pale ghost of itself, and it fades only under reduced motion, where it does not move.
+ *
+ * A sheet run by zag's drawer also follows the thumb. Zag moves it with an inline `transform` while it is swiped, so
+ * that transform takes no time then (`data-dragging`) and stays under the thumb; let go short, it eases back. Opening
+ * and closing are transitions of `translate` and `opacity`, which add to that transform, so a change of mind half way
+ * turns it round from where it is.
+ *
+ * Zag keeps its drag state, with an inline `transition-duration` of 0s, past the thumb: through the exit of a sheet
+ * swiped away, and for the first frame of one opened again during it. Durations are given for each property and as
+ * `!important`, so only the transform ever takes 0s and the way out or back in is never cut. A swipe's exit is as much
+ * quicker as the swipe was fast (`--drawer-swipe-strength`, 0.1 to 1), and the way out from the bottom edge takes off
+ * the distance already swiped (`--drawer-translate-y`), so the sheet keeps an even pace and stops at the edge. A sheet
+ * on another edge names its own `--sheet-from`, written the same way.
+ */
 @utility presence-sheet {
-  transition-property: opacity, translate;
-  transition-duration: var(--presence-duration, var(--duration-sheet));
+  --sheet-exit-after-swipe: calc(var(--duration-exit) * var(--drawer-swipe-strength, 1));
+  transition-property: opacity, translate, transform;
+  transition-duration: var(--duration-sheet) !important;
   transition-timing-function: var(--ease-smooth);
 
   @starting-style {
     opacity: var(--sheet-from-opacity);
-    translate: var(--sheet-from, 0 var(--sheet-distance));
+    translate: var(
+      --sheet-from,
+      0 calc(var(--sheet-distance) - min(var(--drawer-translate-y, 0px), var(--sheet-distance)))
+    );
+  }
+
+  &[data-dragging] {
+    transition-duration: var(--duration-sheet), var(--duration-sheet), 0s !important;
   }
 
   &[data-state="closed"] {
-    --presence-duration: var(--duration-exit);
     pointer-events: none;
     opacity: var(--sheet-from-opacity);
-    translate: var(--sheet-from, 0 var(--sheet-distance));
+    translate: var(
+      --sheet-from,
+      0 calc(var(--sheet-distance) - min(var(--drawer-translate-y, 0px), var(--sheet-distance)))
+    );
+    transition-duration: var(--duration-exit) !important;
     animation: var(--animate-hold);
+  }
+
+  &[data-state="closed"][data-dragging] {
+    transition-duration: var(--sheet-exit-after-swipe), var(--sheet-exit-after-swipe), 0s !important;
   }
 }
 

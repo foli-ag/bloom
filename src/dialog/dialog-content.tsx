@@ -1,9 +1,13 @@
-import { Dialog as Seed } from "@foliag/seeds/dialog"
-import { omit, untrack, type Element } from "solid-js"
+import { Drawer as Seed } from "@foliag/seeds/drawer"
+import type { JSX } from "@solidjs/web"
+import { omit, Show, untrack, type Element } from "solid-js"
 import { tv } from "../internal/variants.js"
+import { DrawerGrabber } from "../drawer/drawer-grabber.jsx"
+import { DrawerGrabberIndicator } from "../drawer/drawer-grabber-indicator.jsx"
 import { useDialogLook } from "./dialog-look.js"
 
-export type DialogContentProps = Omit<Seed.ContentProps, "class"> & {
+export type DialogContentProps = Omit<Seed.ContentProps, "class" | "draggable" | "children"> & {
+  children?: JSX.Element
   class?: string | undefined
 }
 
@@ -13,16 +17,22 @@ export type DialogContentProps = Omit<Seed.ContentProps, "class"> & {
  * home indicator. A press on the dim that leaves it open, as on an alert dialog, is answered: it swells a little and
  * settles back, so the press reads as seen and the eye goes back to the question.
  *
+ * The sheet has the drawer's grabber along its top: swiped down past half its height it closes, let go before that it
+ * settles back. Only the grabber drags it, so a thumb that scrolls the form or selects a word in a field never moves the
+ * sheet. From 640px the card has no grabber.
+ *
  * The root's `size` sets the card's width from 640px. With `phone="full-screen"` it takes the whole screen of a phone
  * instead of rising as a sheet: it slides up from the bottom edge all the same, solid, and back down as it closes,
- * turning round if the farmer changes their mind half way, and only fades under reduced motion. Its edges clear the
- * notch, the rounded corners and the home indicator (`env(safe-area-inset-*)`, which needs `viewport-fit=cover`).
+ * turning round if the farmer changes their mind half way, and only fades under reduced motion. It has no grabber, as
+ * nothing shows above it to swipe it toward. Its edges clear the notch, the rounded corners and the home indicator
+ * (`env(safe-area-inset-*)`, which needs `viewport-fit=cover`).
  */
 export function DialogContent(props: DialogContentProps): Element {
   const look = useDialogLook()
   return (
     <Seed.Content
-      {...omit(props, "class", "ref")}
+      {...omit(props, "class", "ref", "children")}
+      draggable={false}
       ref={(element: HTMLElement) => {
         answerPressesOutside(element)
         forwardRef(
@@ -31,7 +41,14 @@ export function DialogContent(props: DialogContentProps): Element {
         )
       }}
       class={content({ size: look.size(), phone: look.phone(), class: props.class })}
-    />
+    >
+      <Show when={look.phone() === "sheet"}>
+        <DrawerGrabber class="sm:hidden">
+          <DrawerGrabberIndicator />
+        </DrawerGrabber>
+      </Show>
+      {props.children}
+    </Seed.Content>
   )
 }
 
@@ -46,7 +63,7 @@ function answerPressesOutside(content: HTMLElement) {
   content.addEventListener("pointerdown.outside", (event) => {
     queueMicrotask(() => {
       if (!event.defaultPrevented || content.getAttribute("data-state") !== "open") return
-      const positioner = content.closest<HTMLElement>('[data-scope="dialog"][data-part="positioner"]')
+      const positioner = content.closest<HTMLElement>('[data-scope="drawer"][data-part="positioner"]')
       if (!positioner || positioner.hasAttribute("data-swell")) return
       const settle = (end: Event) => {
         if (end.target !== positioner) return
@@ -67,15 +84,16 @@ function forwardRef(ref: unknown, element: HTMLElement) {
   else if (typeof ref === "function") ref(element)
 }
 
-// The sheet slides in and out solid, as it comes from off the screen, and only fades under reduced motion. The card
-// comes up from below, as the sheet does on a phone. A full screen is a sheet as tall as the screen, so it moves as one.
-// Its sides are `--dialog-left` and `--dialog-right`, which `Actions` reads to reach the edges.
+// The sheet slides in and out solid, as it comes from off the screen, follows the thumb on its grabber, and does not
+// scroll while the grabber is held (`data-grabbed`). It only fades under reduced motion. The card comes up from below,
+// as the sheet does on a phone. A full screen is a sheet as tall as the screen, so it moves as one. Its sides are
+// `--dialog-left` and `--dialog-right`, which `Actions` reads to reach the edges.
 const content = tv({
   base: [
     "relative flex w-full flex-col gap-4 overflow-y-auto overscroll-contain bg-raised p-5 text-ink",
     "[--dialog-left:1.25rem] [--dialog-right:1.25rem] pr-(--dialog-right) pl-(--dialog-left)",
     "shadow-overlay outline-none",
-    "max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:presence-sheet",
+    "max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:presence-sheet data-grabbed:overflow-hidden",
     "sm:max-h-[90dvh] sm:rounded-card sm:border-2 sm:border-strong sm:p-6",
     "sm:presence-overlay sm:[--presence-from:0_calc(var(--enter-distance)*0.5)]",
   ],
