@@ -80,6 +80,10 @@
       "types": "./dist/number-input/index.d.ts",
       "default": "./dist/number-input/index.js"
     },
+    "./pagination": {
+      "types": "./dist/pagination/index.d.ts",
+      "default": "./dist/pagination/index.js"
+    },
     "./password-input": {
       "types": "./dist/password-input/index.d.ts",
       "default": "./dist/password-input/index.js"

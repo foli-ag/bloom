@@ -38,6 +38,7 @@ does not tree-shake, so a root entry would load every component.
 | `Drawer` | `@foliag/bloom/drawer` | A sheet on an edge that follows the finger and closes when swiped away |
 | `Tooltip` | `@foliag/bloom/tooltip` | A label for the mouse and the keyboard. It never opens from a tap |
 | `HoverCard` | `@foliag/bloom/hover-card` | A card next to a link, for the mouse and the keyboard. It never opens from a tap |
+| `Pagination` | `@foliag/bloom/pagination` | Pages of a list as 48px squares, the current one filled |
 
 ## Use
 
