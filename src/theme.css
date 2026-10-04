@@ -646,7 +646,7 @@
 }
 
 /*
- * A placeholder for what is loading: the lines and shapes of a skeleton, and the rows of a list while its options load.
+ * A placeholder for what is loading: a skeleton, and the rows of a list while its options load.
  * It is a tint a step off the ground it sits on, with its sheen drawn by `::after` and clipped to its shape. The part
  * that uses it hides it from assistive technology.
  */

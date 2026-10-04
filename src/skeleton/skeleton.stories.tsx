@@ -1,5 +1,4 @@
-import { createSignal, Show } from "solid-js"
-import { expect, waitFor, within } from "storybook/test"
+import { expect, within } from "storybook/test"
 import type { Meta, StoryObj } from "storybook-solidjs-vite"
 import { Card } from "../card/index.js"
 import { Skeleton } from "./index.js"
@@ -8,96 +7,62 @@ const meta = {
   title: "Components/Skeleton",
   component: Skeleton,
   tags: ["autodocs"],
-  args: { shape: "text", lines: 3 },
+  args: { class: "h-4 w-48" },
   decorators: [(Story) => <div class="w-80">{Story()}</div>],
 } satisfies Meta<typeof Skeleton>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Lines of text loading, the last one shorter. Its props are in the Controls panel. */
-export const Playground: Story = {
-  argTypes: {
-    shape: { control: "inline-radio", options: ["text", "circle", "rect"] },
-    lines: { control: { type: "number", min: 1, max: 8 } },
-  },
-}
+/** One bar, sized by its classes. Its props are in the Controls panel. */
+export const Playground: Story = {}
 
-/** The three shapes: a line as tall as its text, a circle for an avatar, a rectangle for a photo */
+/** Shapes are classes: a circle for an avatar, a rectangle for a photo, one bar per line of text, the last one shorter */
 export const Shapes: Story = {
   render: () => (
     <div class="grid gap-4">
       <div class="flex items-center gap-3">
-        <Skeleton shape="circle" />
-        <Skeleton class="w-1/2 text-lg" />
+        <Skeleton class="size-12 rounded-full" />
+        <Skeleton class="h-5 w-1/2" />
       </div>
-      <Skeleton shape="rect" class="aspect-[2/1] h-auto" />
-      <Skeleton lines={3} />
+      <Skeleton class="aspect-[2/1] w-full" />
+      <div class="grid gap-2">
+        <Skeleton class="h-4 w-full" />
+        <Skeleton class="h-4 w-full" />
+        <Skeleton class="h-4 w-3/5" />
+      </div>
     </div>
   ),
 }
 
-/**
- * A card while it loads: the same parts with skeletons in place of words, so nothing moves when they arrive. The card
- * says it is busy, and a status says so in words.
- */
+/** A card while it loads: the same parts with skeletons in place of words. The card says it is busy, and a status says so in words. */
 export const ACardLoading: Story = {
-  render: () => <FieldCard loading />,
-}
-
-function FieldCard(props: { loading: boolean }) {
-  return (
-    <Card.Root aria-busy={props.loading ? "true" : undefined}>
+  render: () => (
+    <Card.Root aria-busy="true">
       <span role="status" class="sr-only">
-        {props.loading ? "Chargement de la parcelle…" : ""}
+        Chargement de la parcelle…
       </span>
-      <Show
-        when={!props.loading}
-        fallback={
-          <>
-            <Card.Header>
-              <Skeleton class="w-3/5 text-lg" />
-              <Skeleton class="w-2/5" />
-            </Card.Header>
-            <Skeleton lines={2} />
-          </>
-        }
-      >
-        <Card.Header>
-          <Card.Title>Les Grands Champs</Card.Title>
-          <Card.Description>Blé tendre, 12,4 ha</Card.Description>
-        </Card.Header>
-        <Card.Body>Semé le 12 octobre, levée régulière sur toute la parcelle.</Card.Body>
-      </Show>
+      <Card.Header>
+        <Skeleton class="h-6 w-3/5" />
+        <Skeleton class="h-4 w-2/5" />
+      </Card.Header>
+      <div class="grid gap-2">
+        <Skeleton class="h-4 w-full" />
+        <Skeleton class="h-4 w-3/5" />
+      </div>
     </Card.Root>
-  )
+  ),
 }
 
-/** The words take the skeleton's place without the card changing height: each line is as tall as the text it stands for */
-export const TestNothingMovesWhenTheWordsArrive: Story = {
-  name: "Test: Nothing moves when the words arrive",
-  render: () => {
-    const [loading, setLoading] = createSignal(true)
-    return (
-      <div class="grid gap-3">
-        <FieldCard loading={loading()} />
-        <button type="button" onClick={() => setLoading(false)}>
-          Charger
-        </button>
-      </div>
-    )
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const card = canvasElement.querySelector<HTMLElement>("[data-scope=card]")!
-    expect(card).toHaveAttribute("aria-busy", "true")
-    expect(canvas.getByRole("status")).toHaveTextContent("Chargement de la parcelle…")
-    for (const skeleton of canvasElement.querySelectorAll("[data-scope=skeleton]"))
-      expect(skeleton).toHaveAttribute("aria-hidden", "true")
-    const before = card.getBoundingClientRect().height
-    canvas.getByRole("button", { name: "Charger" }).click()
-    await waitFor(() => expect(card).not.toHaveAttribute("aria-busy"))
-    expect(card.getBoundingClientRect().height).toBeCloseTo(before, 0)
+/** Screen readers skip the skeletons and hear the status instead */
+export const TestHiddenFromAssistiveTechnology: Story = {
+  ...ACardLoading,
+  name: "Test: Hidden from assistive technology",
+  play: ({ canvasElement }) => {
+    expect(within(canvasElement).getByRole("status")).toHaveTextContent("Chargement de la parcelle…")
+    const skeletons = canvasElement.querySelectorAll("[data-scope=skeleton]")
+    expect(skeletons.length).toBeGreaterThan(0)
+    for (const skeleton of skeletons) expect(skeleton).toHaveAttribute("aria-hidden", "true")
   },
 }
 
