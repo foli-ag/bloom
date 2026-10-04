@@ -1,7 +1,20 @@
 import { Dialog as Seed } from "@foliag/seeds/dialog"
-import type { Element } from "solid-js"
+import { omit, type Element } from "solid-js"
+import { DialogLookContext, lookOf, type DialogPhone, type DialogSize } from "./dialog-look.js"
 
-export type DialogRootProps = Omit<Seed.RootProps, "lazyMount" | "unmountOnExit">
+export type DialogRootProps = Omit<Seed.RootProps, "lazyMount" | "unmountOnExit"> & {
+  /**
+   * How wide the card is from 640px: `sm` (28rem) for a question, `md` (32rem, the default) for a short form, `lg`
+   * (48rem) for a table or a long text. On a phone it is the width of the screen whatever its size.
+   */
+  size?: DialogSize | undefined
+  /**
+   * What it is on a phone: a sheet from the bottom edge (`sheet`, the default), or the whole screen (`full-screen`), for
+   * a long form that would be cramped in a sheet. A full-screen dialog slides up from the bottom edge as the sheet does,
+   * clears the notch and the home indicator, and keeps its `Actions` at the foot of the screen. From 640px it is a card.
+   */
+  phone?: DialogPhone | undefined
+}
 
 /**
  * A question or a short task that has to be dealt with before going back to the page. On a phone it rises from the
@@ -13,7 +26,7 @@ export type DialogRootProps = Omit<Seed.RootProps, "lazyMount" | "unmountOnExit"
  * not close it, so a stray tap cannot answer it, and focus starts on its `Trigger.Close`. Escape still closes it.
  *
  * @example
- * <Dialog.Root role="alertdialog">
+ * <Dialog.Root role="alertdialog" size="sm">
  *   <Dialog.Trigger as={Button} tone="danger" variant="outline">Supprimer la parcelle</Dialog.Trigger>
  *   <Dialog.Backdrop />
  *   <Dialog.Positioner>
@@ -27,7 +40,13 @@ export type DialogRootProps = Omit<Seed.RootProps, "lazyMount" | "unmountOnExit"
  *     </Dialog.Content>
  *   </Dialog.Positioner>
  * </Dialog.Root>
+ *
+ * <Dialog.Root size="lg" phone="full-screen">…</Dialog.Root>
  */
 export function DialogRoot(props: DialogRootProps): Element {
-  return <Seed.Root {...props} lazyMount unmountOnExit />
+  return (
+    <DialogLookContext value={lookOf(props)}>
+      <Seed.Root {...omit(props, "size", "phone")} lazyMount unmountOnExit />
+    </DialogLookContext>
+  )
 }

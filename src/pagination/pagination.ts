@@ -5,7 +5,13 @@ export {
   type PaginationEllipsisProps as EllipsisProps,
 } from "./pagination-ellipsis.jsx"
 export { PaginationItem as Item, type PaginationItemProps as ItemProps } from "./pagination-item.jsx"
+export {
+  PaginationProgressText as ProgressText,
+  type PaginationProgressTextProps as ProgressTextProps,
+  type PaginationProgressTextDetails as ProgressTextDetails,
+} from "./pagination-progress-text.jsx"
 export { PaginationRoot as Root, type PaginationRootProps as RootProps } from "./pagination-root.jsx"
+export type { PaginationCompact as Compact } from "./pagination-look.js"
 export {
   PaginationRootProvider as RootProvider,
   type PaginationRootProviderProps as RootProviderProps,

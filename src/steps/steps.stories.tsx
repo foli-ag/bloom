@@ -81,7 +81,9 @@ export const TestMovingThroughTheSteps: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "Suivant" }))
     expect(canvas.getByRole("tab", { name: "Produit" })).toHaveAttribute("aria-selected", "true")
     expect(parcel).toHaveAttribute("data-complete")
-    expect(parcel.querySelector("[data-part=indicator]")).not.toHaveTextContent("1")
+    const mark = parcel.querySelector<HTMLElement>("[data-part=indicator]")!
+    await waitFor(() => expect(within(mark).getByText("1")).not.toBeVisible())
+    expect(mark.querySelector("svg")).toBeVisible()
     expect(args.onStepChange).toHaveBeenLastCalledWith({ step: 1 })
 
     await userEvent.click(parcel)
@@ -92,6 +94,19 @@ export const TestMovingThroughTheSteps: Story = {
     await settled()
     expect(canvas.getByText("Intervention enregistrée.")).toBeVisible()
     expect(next).toBeDisabled()
+  },
+}
+
+/** Tab reaches the first step, and its ring shows whole from the first frame */
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
+  play: async ({ canvasElement }) => {
+    const step = within(canvasElement).getByRole("tab", { name: "Parcelle" })
+    await userEvent.tab()
+    expect(step).toHaveFocus()
+    expect(getComputedStyle(step).outlineStyle).not.toBe("none")
+    const easing = step.getAnimations() as CSSTransition[]
+    expect(easing.map((transition) => transition.transitionProperty)).not.toContain("outline-color")
   },
 }
 

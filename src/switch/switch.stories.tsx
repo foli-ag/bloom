@@ -1,6 +1,7 @@
 import { createSignal, For } from "solid-js"
 import { expect, fn, userEvent, within } from "storybook/test"
 import type { Meta, StoryObj } from "storybook-solidjs-vite"
+import { settled } from "../foundations/settled.js"
 import { Switch } from "./index.js"
 
 const meta = {
@@ -67,6 +68,21 @@ export const TestKnobSlidesWhenChecked: Story = {
     const thumb = canvasElement.querySelector("[data-part=thumb]")
     expect(thumb).toHaveAttribute("data-state", "checked")
     expect(getComputedStyle(thumb!).translate).not.toBe("none")
+  },
+}
+
+/** Under reduced motion the knob changes sides at once, and only the colors fade */
+export const TestWithReducedMotion: Story = {
+  name: "Test: With reduced motion",
+  globals: { motion: "reduced" },
+  play: async ({ canvasElement }) => {
+    const thumb = canvasElement.querySelector<HTMLElement>("[data-part=thumb]")!
+    const start = getComputedStyle(thumb).translate
+    await userEvent.click(within(canvasElement).getByText("Arrosage automatique"))
+    const moved = getComputedStyle(thumb).translate
+    expect(moved).not.toBe(start)
+    await settled()
+    expect(getComputedStyle(thumb).translate).toBe(moved)
   },
 }
 

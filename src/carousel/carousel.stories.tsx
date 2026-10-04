@@ -72,6 +72,7 @@ export const Playground: Story = {
     snapType: { control: "inline-radio", options: ["mandatory", "proximity"] },
     spacing: { control: "text" },
     padding: { control: "text" },
+    peek: { control: "boolean" },
   },
 }
 
@@ -125,6 +126,24 @@ export const TestDotsAreFingerWide: Story = {
   },
 }
 
+/** With reduced motion, the next visit is in place at once instead of gliding across the screen */
+export const TestWithReducedMotion: Story = {
+  name: "Test: With reduced motion",
+  globals: { motion: "reduced" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const group = canvasElement.querySelector<HTMLElement>("[data-scope=carousel][data-part=item-group]")!
+    // Out of view, it is hidden from a screen reader
+    const second = canvasElement.querySelectorAll<HTMLElement>("[data-scope=carousel][data-part=item]")[1]!
+    await canvas.findByRole("group", { name: "1 sur 4" })
+    await userEvent.click(canvas.getByRole("button", { name: "Suivante" }))
+    // A glide takes about 300ms; two frames later it would have barely started
+    await new Promise(requestAnimationFrame)
+    await new Promise(requestAnimationFrame)
+    expect(second.getBoundingClientRect().left).toBeCloseTo(group.getBoundingClientRect().left, 0)
+  },
+}
+
 export const TestInDarkTheme: Story = {
   name: "Test: In dark theme",
   args: { defaultPage: 1 },
@@ -136,5 +155,112 @@ export const TestWithMoreContrast: Story = {
   name: "Test: With more contrast",
   args: { defaultPage: 1 },
   globals: { contrast: "more" },
+  play: settled,
+}
+
+/** The next visit shows at the edge of the row, so it is plain the row can be swiped */
+export const Peek: Story = {
+  args: { peek: true },
+}
+
+/** On a phone, where swiping is how a farmer moves through the visits */
+export const PeekOnAPhone: Story = {
+  args: { peek: true },
+  globals: { viewport: { value: "mobile2", isRotated: false } },
+}
+
+function slides(canvasElement: HTMLElement) {
+  const group = canvasElement.querySelector<HTMLElement>("[data-scope=carousel][data-part=item-group]")!
+  const items = [...canvasElement.querySelectorAll<HTMLElement>("[data-scope=carousel][data-part=item]")]
+  const row = group.getBoundingClientRect()
+  /** How much of a slide shows inside the row */
+  const showing = (index: number) => {
+    const slide = items[index]!.getBoundingClientRect()
+    return Math.max(0, Math.min(slide.right, row.right) - Math.max(slide.left, row.left))
+  }
+  return { group, items, row, showing }
+}
+
+/**
+ * The first visit starts at the row's start and the next one shows at its end. Once moved on, the visit before shows at
+ * the start too. The dots, the counter and the slide a screen reader is given still follow the page.
+ */
+export const TestPeek: Story = {
+  name: "Test: Peek",
+  args: { peek: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await canvas.findByRole("group", { name: "1 sur 4" })
+    await settled()
+    let { row, items, showing } = slides(canvasElement)
+    expect(items[0]!.getBoundingClientRect().left).toBeCloseTo(row.left, 0)
+    expect(showing(1)).toBeGreaterThan(24)
+    expect(items[1]).toHaveAttribute("aria-hidden", "true")
+
+    await userEvent.click(canvas.getByRole("button", { name: "Suivante" }))
+    await waitFor(() => expect(canvas.getByText("2 sur 4")).toBeVisible())
+    await settled()
+    ;({ row, items, showing } = slides(canvasElement))
+    expect(showing(0)).toBeGreaterThan(8)
+    expect(showing(2)).toBeGreaterThan(8)
+    expect(showing(1)).toBeCloseTo(items[1]!.getBoundingClientRect().width, 0)
+    expect(canvas.getByRole("button", { name: "Visite 2" })).toHaveAttribute("aria-current", "true")
+
+    await userEvent.click(canvas.getByRole("button", { name: "Visite 4" }))
+    await waitFor(() => expect(canvas.getByText("4 sur 4")).toBeVisible())
+    await settled()
+    ;({ row, items } = slides(canvasElement))
+    expect(items[3]!.getBoundingClientRect().right).toBeCloseTo(row.right, 0)
+  },
+}
+
+/**
+ * A swipe that stops between two visits snaps to the nearer one, and the dots and the counter follow it. The browser's
+ * snap and zag's count of the pages agree, the last page included.
+ */
+export const TestPeekSnapsAfterASwipe: Story = {
+  name: "Test: Peek snaps after a swipe",
+  args: { peek: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await canvas.findByRole("group", { name: "1 sur 4" })
+    await settled()
+    const { group, items } = slides(canvasElement)
+    const step = items[1]!.offsetLeft - items[0]!.offsetLeft
+    group.dispatchEvent(new TouchEvent("touchstart", { bubbles: true }))
+    await new Promise(requestAnimationFrame)
+    group.scrollTo({ left: step * 2.3, behavior: "instant" })
+    await waitFor(() => expect(canvas.getByText("3 sur 4")).toBeVisible())
+    expect(canvas.getByRole("button", { name: "Visite 3" })).toHaveAttribute("aria-current", "true")
+    group.dispatchEvent(new TouchEvent("touchstart", { bubbles: true }))
+    await new Promise(requestAnimationFrame)
+    group.scrollTo({ left: group.scrollWidth, behavior: "instant" })
+    await waitFor(() => expect(canvas.getByText("4 sur 4")).toBeVisible())
+    await waitFor(() => expect(canvas.getByRole("button", { name: "Suivante" })).toBeDisabled())
+  },
+}
+
+/** With reduced motion a peeking row still changes page at once */
+export const TestPeekWithReducedMotion: Story = {
+  name: "Test: Peek with reduced motion",
+  args: { peek: true },
+  globals: { motion: "reduced" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await canvas.findByRole("group", { name: "1 sur 4" })
+    await settled()
+    const { group, items } = slides(canvasElement)
+    const stop = items[1]!.offsetLeft - Number.parseFloat(getComputedStyle(group).scrollPaddingLeft)
+    await userEvent.click(canvas.getByRole("button", { name: "Suivante" }))
+    await new Promise(requestAnimationFrame)
+    await new Promise(requestAnimationFrame)
+    expect(group.scrollLeft).toBeCloseTo(stop, 0)
+  },
+}
+
+export const TestPeekInDarkTheme: Story = {
+  name: "Test: Peek in dark theme",
+  args: { peek: true, defaultPage: 1 },
+  globals: { theme: "dark" },
   play: settled,
 }

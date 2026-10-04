@@ -7,7 +7,7 @@ const link = "https://foli.ag/invitation/7KQ2-MOISSON"
 
 function InviteLink(props: Partial<Clipboard.RootProps>) {
   return (
-    <Clipboard.Root defaultValue={link} class="w-96 max-w-full" {...props}>
+    <Clipboard.Root defaultValue={link} class="w-[min(24rem,90vw)]" {...props}>
       <Clipboard.Label>Lien d'invitation pour un saisonnier</Clipboard.Label>
       <Clipboard.Control>
         <Clipboard.Input />
@@ -65,7 +65,7 @@ export const AsText: Story = {
 
 /**
  * The link reads in a field that cannot be typed in. The button copies it and says so in its own words for a moment,
- * named by them and not by zag's English "Copy to clipboard", then goes back.
+ * named by them and not by zag's English "Copy to clipboard", then goes back. The field keeps its width throughout.
  */
 export const TestCopyingTheLink: Story = {
   name: "Test: Copying the link",
@@ -76,11 +76,13 @@ export const TestCopyingTheLink: Story = {
     const field = canvas.getByRole("textbox", { name: "Lien d'invitation pour un saisonnier" })
     expect(field).toHaveValue(link)
     expect(field).toHaveAttribute("readonly")
+    const width = field.getBoundingClientRect().width
 
     await userEvent.click(canvas.getByRole("button", { name: "Copier" }))
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(link)
     expect(args.onStatusChange).toHaveBeenCalledWith({ copied: true })
     expect(await canvas.findByRole("button", { name: "Copié" })).toBeVisible()
+    expect(field.getBoundingClientRect().width).toBe(width)
     await waitFor(() => expect(canvas.getByRole("button", { name: "Copier" })).toBeVisible(), { timeout: 2000 })
   },
 }

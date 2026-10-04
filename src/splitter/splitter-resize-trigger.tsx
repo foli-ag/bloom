@@ -21,15 +21,17 @@ export function SplitterResizeTrigger(props: SplitterResizeTriggerProps): Elemen
 
 const trigger = tv({
   base: [
-    "group/trigger relative z-10 flex items-center justify-center bg-border outline-none",
-    "transition-colors duration-(--duration-smooth) ease-smooth",
+    "group/trigger relative z-10 flex items-center justify-center bg-border",
+    // Its color eases and its focus ring does not: a ring has to be there at once
+    "transition-[background-color] duration-(--duration-smooth) ease-smooth",
     "before:absolute before:content-['']",
     "data-[orientation=horizontal]:w-3 data-[orientation=horizontal]:before:inset-y-0",
     "data-[orientation=horizontal]:before:-inset-x-[18px]",
     "data-[orientation=vertical]:h-3 data-[orientation=vertical]:before:inset-x-0",
     "data-[orientation=vertical]:before:-inset-y-[18px]",
     "hover:bg-neutral-soft data-dragging:bg-primary-soft",
-    "focus-visible:outline-3 focus-visible:outline-offset-0 focus-visible:outline-focus",
+    // The browser focuses the bar itself when it is pressed, which does not ring it, so the ring is the keyboard's alone
+    "focus-ring [--focus-inset:3px]",
     "data-disabled:bg-disabled",
   ],
 })

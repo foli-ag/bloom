@@ -7,8 +7,9 @@ export type ProgressCircleRangeProps = Omit<Seed.CircleRangeProps, "class"> & {
 }
 
 /**
- * The arc the value fills, from the top, in the green of an edge, which is 3:1 against the page. It closes on the
- * smooth spring. While the value is not known it is a quarter of the ring, and the ring turns.
+ * The arc the value fills, from the top, in the tone's fill, which is 3:1 against the track and the page. It closes on
+ * the smooth spring, and its color eases when the tone changes. While the value is not known it is a quarter of the
+ * ring, and the ring turns.
  */
 export function ProgressCircleRange(props: ProgressCircleRangeProps): Element {
   return <Seed.Circle.Range {...omit(props, "class")} class={range({ class: props.class })} />
@@ -16,8 +17,8 @@ export function ProgressCircleRange(props: ProgressCircleRangeProps): Element {
 
 const range = tv({
   base: [
-    "stroke-primary-edge [stroke-linecap:round]",
-    "transition-[stroke-dashoffset] duration-(--duration-smooth) ease-smooth",
+    "stroke-(--progress-fill) [stroke-linecap:round]",
+    "transition-[stroke-dashoffset,stroke] duration-(--duration-smooth) ease-smooth",
     "data-[state=indeterminate]:[stroke-dasharray:calc(var(--circumference)*0.25)_var(--circumference)]",
   ],
 })

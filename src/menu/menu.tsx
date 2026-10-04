@@ -2,7 +2,8 @@ import { Menu as Seed, useMenuContext } from "@foliag/seeds/menu"
 import type { ValidComponent } from "@foliag/seeds/polymorphic"
 import { Portal, type JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv, type VariantProps } from "tailwind-variants"
+import type { VariantProps } from "tailwind-variants"
+import { indicatorChevron } from "../internal/disclosure.js"
 import { Chevron, Mark, tick } from "../internal/icons.jsx"
 import {
   groupLabel,
@@ -61,7 +62,7 @@ export interface IndicatorProps {
 /** A chevron for the trigger, after its words, that turns as the menu opens */
 export function Indicator(props: IndicatorProps): Element {
   return (
-    <Seed.Indicator as="span" class={indicator({ class: props.class })}>
+    <Seed.Indicator as="span" class={indicatorChevron({ class: ["-me-1", props.class] })}>
       <Chevron class="size-5" />
     </Seed.Indicator>
   )
@@ -79,7 +80,7 @@ export function Content(props: ContentProps): Element {
   const state = () => (api().open ? "open" : "closed")
   return (
     <Portal>
-      <Seed.Positioner class={sheetPositioner()} data-state={state()}>
+      <Seed.Positioner class={sheetPositioner({ holds: "list" })} data-state={state()}>
         <div
           class={sheetPanel({ scroll: "list", class: props.class })}
           data-state={state()}
@@ -156,8 +157,8 @@ function ItemRadio(props: ItemRadioProps): Element {
 
 function OptionTick(): Element {
   return (
-    <Seed.Item.Indicator class={optionIndicator()}>
-      <Mark class="size-6 animate-pop-in">
+    <Seed.Item.Indicator hidden={false} class={optionIndicator()}>
+      <Mark class="size-6">
         <path d={tick} />
       </Mark>
     </Seed.Item.Indicator>
@@ -215,7 +216,3 @@ export function Close<As extends ValidComponent = "button">(props: CloseProps<As
   const api = useMenuContext()
   return <SheetClose button={props} onClose={() => api().setOpen(false)} />
 }
-
-const indicator = tv({
-  base: "-me-1 inline-flex shrink-0 transition-[rotate] duration-(--duration-smooth) ease-smooth data-[state=open]:rotate-180",
-})

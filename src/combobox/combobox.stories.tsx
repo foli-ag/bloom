@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For } from "solid-js"
+import { createMemo, createSignal, For, untrack } from "solid-js"
 import { expect, fn, userEvent, waitFor, within } from "storybook/test"
 import type { Meta, StoryObj } from "storybook-solidjs-vite"
 import { Button } from "../button/index.js"
@@ -32,16 +32,26 @@ function Commune(props: Partial<Combobox.RootProps>) {
         {...props}
       >
         <Combobox.Label>Commune</Combobox.Label>
-        <Combobox.Input />
-        <Combobox.Clear as={Button} tone="neutral" variant="ghost" class="justify-self-start">
+        <Combobox.Control>
+          <Combobox.Input />
+          <Combobox.Indicator />
+        </Combobox.Control>
+        <Combobox.Trigger.Clear as={Button} tone="neutral" variant="ghost" class="justify-self-start">
           Effacer
-        </Combobox.Clear>
-        <Combobox.Content>
-          <Combobox.List>
-            <For each={collection().items}>{(item) => <Combobox.Item item={item}>{item.label}</Combobox.Item>}</For>
-          </Combobox.List>
+        </Combobox.Trigger.Clear>
+        <Combobox.Positioner>
+          <Combobox.Content>
+            <For each={collection().items}>
+              {(item) => (
+                <Combobox.Item item={item}>
+                  <Combobox.Item.Text>{item.label}</Combobox.Item.Text>
+                  <Combobox.Item.Indicator />
+                </Combobox.Item>
+              )}
+            </For>
+          </Combobox.Content>
           <Combobox.Empty>Aucune commune trouvée</Combobox.Empty>
-        </Combobox.Content>
+        </Combobox.Positioner>
       </Combobox.Root>
     </div>
   )
@@ -86,6 +96,113 @@ export const Open: Story = {
 
 export const Invalid: Story = {
   args: { invalid: true },
+}
+
+function Communes(props: Partial<Combobox.RootProps>) {
+  const [typed, setTyped] = createSignal("")
+  const collection = createMemo(() =>
+    createListCollection({
+      items: communes.filter((commune) => commune.label.toLowerCase().startsWith(typed().toLowerCase())),
+    }),
+  )
+  return (
+    <div class="w-80">
+      <Combobox.Root
+        collection={collection()}
+        multiple
+        onInputValueChange={(details) => setTyped(details.inputValue)}
+        placeholder="Tapez le nom"
+        {...props}
+      >
+        <Combobox.Label>Communes</Combobox.Label>
+        <Combobox.Control>
+          <Combobox.ChipGroup>
+            {(item: (typeof communes)[number]) => (
+              <Combobox.Chip item={item}>
+                <Combobox.Chip.Text>{item.label}</Combobox.Chip.Text>
+                <Combobox.Chip.Trigger>Retirer {item.label}</Combobox.Chip.Trigger>
+              </Combobox.Chip>
+            )}
+          </Combobox.ChipGroup>
+          <Combobox.Input />
+          <Combobox.Indicator />
+        </Combobox.Control>
+        <Combobox.Positioner>
+          <Combobox.Content>
+            <For each={collection().items}>
+              {(item) => (
+                <Combobox.Item item={item}>
+                  <Combobox.Item.Text>{item.label}</Combobox.Item.Text>
+                  <Combobox.Item.Indicator />
+                </Combobox.Item>
+              )}
+            </For>
+          </Combobox.Content>
+          <Combobox.Loading>Recherche des communes…</Combobox.Loading>
+          <Combobox.Empty>Aucune commune trouvée</Combobox.Empty>
+        </Combobox.Positioner>
+      </Combobox.Root>
+    </div>
+  )
+}
+
+/** Several communes as chips in the field, before the input, wrapping with it */
+export const SeveralAsChips: Story = {
+  render: (args) => <Communes {...args} defaultValue={["32013", "32107", "32208"]} />,
+}
+
+// A search sent to a server as the farmer types, answering after a while
+function SearchedCommunes(props: { delay?: number; waiting?: boolean }) {
+  const [typed, setTyped] = createSignal("")
+  const [found, setFound] = createSignal<typeof communes>([])
+  const [loading, setLoading] = createSignal(untrack(() => props.waiting ?? false))
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const collection = createMemo(() => createListCollection({ items: found() }))
+  return (
+    <div class="w-80">
+      <Combobox.Root
+        collection={collection()}
+        loading={loading()}
+        defaultOpen={untrack(() => props.waiting)}
+        onInputValueChange={(details) => {
+          setTyped(details.inputValue)
+          setFound([])
+          setLoading(true)
+          clearTimeout(timer)
+          timer = setTimeout(() => {
+            setFound(communes.filter((commune) => commune.label.toLowerCase().startsWith(typed().toLowerCase())))
+            setLoading(false)
+          }, props.delay ?? 1500)
+        }}
+        placeholder="Tapez le nom"
+      >
+        <Combobox.Label>Commune</Combobox.Label>
+        <Combobox.Control>
+          <Combobox.Input />
+          <Combobox.Indicator />
+        </Combobox.Control>
+        <Combobox.Positioner>
+          <Combobox.Content>
+            <For each={collection().items}>
+              {(item) => (
+                <Combobox.Item item={item}>
+                  <Combobox.Item.Text>{item.label}</Combobox.Item.Text>
+                  <Combobox.Item.Indicator />
+                </Combobox.Item>
+              )}
+            </For>
+          </Combobox.Content>
+          <Combobox.Loading>Recherche des communes…</Combobox.Loading>
+          <Combobox.Empty>Aucune commune trouvée</Combobox.Empty>
+        </Combobox.Positioner>
+      </Combobox.Root>
+    </div>
+  )
+}
+
+/** While the search is under way, the list shows rows of skeleton bars and is marked busy */
+export const Loading: Story = {
+  render: () => <SearchedCommunes waiting />,
 }
 
 /**
@@ -142,6 +259,53 @@ export const TestNothingMatches: Story = {
   },
 }
 
+/** Closed while it says nothing matches, the panel fades out like any other, rather than vanishing on the spot */
+export const TestClosingWhileNothingMatches: Story = {
+  name: "Test: Closing while nothing matches",
+  play: async () => {
+    const page = within(document.body)
+    await userEvent.type(page.getByRole("combobox", { name: "Commune" }), "zz")
+    const panel = (await page.findByText("Aucune commune trouvée")).closest("[data-state]")!
+    await settled()
+
+    await userEvent.keyboard("{Escape}")
+    await new Promise(requestAnimationFrame)
+    await new Promise(requestAnimationFrame)
+    expect(panel).toHaveAttribute("data-state", "closed")
+    expect(panel.isConnected).toBe(true)
+    await waitFor(() => expect(panel.isConnected).toBe(false))
+  },
+}
+
+/**
+ * Near the foot of the screen there is no room for the list under the field, so it opens above it, and stays there as
+ * typing narrows it: it does not jump under the field once the shorter list would fit there.
+ */
+export const TestNearTheFootOfTheScreen: Story = {
+  name: "Test: Near the foot of the screen",
+  parameters: { layout: "fullscreen" },
+  render: (args) => (
+    <div class="flex h-dvh flex-col justify-end px-4 pb-44">
+      <Commune {...args} />
+    </div>
+  ),
+  play: async () => {
+    const page = within(document.body)
+    const field = page.getByRole("combobox", { name: "Commune" })
+    await userEvent.click(field)
+    const list = await page.findByRole("listbox")
+    await settled()
+    const gap = () => field.getBoundingClientRect().top - list.parentElement!.getBoundingClientRect().bottom
+    const above = gap()
+    expect(above).toBeGreaterThan(0)
+
+    await userEvent.type(field, "au")
+    await waitFor(() => expect(within(list).getAllByRole("option")).toHaveLength(2))
+    await settled()
+    expect(gap()).toBeCloseTo(above, 0)
+  },
+}
+
 export const TestOpenInDarkTheme: Story = {
   name: "Test: Open in dark theme",
   ...Open,
@@ -152,4 +316,127 @@ export const TestOpenWithMoreContrast: Story = {
   name: "Test: Open with more contrast",
   ...Open,
   globals: { contrast: "more" },
+}
+
+/**
+ * Chosen communes become chips and the input empties, ready for the next. Backspace in the empty input takes the last
+ * one out, and a chip's cross takes its own out, with the focus kept in the input.
+ */
+export const TestChoosingSeveralAsChips: Story = {
+  name: "Test: Choosing several as chips",
+  render: (args) => <Communes {...args} />,
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    const page = within(document.body)
+    const chips = () =>
+      [...canvasElement.querySelectorAll("[data-part=chip]:not([data-state=closed])")].map(
+        (chip) => chip.querySelector("[data-part=chip-text]")!.textContent,
+      )
+    const field = canvas.getByRole("combobox", { name: "Communes" })
+    await userEvent.type(field, "au")
+    await userEvent.click(await page.findByRole("option", { name: "Auch" }))
+    expect(field).toHaveValue("")
+    await userEvent.type(field, "con")
+    await userEvent.click(await page.findByRole("option", { name: "Condom" }))
+    await waitFor(() => expect(chips()).toEqual(["Auch", "Condom"]))
+    expect(args.onValueChange).toHaveBeenLastCalledWith(expect.objectContaining({ value: ["32013", "32107"] }))
+    // Typing narrows the list, and the chips stay
+    await userEvent.type(field, "zz")
+    expect(chips()).toEqual(["Auch", "Condom"])
+    await userEvent.clear(field)
+
+    await userEvent.keyboard("{Backspace}")
+    expect(args.onValueChange).toHaveBeenLastCalledWith(expect.objectContaining({ value: ["32013"] }))
+    await waitFor(() => expect(chips()).toEqual(["Auch"]))
+    expect(field).toHaveFocus()
+
+    await userEvent.click(canvas.getByRole("button", { name: "Retirer Auch" }))
+    await waitFor(() => expect(chips()).toEqual([]))
+    expect(field).toHaveFocus()
+    await waitFor(() => expect(canvasElement.querySelector("[data-part=chip]")).toBeNull())
+  },
+}
+
+/** Backspace only takes a choice out once the input is empty: before that it deletes letters */
+export const TestBackspaceDeletesLettersFirst: Story = {
+  name: "Test: Backspace deletes letters first",
+  render: (args) => <Communes {...args} defaultValue={["32013"]} />,
+  play: async ({ canvasElement, args }) => {
+    const field = within(canvasElement).getByRole("combobox", { name: "Communes" })
+    await userEvent.type(field, "co")
+    await userEvent.keyboard("{Backspace}{Backspace}")
+    expect(field).toHaveValue("")
+    expect(args.onValueChange).not.toHaveBeenCalled()
+    await userEvent.keyboard("{Backspace}")
+    expect(args.onValueChange).toHaveBeenLastCalledWith(expect.objectContaining({ value: [] }))
+  },
+}
+
+/** A press on the field beside the chips puts the focus in the input and opens the list */
+export const TestPressingTheField: Story = {
+  ...SeveralAsChips,
+  name: "Test: Pressing the field",
+  play: async ({ canvasElement }) => {
+    const control = canvasElement.querySelector<HTMLElement>("[data-part=control]")!
+    const box = control.getBoundingClientRect()
+    await userEvent.pointer({
+      keys: "[MouseLeft]",
+      target: control,
+      coords: { clientX: box.right - 60, clientY: box.bottom - 10 },
+    })
+    await waitFor(() => expect(within(canvasElement).getByRole("combobox")).toHaveFocus())
+    await within(document.body).findByRole("listbox")
+    await settled()
+    expect(within(document.body).getByRole("listbox")).toBeVisible()
+  },
+}
+
+/**
+ * While the search is under way the list is marked busy and shows rows of skeleton bars, and a status says so; the
+ * empty message does not show, as nothing is known yet. Then the communes found take their place.
+ */
+export const TestSearching: Story = {
+  name: "Test: Searching",
+  render: () => <SearchedCommunes delay={800} />,
+  play: async ({ canvasElement }) => {
+    const page = within(document.body)
+    await userEvent.type(within(canvasElement).getByRole("combobox", { name: "Commune" }), "au")
+    // The list has no row yet, so it is hidden: found by its part
+    const content = () => document.querySelector<HTMLElement>("[data-scope=combobox][data-part=content]")
+    await waitFor(() => expect(content()).not.toBeNull())
+    const list = content()!
+    await waitFor(() => expect(list).toHaveAttribute("aria-busy", "true"))
+    expect(page.getAllByRole("status").map((status) => status.textContent)).toEqual(["Recherche des communes…", ""])
+    expect(page.queryByText("Aucune commune trouvée")).toBeNull()
+    await waitFor(() => expect(page.getAllByRole("option")).toHaveLength(2), { timeout: 3000 })
+    expect(list).not.toHaveAttribute("aria-busy")
+    expect(document.querySelector("[data-scope=combobox][data-part=loading] [aria-hidden=true]")).toBeNull()
+  },
+}
+
+export const TestChipsInDarkTheme: Story = {
+  ...SeveralAsChips,
+  name: "Test: Chips in dark theme",
+  globals: { theme: "dark" },
+}
+
+export const TestChipsWithMoreContrast: Story = {
+  ...SeveralAsChips,
+  name: "Test: Chips with more contrast",
+  globals: { contrast: "more" },
+}
+
+/** On a phone the chips and the input wrap onto as many lines as they need, and the field grows with them */
+export const TestChipsOnAPhone: Story = {
+  name: "Test: Chips on a phone",
+  globals: { viewport: { value: "mobile2", isRotated: false } },
+  render: (args) => <Communes {...args} defaultValue={["32013", "32107", "32208", "32132", "32256"]} />,
+  play: ({ canvasElement }) => {
+    const control = canvasElement.querySelector<HTMLElement>("[data-part=control]")!.getBoundingClientRect()
+    for (const chip of canvasElement.querySelectorAll("[data-part=chip]")) {
+      const box = chip.getBoundingClientRect()
+      expect(box.right).toBeLessThanOrEqual(control.right)
+    }
+    expect(control.height).toBeGreaterThan(48 * 2 - 4)
+  },
 }

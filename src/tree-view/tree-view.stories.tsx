@@ -1,4 +1,4 @@
-import { For, omit, Show } from "solid-js"
+import { createSignal, For, omit, Show } from "solid-js"
 import { expect, fn, userEvent, waitFor, within } from "storybook/test"
 import type { Meta, StoryObj } from "storybook-solidjs-vite"
 import { settled } from "../foundations/settled.js"
@@ -8,6 +8,8 @@ interface Place {
   value: string
   label: string
   children?: Place[]
+  /** A block whose fields come from the server when it is first opened */
+  childrenCount?: number
 }
 
 const farm = createTreeCollection<Place>({
@@ -28,7 +30,14 @@ const farm = createTreeCollection<Place>({
         label: "Îlot 2, Le Plateau",
         children: [
           { value: "pre-haut", label: "Le Pré Haut" },
-          { value: "longues-raies", label: "Les Longues Raies" },
+          {
+            value: "longues-raies",
+            label: "Les Longues Raies",
+            children: [
+              { value: "raies-nord", label: "Bande nord" },
+              { value: "raies-sud", label: "Bande sud" },
+            ],
+          },
           { value: "bois", label: "Le Bout du Bois" },
         ],
       },
@@ -41,7 +50,7 @@ function Node(props: { node: Place; indexPath: number[]; checkable?: boolean | u
   return (
     <TreeView.Node.Provider node={props.node} indexPath={props.indexPath}>
       <Show
-        when={props.node.children}
+        when={props.node.children ?? (props.node.childrenCount ? [] : undefined)}
         fallback={
           <TreeView.Item>
             <Show when={props.checkable}>
@@ -98,10 +107,60 @@ function Farm(props: FarmProps) {
   )
 }
 
+const fields: Record<string, Place[]> = {
+  "ilot-1": [
+    { value: "grands-champs", label: "Les Grands Champs" },
+    { value: "noue", label: "La Noue" },
+  ],
+  "ilot-2": [
+    { value: "pre-haut", label: "Le Pré Haut" },
+    { value: "longues-raies", label: "Les Longues Raies" },
+    { value: "bois", label: "Le Bout du Bois" },
+  ],
+}
+
+// The same farm, whose blocks fetch their fields the first time they open, as from a server on a slow connection
+function FarmFromTheServer(props: FarmProps) {
+  const [collection, setCollection] = createSignal(
+    createTreeCollection<Place>({
+      rootNode: {
+        value: "ferme",
+        label: "Ferme du Moulin",
+        children: [
+          { value: "ilot-1", label: "Îlot 1, Le Moulin", childrenCount: 2 },
+          { value: "ilot-2", label: "Îlot 2, Le Plateau", childrenCount: 3 },
+          { value: "verger", label: "Le Verger" },
+        ],
+      },
+    }),
+  )
+  return (
+    <TreeView.Root
+      collection={collection()}
+      loadChildren={({ node }) =>
+        new Promise<Place[]>((resolve) => setTimeout(() => resolve(fields[node.value] ?? []), 1200))
+      }
+      onLoadChildrenComplete={(details) => setCollection(details.collection)}
+      class="w-80"
+      {...omit(props, "checkable")}
+    >
+      <TreeView.Label>Parcelles</TreeView.Label>
+      <TreeView.Tree>
+        {/* By value, so a block that has just been given its fields stays the same row and opens on them */}
+        <For each={collection().rootNode.children} keyed={(node) => node.value}>
+          {(node, index) => <Node node={node()} indexPath={[index()]} />}
+        </For>
+      </TreeView.Tree>
+    </TreeView.Root>
+  )
+}
+
 const meta = {
   title: "Components/TreeView",
   component: Farm,
   tags: ["autodocs"],
+  // Pinned to the top, as on a page: centred, the tree would rise by half of what a branch grows
+  parameters: { layout: "padded" },
   args: { onSelectionChange: fn(), onExpandedChange: fn() },
 } satisfies Meta<typeof Farm>
 
@@ -144,13 +203,17 @@ export const TestOpeningAndSelecting: Story = {
     await userEvent.click(noue)
     expect(noue).toHaveAttribute("aria-selected", "true")
     expect(args.onSelectionChange).toHaveBeenLastCalledWith(expect.objectContaining({ selectedValue: ["noue"] }))
+    // The tick pops in from nothing, so it is checked once it has
+    await settled()
     expect(noue.querySelector("[data-part=item-indicator]")).toBeVisible()
+    // The tick of an item not selected stays laid out, unseen, so it can leave on a transition
+    expect(within(tree).getByRole("treeitem", { name: "Le Verger" }).querySelector("[data-part=item-indicator]")).not.toBeVisible()
   },
 }
 
 /**
- * From the keyboard: the right arrow opens a block and steps into it, the down arrow moves, Enter selects, and the left
- * arrow goes back out to the block and closes it.
+ * From the keyboard: the ring shows on the row that has focus, the right arrow opens a block and steps into it, the
+ * down arrow moves, Enter selects, and the left arrow goes back out to the block and closes it.
  */
 export const TestWithTheKeyboard: Story = {
   name: "Test: With the keyboard",
@@ -159,6 +222,8 @@ export const TestWithTheKeyboard: Story = {
     await userEvent.tab()
     const control = canvas.getByRole("button", { name: "Îlot 1, Le Moulin" })
     expect(control).toHaveFocus()
+    expect(getComputedStyle(control).outlineStyle).toBe("solid")
+    expect(ringTransitions(control)).toEqual([])
 
     await userEvent.keyboard("{ArrowRight}")
     expect(branch("Îlot 1")).toHaveAttribute("aria-expanded", "true")
@@ -174,18 +239,43 @@ export const TestWithTheKeyboard: Story = {
   },
 }
 
-/** Each level steps in by 24px, and every row is 48px tall */
+/**
+ * Each level steps in by 24px, and every row is 48px tall. A field has no chevron, so its words start where a block's
+ * do at the same level.
+ */
 export const TestLevels: Story = {
   name: "Test: Levels",
   args: { defaultExpandedValue: ["ilot-2"] },
   play: async ({ canvasElement }) => {
     await settled()
     const canvas = within(canvasElement)
-    const block = canvas.getByRole("button", { name: "Îlot 2, Le Plateau" })
     const field = canvas.getByRole("treeitem", { name: "Le Pré Haut" })
     expect(field.getBoundingClientRect().height).toBeGreaterThanOrEqual(48)
-    const indent = (element: HTMLElement) => Number.parseFloat(getComputedStyle(element).paddingInlineStart)
-    expect(indent(field) - indent(block)).toBe(24)
+    const start = (words: string) => canvas.getByText(words).getBoundingClientRect().left
+    expect(start("Le Pré Haut") - start("Îlot 2, Le Plateau")).toBe(24)
+    expect(start("Le Verger")).toBe(start("Îlot 1, Le Moulin"))
+  },
+}
+
+/**
+ * Fields that come from the server: while they are on their way a ring turns in place of the block's chevron and the
+ * block is announced busy, then it opens on them.
+ */
+export const TestLoadingABlock: Story = {
+  name: "Test: Loading a block",
+  render: (args) => <FarmFromTheServer {...args} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const block = canvas.getByRole("button", { name: "Îlot 1, Le Moulin" })
+    await userEvent.click(block)
+    await waitFor(() => expect(block).toHaveAttribute("aria-busy", "true"))
+    const [chevron, ring] = block.querySelectorAll("[data-part=branch-indicator] svg")
+    expect(chevron).not.toBeVisible()
+    expect(ring).toBeVisible()
+    await canvas.findByRole("treeitem", { name: "La Noue" }, { timeout: 3000 })
+    expect(block).not.toHaveAttribute("aria-busy")
+    expect(chevron).toBeVisible()
+    await settled()
   },
 }
 
@@ -215,4 +305,11 @@ export const TestWithMoreContrast: Story = {
   args: { defaultExpandedValue: ["ilot-1"], defaultSelectedValue: ["noue"] },
   globals: { contrast: "more" },
   play: settled,
+}
+
+/** The transitions running on an element's focus ring, which appears at once */
+function ringTransitions(element: Element): Animation[] {
+  return element
+    .getAnimations()
+    .filter((animation) => (animation as CSSTransition).transitionProperty === "outline-color")
 }

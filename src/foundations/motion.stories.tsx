@@ -1,5 +1,5 @@
-import { createSignal, For } from "solid-js"
-import { expect } from "storybook/test"
+import { createSignal, For, Show } from "solid-js"
+import { expect, waitFor, within } from "storybook/test"
 import type { Meta, StoryObj } from "storybook-solidjs-vite"
 import { Button } from "../button/index.js"
 
@@ -55,6 +55,77 @@ export const ReducedMotion: Story = {
     const [smooth, pop] = canvasElement.querySelectorAll<HTMLElement>("[data-dot]")
     expect(getComputedStyle(pop).transitionTimingFunction).toBe(getComputedStyle(smooth).transitionTimingFunction)
   },
+}
+
+/**
+ * What opens and closes runs on transitions (`presence-overlay`, `presence-sheet`, `presence-fade`), so a change of mind
+ * half way turns it round from where it is. Press Ouvrir, then Fermer before the panel has finished appearing: it fades
+ * back from where it got to. A keyframe exit would start from the open look, and the panel would flash fully open first.
+ */
+export const Presence: Story = {
+  render: () => <PresenceDemo />,
+  play: async ({ canvasElement }) => {
+    const toggle = within(canvasElement).getByRole("button", { name: "Ouvrir" })
+    toggle.click()
+    const panel = await waitFor(() => {
+      const found = canvasElement.querySelector<HTMLElement>("[data-panel]")
+      expect(found).not.toBeNull()
+      return found!
+    })
+    const opacity = () => Number(getComputedStyle(panel).opacity)
+    // Closed half way through appearing. It goes on rising for the frame the change takes to land, then turns round
+    // from there: a keyframe exit would restart from the open look, at 1.
+    await waitFor(() => expect(opacity()).toBeGreaterThan(0.2))
+    const before = opacity()
+    toggle.click()
+    await waitFor(() => expect(panel.dataset.state).toBe("closed"))
+    let last = opacity()
+    expect(last).toBeLessThan(Math.min(before + 0.3, 0.9))
+    expect(getComputedStyle(panel).pointerEvents).toBe("none")
+    // From there it only fades, and it leaves once the exit has played
+    while (panel.isConnected) {
+      const now = opacity()
+      expect(now).toBeLessThanOrEqual(last + 0.02)
+      last = now
+      await frame()
+    }
+    expect(last).toBeLessThan(0.1)
+  },
+}
+
+/** A panel that mounts as it opens and leaves once its exit has played, as zag's presence does */
+function PresenceDemo() {
+  const [open, setOpen] = createSignal(false)
+  const [present, setPresent] = createSignal(false)
+  return (
+    <section class="grid max-w-3xl justify-items-start gap-5">
+      <Button
+        onClick={() => {
+          if (!open()) setPresent(true)
+          setOpen((value) => !value)
+        }}
+      >
+        Ouvrir
+      </Button>
+      <Show when={present()}>
+        <div
+          data-panel
+          data-state={open() ? "open" : "closed"}
+          onAnimationEnd={() => {
+            if (!open()) setPresent(false)
+          }}
+          class="presence-overlay rounded-card border-2 border-strong bg-raised p-5 shadow-overlay"
+        >
+          <p class="text-lg font-semibold">Les Grands Champs</p>
+          <p class="text-muted">Blé tendre, 12,4 ha</p>
+        </div>
+      </Show>
+    </section>
+  )
+}
+
+function frame() {
+  return new Promise((resolve) => requestAnimationFrame(resolve))
 }
 
 /** The stops of a `linear()` curve token, as the page resolves it */

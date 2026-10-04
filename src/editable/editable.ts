@@ -16,6 +16,6 @@ export type EditChangeDetails = Seed.EditChangeDetails
 export type SubmitMode = Seed.SubmitMode
 export type ValueChangeDetails = Seed.ValueChangeDetails
 
-// Seeds' own, with no look. The triggers render as a `Button`.
-export const Trigger: typeof Seed.Trigger = Seed.Trigger
+// The buttons at the end of the area's box: a pencil, a tick and a cross, named by their words
+export * as Trigger from "./editable-trigger.js"
 export const Context: typeof Seed.Context = Seed.Context

@@ -9,11 +9,14 @@ export type EditableRootProps = Omit<Seed.RootProps, "class" | "translations"> &
 }
 
 /**
- * A value read as text that the farmer changes in place, such as the name of a parcel. A tap on the text, or focus on
- * it, turns it into a field. Enter or a tap elsewhere keeps the change, Escape puts the old value back.
+ * A value read as text that the farmer changes in place, such as the name of a parcel. A press on the words, or on the
+ * pencil beside them, turns them into a field. Enter or the tick keeps the change, Escape or the cross puts the old
+ * value back, and a press elsewhere keeps it.
  *
- * Text that turns into a field is easy to miss, so always give it a visible `Trigger.Edit` with words. Its parts stack
- * with even gaps. The triggers are seeds' own, with no look: render them as a `Button`.
+ * Text that turns into a field is easy to miss, so the `Area` draws a quiet box round the words with a pencil at its end,
+ * `Trigger.Edit`, seen without a hover. The `Control` goes inside the `Area`, where its buttons are drawn: the pencil
+ * with its words, then a tick and a cross named by theirs. They are the editable's own, so do not render them as a
+ * `Button`.
  *
  * @example
  * <Editable.Root name="parcelle" defaultValue="Les Grands Champs" placeholder="Nom de la parcelle">
@@ -21,12 +24,12 @@ export type EditableRootProps = Omit<Seed.RootProps, "class" | "translations"> &
  *   <Editable.Area>
  *     <Editable.Input />
  *     <Editable.Preview />
+ *     <Editable.Control>
+ *       <Editable.Trigger.Edit>Renommer</Editable.Trigger.Edit>
+ *       <Editable.Trigger.Submit>Enregistrer</Editable.Trigger.Submit>
+ *       <Editable.Trigger.Cancel>Annuler</Editable.Trigger.Cancel>
+ *     </Editable.Control>
  *   </Editable.Area>
- *   <Editable.Control>
- *     <Editable.Trigger.Edit as={Button} variant="outline">Renommer</Editable.Trigger.Edit>
- *     <Editable.Trigger.Submit as={Button}>Enregistrer</Editable.Trigger.Submit>
- *     <Editable.Trigger.Cancel as={Button} tone="neutral" variant="outline">Annuler</Editable.Trigger.Cancel>
- *   </Editable.Control>
  * </Editable.Root>
  */
 export function EditableRoot(props: EditableRootProps): Element {

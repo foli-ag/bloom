@@ -1,8 +1,15 @@
 import { Tabs as Seed } from "@foliag/seeds/tabs"
 import { omit, type Element } from "solid-js"
 import { tv } from "tailwind-variants"
+import { type TabsVariant, TabsVariantContext } from "./tabs-variant.js"
 
 export type TabsRootProps = Omit<Seed.RootProps, "class"> & {
+  /**
+   * How the tabs look. `line`, the default: a row of tabs over a thin line, a green bar under the chosen one.
+   * `segmented`: the tabs sit in a track, and a pill slides and stretches behind the chosen one, for a few short views
+   * of the same thing, such as a list and a map. The `Indicator` draws the bar or the pill.
+   */
+  variant?: TabsVariant | undefined
   /** Merged after the component's own classes, and wins over them */
   class?: string | undefined
 }
@@ -24,7 +31,11 @@ export type TabsRootProps = Omit<Seed.RootProps, "class"> & {
  * </Tabs.Root>
  */
 export function TabsRoot(props: TabsRootProps): Element {
-  return <Seed.Root {...omit(props, "class")} class={root({ class: props.class })} />
+  return (
+    <TabsVariantContext value={() => props.variant ?? "line"}>
+      <Seed.Root {...omit(props, "class", "variant")} class={root({ class: props.class })} />
+    </TabsVariantContext>
+  )
 }
 
-export const root = tv({ base: "flex min-w-0 flex-col data-[orientation=vertical]:flex-row" })
+export const root = tv({ base: "group/tabs flex min-w-0 flex-col data-[orientation=vertical]:flex-row" })

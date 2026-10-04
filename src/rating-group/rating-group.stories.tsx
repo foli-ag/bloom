@@ -69,17 +69,22 @@ export const TestTapOnAStar: Story = {
     expect(args.onValueChange).toHaveBeenLastCalledWith({ value: 4 })
     expect(new FormData(canvasElement.querySelector("form")!).get("levee")).toBe("4")
     expect(canvasElement.querySelectorAll("[data-part=item][data-highlighted]")).toHaveLength(4)
+    // Zag focuses the star that took the mark, and a tap leaves no ring on it
+    await waitFor(() => expect(four).toHaveFocus())
+    expect(getComputedStyle(four).outlineStyle).toBe("none")
   },
 }
 
-/** The arrow keys move the mark from the keyboard */
+/** The arrow keys move the mark from the keyboard, and the star that has it shows a ring */
 export const TestWithTheKeyboard: Story = {
   name: "Test: With the keyboard",
   args: { defaultValue: 2 },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     await userEvent.tab()
-    expect(canvas.getByRole("radio", { name: "2 sur 5" })).toHaveFocus()
+    const two = canvas.getByRole("radio", { name: "2 sur 5" })
+    expect(two).toHaveFocus()
+    expect(getComputedStyle(two).outlineStyle).toBe("solid")
     await userEvent.keyboard("{ArrowRight}")
     await waitFor(() => expect(args.onValueChange).toHaveBeenLastCalledWith({ value: 3 }))
   },

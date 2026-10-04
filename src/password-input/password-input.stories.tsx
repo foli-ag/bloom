@@ -59,7 +59,8 @@ export const Disabled: Story = {
 
 /**
  * Hidden as it is typed. "Afficher" shows it in plain text so the farmer can check it, and focus stays in the field
- * to go on typing. The button then reads "Masquer". The password goes into the form either way.
+ * to go on typing. The button then reads "Masquer", and keeps its width, so the field beside it does not move under the
+ * farmer's thumb. The password goes into the form either way.
  */
 export const TestShowingAndHidingThePassword: Story = {
   name: "Test: Showing and hiding the password",
@@ -69,10 +70,12 @@ export const TestShowingAndHidingThePassword: Story = {
     expect(field).toHaveAttribute("type", "password")
     expect(field).toHaveAttribute("autocomplete", "current-password")
     await userEvent.type(field, "colza2026")
+    const width = field.getBoundingClientRect().width
 
     await userEvent.click(canvas.getByRole("button", { name: "Afficher" }))
     await waitFor(() => expect(field).toHaveAttribute("type", "text"))
     await waitFor(() => expect(field).toHaveFocus())
+    expect(field.getBoundingClientRect().width).toBe(width)
     expect(args.onVisibilityChange).toHaveBeenLastCalledWith({ visible: true })
     await userEvent.keyboard("!")
 

@@ -14,5 +14,10 @@ export function PopoverContent(props: PopoverContentProps): Element {
   )
 }
 
-// On a phone the bottom padding also clears the home indicator
-const content = tv({ base: "gap-3 p-5 max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:w-max sm:max-w-sm" })
+// On a phone the bottom padding also clears the home indicator. Beside its trigger it narrows to the room there is.
+const content = tv({
+  base: [
+    "gap-3 p-5 max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))]",
+    "sm:w-max sm:max-w-[min(24rem,var(--available-width,24rem))]",
+  ],
+})

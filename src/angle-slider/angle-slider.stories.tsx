@@ -77,6 +77,7 @@ export const TestWithTheKeyboard: Story = {
     needle.focus()
     await userEvent.keyboard("{ArrowRight}{ArrowRight}")
     await waitFor(() => expect(needle).toHaveAttribute("aria-valuenow", "55"))
+    expect(getComputedStyle(needle).outlineStyle).toBe("solid")
     await userEvent.keyboard("{ArrowLeft}")
     await waitFor(() => expect(needle).toHaveAttribute("aria-valuenow", "50"))
     expect(args.onValueChange).toHaveBeenLastCalledWith(expect.objectContaining({ value: 50 }))
@@ -85,20 +86,54 @@ export const TestWithTheKeyboard: Story = {
   },
 }
 
-/** A press on the dial points the needle there: on the right edge is east */
+/**
+ * A press on the dial points the needle there: on the right edge is east. The press lands on whatever is under it, as a
+ * finger's would, and the needle covering the dial lets it through to the dial. The needle takes focus without a ring,
+ * as the ring is for the keyboard.
+ */
 export const TestPressToPoint: Story = {
   name: "Test: Press to point",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const dial = canvasElement.querySelector<HTMLElement>("[data-part=control]")!
     const { right, top, height } = dial.getBoundingClientRect()
+    const coords = { clientX: right - 10, clientY: top + height / 2 }
+    const target = document.elementFromPoint(coords.clientX, coords.clientY)!
+    await userEvent.pointer({ keys: "[MouseLeft]", target, coords })
+    await waitFor(() => expect(canvas.getByRole("slider")).toHaveAttribute("aria-valuenow", "90"))
+    await waitFor(() =>
+      expect(getComputedStyle(canvasElement.querySelector("[data-part=thumb]")!).rotate).toBe("90deg"),
+    )
+    // Zag focuses the needle after the press, and the ring is the keyboard's alone
+    await waitFor(() => expect(canvas.getByRole("slider")).toHaveFocus())
+    expect(getComputedStyle(canvas.getByRole("slider")).outlineStyle).toBe("none")
+  },
+}
+
+/**
+ * The needle turns the short way round: from 350° to a press just east of north it goes on through north, by 20°, and
+ * not back by 340°.
+ */
+export const TestTurnsTheShortWayRound: Story = {
+  name: "Test: Turns the short way round",
+  args: { defaultValue: 350 },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const dial = canvasElement.querySelector<HTMLElement>("[data-part=control]")!
+    const needle = canvasElement.querySelector<HTMLElement>("[data-part=thumb]")!
+    const { left, top, width, height } = dial.getBoundingClientRect()
+    const radius = width / 2 - 10
+    const coords = {
+      clientX: left + width / 2 + radius * Math.sin(Math.PI / 18),
+      clientY: top + height / 2 - radius * Math.cos(Math.PI / 18),
+    }
     await userEvent.pointer({
       keys: "[MouseLeft]",
-      target: dial,
-      coords: { clientX: right - 10, clientY: top + height / 2 },
+      target: document.elementFromPoint(coords.clientX, coords.clientY)!,
+      coords,
     })
-    await waitFor(() => expect(canvas.getByRole("slider")).toHaveAttribute("aria-valuenow", "90"))
-    expect(getComputedStyle(canvasElement.querySelector("[data-part=thumb]")!).rotate).toBe("90deg")
+    await waitFor(() => expect(canvas.getByRole("slider")).toHaveAttribute("aria-valuenow", "10"))
+    await waitFor(() => expect(getComputedStyle(needle).rotate).toBe("370deg"))
   },
 }
 

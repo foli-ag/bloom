@@ -23,9 +23,12 @@ export function SheetClose<As extends ValidComponent = "button">(props: {
   onClose: () => void
 }): Element {
   const Rendered = dynamic(() => props.button.as ?? "button")
+  // A view of the caller's props, made once. Spread straight from `omit(…)`, the compiler would wrap it in a memo, and
+  // the button inside, reading whether its own `as` is fixed, would read that memo outside any tracking scope.
+  const button = omit(props.button, "as")
   return (
     <div data-sheet-close class="shrink-0 border-t-2 border-border p-3 sm:hidden" onClick={() => props.onClose()}>
-      <Rendered {...omit(props.button, "as")} />
+      <Rendered {...button} />
     </div>
   )
 }

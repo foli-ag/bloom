@@ -1,11 +1,19 @@
 import { Carousel as Seed } from "@foliag/seeds/carousel"
 import { omit, type Element } from "solid-js"
 import { tv } from "tailwind-variants"
+import { CarouselPeek } from "./carousel-look.js"
 import { translationsFrom, type CarouselTranslations } from "./use-carousel.js"
 
 export type CarouselRootProps = Omit<Seed.RootProps, "class" | "translations"> & {
   /** The names of the slides and indicators, and the progress text. Required, as zag's are English. */
   translations: CarouselTranslations
+  /**
+   * The next slide shows at the edge of the row, and the one before once the farmer has moved on, so it is plain that
+   * the row can be swiped. The first slide still starts at the row's start and the last ends at its end. `--peek` on
+   * the group sets how much shows, 2rem less the gap by default, and the gap is at least 0.75rem. It takes the place of
+   * zag's `padding`.
+   */
+  peek?: boolean | undefined
   /** Merged after the component's own classes, and wins over them */
   class?: string | undefined
 }
@@ -37,11 +45,13 @@ export type CarouselRootProps = Omit<Seed.RootProps, "class" | "translations"> &
  */
 export function CarouselRoot(props: CarouselRootProps): Element {
   return (
-    <Seed.Root
-      {...omit(props, "class", "translations")}
-      translations={translationsFrom(props.translations)}
-      class={root({ class: props.class })}
-    />
+    <CarouselPeek value={() => props.peek ?? false}>
+      <Seed.Root
+        {...omit(props, "class", "translations", "peek")}
+        translations={translationsFrom(props.translations)}
+        class={root({ class: props.class })}
+      />
+    </CarouselPeek>
   )
 }
 

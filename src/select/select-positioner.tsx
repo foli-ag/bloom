@@ -21,7 +21,7 @@ export function SelectPositioner(props: SelectPositionerProps): Element {
     <Portal>
       <Seed.Positioner
         {...omit(props, "class", "children")}
-        class={sheetPositioner({ class: props.class })}
+        class={sheetPositioner({ holds: "list", class: props.class })}
         data-state={state()}
       >
         <div class={sheetPanel({ scroll: "list" })} data-state={state()}>

@@ -10,6 +10,7 @@ export {
 } from "./dialog-description.jsx"
 export { DialogPositioner as Positioner, type DialogPositionerProps as PositionerProps } from "./dialog-positioner.jsx"
 export { DialogRoot as Root, type DialogRootProps as RootProps } from "./dialog-root.jsx"
+export type { DialogPhone as Phone, DialogSize as Size } from "./dialog-look.js"
 export {
   DialogRootProvider as RootProvider,
   type DialogRootProviderProps as RootProviderProps,

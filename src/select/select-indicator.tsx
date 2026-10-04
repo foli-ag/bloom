@@ -7,10 +7,10 @@ export type SelectIndicatorProps = Omit<Seed.IndicatorProps<"span">, "class" | "
   class?: string | undefined
 }
 
-/** A chevron at the end of the field that turns as the list opens */
+/** A chevron at the end of the field that turns as the list opens. It keeps to the end when chips leave the words of the field to a screen reader. */
 export function SelectIndicator(props: SelectIndicatorProps): Element {
   return (
-    <Seed.Indicator as="span" {...omit(props, "class")} class={indicatorChevron({ class: props.class })}>
+    <Seed.Indicator as="span" {...omit(props, "class")} class={indicatorChevron({ class: ["ms-auto", props.class] })}>
       <Chevron class="size-5" />
     </Seed.Indicator>
   )

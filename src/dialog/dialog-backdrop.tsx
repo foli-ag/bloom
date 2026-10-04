@@ -17,6 +17,7 @@ export function DialogBackdrop(props: DialogBackdropProps): Element {
   )
 }
 
+// On a phone it dims on the clock of the sheet, so the two arrive together
 const backdrop = tv({
-  base: "fixed inset-0 z-50 bg-scrim data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out",
+  base: "fixed inset-0 z-50 bg-scrim presence-fade max-sm:[--presence-duration:var(--duration-sheet)]",
 })

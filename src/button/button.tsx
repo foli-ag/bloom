@@ -3,6 +3,7 @@ import type { JSX } from "@solidjs/web"
 import { omit, Show, untrack, type Element } from "solid-js"
 import { tv, type VariantProps } from "tailwind-variants"
 import { ButtonSpinner } from "./button-spinner.jsx"
+import { forwardRef } from "../internal/pointer.js"
 
 export type ButtonProps<As extends ValidComponent = "button"> = PolymorphicProps<As, ButtonOwnProps>
 
@@ -75,15 +76,14 @@ function ignoreClicksWhile(element: HTMLElement, busy: () => boolean) {
   )
 }
 
-/** The caller's own ref, which the compiler hands over as a callback or an array of them */
-function forwardRef(ref: unknown, element: HTMLElement) {
-  if (Array.isArray(ref)) for (const each of ref) forwardRef(each, element)
-  else if (typeof ref === "function") ref(element)
-}
-
 /**
  * Pressed and hovered states lighten the primary fill, because its ink is dark and gets more contrast, not less, on a
  * lighter ground. Danger and neutral fills move the other way, for the same reason.
+ *
+ * A phone has no hover, so every variant takes its hover look, or a step past it, while it is pressed. Its colors get
+ * there as fast as it shrinks, so even a quick tap shows, and ease back on the smooth spring when it is let go. A
+ * disabled or busy button shows no press, as the press does nothing. A button that opens a menu or a popover keeps its
+ * hover look while what it opens is open (`aria-expanded`), as a select's field does.
  */
 const button = tv({
   base: [
@@ -95,7 +95,14 @@ const button = tv({
   ],
   variants: {
     tone: { primary: "", neutral: "", danger: "" },
-    variant: { solid: "", soft: "", outline: "", ghost: "" },
+    // A ring would sink into a solid fill, so a line of the page's color keeps it apart. Soft and ghost buttons have no
+    // edge to keep, so their ring takes its place.
+    variant: {
+      solid: "[--focus-gap:var(--color-surface)]",
+      soft: "[--focus-inset:3px]",
+      outline: "",
+      ghost: "[--focus-inset:3px]",
+    },
     size: {
       md: "min-h-12 px-5 py-2 text-base",
       lg: "min-h-14 px-6 py-3 text-lg",
@@ -106,66 +113,87 @@ const button = tv({
     {
       tone: "primary",
       variant: "solid",
-      class: "border-primary-edge bg-primary text-on-primary hover:bg-primary-400 active:bg-primary-300",
+      class:
+        "border-primary-edge bg-primary text-on-primary hover:bg-primary-400 aria-expanded:bg-primary-400 pressing:bg-primary-300",
     },
     {
       tone: "primary",
       variant: "soft",
-      class: "border-transparent bg-primary-soft text-primary-text hover:border-primary-edge",
+      class:
+        "border-transparent bg-primary-soft text-primary-text hover:border-primary-edge aria-expanded:border-primary-edge pressing:border-primary-edge",
     },
     {
       tone: "primary",
       variant: "outline",
-      class: "border-primary-edge bg-transparent text-primary-text hover:bg-primary-soft disabled:bg-transparent",
+      class: [
+        "border-primary-edge bg-transparent text-primary-text hover:bg-primary-soft aria-expanded:bg-primary-soft pressing:bg-primary-soft",
+        "disabled:bg-transparent",
+      ],
     },
     {
       tone: "primary",
       variant: "ghost",
-      class: "border-transparent bg-transparent text-primary-text hover:bg-primary-soft disabled:bg-transparent",
+      class: [
+        "border-transparent bg-transparent text-primary-text hover:bg-primary-soft aria-expanded:bg-primary-soft pressing:bg-primary-soft",
+        "disabled:bg-transparent",
+      ],
     },
     {
       tone: "neutral",
       variant: "solid",
-      class: "border-ink bg-ink text-surface hover:border-muted hover:bg-muted",
+      class:
+        "border-ink bg-ink text-surface hover:border-muted aria-expanded:border-muted hover:bg-muted aria-expanded:bg-muted pressing:border-muted pressing:bg-muted",
     },
     {
       tone: "neutral",
       variant: "soft",
-      class: "border-transparent bg-neutral-soft text-ink hover:border-strong",
+      class:
+        "border-transparent bg-neutral-soft text-ink hover:border-strong aria-expanded:border-strong pressing:border-strong",
     },
     {
       tone: "neutral",
       variant: "outline",
-      class: "border-strong bg-transparent text-ink hover:bg-neutral-soft disabled:bg-transparent",
+      class:
+        "border-strong bg-transparent text-ink hover:bg-neutral-soft aria-expanded:bg-neutral-soft pressing:bg-neutral-soft disabled:bg-transparent",
     },
     {
       tone: "neutral",
       variant: "ghost",
-      class: "border-transparent bg-transparent text-ink hover:bg-neutral-soft disabled:bg-transparent",
+      class: [
+        "border-transparent bg-transparent text-ink hover:bg-neutral-soft aria-expanded:bg-neutral-soft pressing:bg-neutral-soft",
+        "disabled:bg-transparent",
+      ],
     },
     {
       tone: "danger",
       variant: "solid",
       class: [
         "border-danger bg-danger text-on-danger",
-        "hover:bg-[color-mix(in_oklab,var(--color-danger)_85%,var(--color-ink))]",
-        "active:bg-[color-mix(in_oklab,var(--color-danger)_70%,var(--color-ink))]",
+        "hover:bg-[color-mix(in_oklab,var(--color-danger)_85%,var(--color-ink))] aria-expanded:bg-[color-mix(in_oklab,var(--color-danger)_85%,var(--color-ink))]",
+        "pressing:bg-[color-mix(in_oklab,var(--color-danger)_70%,var(--color-ink))]",
       ],
     },
     {
       tone: "danger",
       variant: "soft",
-      class: "border-transparent bg-danger-soft text-danger-text hover:border-danger-text",
+      class:
+        "border-transparent bg-danger-soft text-danger-text hover:border-danger-text aria-expanded:border-danger-text pressing:border-danger-text",
     },
     {
       tone: "danger",
       variant: "outline",
-      class: "border-danger-text bg-transparent text-danger-text hover:bg-danger-soft disabled:bg-transparent",
+      class: [
+        "border-danger-text bg-transparent text-danger-text hover:bg-danger-soft aria-expanded:bg-danger-soft pressing:bg-danger-soft",
+        "disabled:bg-transparent",
+      ],
     },
     {
       tone: "danger",
       variant: "ghost",
-      class: "border-transparent bg-transparent text-danger-text hover:bg-danger-soft disabled:bg-transparent",
+      class: [
+        "border-transparent bg-transparent text-danger-text hover:bg-danger-soft aria-expanded:bg-danger-soft pressing:bg-danger-soft",
+        "disabled:bg-transparent",
+      ],
     },
   ],
   defaultVariants: { tone: "primary", variant: "solid", size: "md", block: false },

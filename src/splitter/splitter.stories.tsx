@@ -14,16 +14,20 @@ function MapAndList(props: Partial<Splitter.RootProps>) {
         keyboardResizeBy={5}
         {...props}
       >
-        <Splitter.Panel id="carte" class="p-4">
-          <h2 class="text-lg font-semibold">Carte des parcelles</h2>
-          <p class="text-muted">Les Grands Champs, La Noue, Le Pré Haut</p>
+        <Splitter.Panel id="carte">
+          <div class="p-4">
+            <h2 class="text-lg font-semibold">Carte des parcelles</h2>
+            <p class="text-muted">Les Grands Champs, La Noue, Le Pré Haut</p>
+          </div>
         </Splitter.Panel>
         <Splitter.ResizeTrigger id="carte:liste" aria-label="Largeur de la carte">
           <Splitter.ResizeTrigger.Indicator />
         </Splitter.ResizeTrigger>
-        <Splitter.Panel id="liste" class="p-4">
-          <h2 class="text-lg font-semibold">Interventions</h2>
-          <p class="text-muted">Semis de blé tendre, 12 octobre</p>
+        <Splitter.Panel id="liste">
+          <div class="p-4">
+            <h2 class="text-lg font-semibold">Interventions</h2>
+            <p class="text-muted">Semis de blé tendre, 12 octobre</p>
+          </div>
         </Splitter.Panel>
       </Splitter.Root>
     </div>
@@ -71,6 +75,7 @@ export const TestWithTheKeyboard: Story = {
     bar.focus()
     await userEvent.keyboard("{ArrowRight}")
     await waitFor(() => expect(bar).toHaveAttribute("aria-valuenow", "65"))
+    expect(getComputedStyle(bar).outlineStyle).toBe("solid")
     await userEvent.keyboard("{ArrowLeft}{ArrowLeft}{ArrowLeft}")
     await waitFor(() => expect(bar).toHaveAttribute("aria-valuenow", "50"))
     await userEvent.keyboard("{Home}")

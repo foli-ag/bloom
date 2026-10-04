@@ -86,6 +86,33 @@ export const Open: Story = {
 }
 
 /**
+ * Along a row of buttons, the first tooltip waits for the mouse to rest. Once one shows, moving to the next button
+ * swaps the words at once, with no wait and no fade, as the eye is already there.
+ */
+export const InARow: Story = {
+  render: () => (
+    <div class="flex gap-3 p-16">
+      <Tooltip.Root openDelay={300}>
+        <Tooltip.Trigger as={Button} variant="outline">
+          Exporter
+        </Tooltip.Trigger>
+        <Tooltip.Positioner>
+          <Tooltip.Content>Au format de la déclaration PAC</Tooltip.Content>
+        </Tooltip.Positioner>
+      </Tooltip.Root>
+      <Tooltip.Root openDelay={300}>
+        <Tooltip.Trigger as={Button} variant="outline">
+          Imprimer
+        </Tooltip.Trigger>
+        <Tooltip.Positioner>
+          <Tooltip.Content>Une page par parcelle</Tooltip.Content>
+        </Tooltip.Positioner>
+      </Tooltip.Root>
+    </div>
+  ),
+}
+
+/**
  * The keyboard reaching the button shows it at once, as the button's description. Escape hides it and focus stays on
  * the button.
  */
@@ -132,6 +159,27 @@ export const TestNotOnTouch: Story = {
     trigger.dispatchEvent(new PointerEvent("pointermove", init))
     await new Promise((resolve) => setTimeout(resolve, 600))
     expect(page.queryByRole("tooltip")).toBeNull()
+  },
+}
+
+/** Once a tooltip shows, the next button's replaces it on the spot: whole at once, and the first one gone */
+export const TestMovingAlongARow: Story = {
+  ...InARow,
+  name: "Test: Moving along a row",
+  play: async () => {
+    const page = within(document.body)
+    await userEvent.hover(page.getByRole("button", { name: "Exporter" }))
+    await page.findByRole("tooltip")
+    await settled()
+
+    const print = page.getByRole("button", { name: "Imprimer" })
+    await userEvent.hover(print)
+    await waitFor(() => expect(print).toHaveAccessibleDescription("Une page par parcelle"))
+    await new Promise(requestAnimationFrame)
+    await new Promise(requestAnimationFrame)
+    const tooltips = page.getAllByRole("tooltip")
+    expect(tooltips).toHaveLength(1)
+    expect(getComputedStyle(tooltips[0]!).opacity).toBe("1")
   },
 }
 

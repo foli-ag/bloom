@@ -11,4 +11,5 @@ export function TreeViewTree(props: TreeViewTreeProps): Element {
   return <Seed.Tree {...omit(props, "class")} class={tree({ class: props.class })} />
 }
 
-const tree = tv({ base: "flex flex-col gap-0.5 outline-none" })
+// A layer of its own, so the guides can sit under the rows (see `Branch.IndentGuide`)
+const tree = tv({ base: "isolate flex flex-col gap-0.5 outline-none" })

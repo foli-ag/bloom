@@ -49,6 +49,10 @@
   --radius-control: 0.75rem;
   --radius-card: 1rem;
   --shadow-overlay: 0 1px 2px oklch(0.2 0.02 135 / 0.12), 0 12px 32px -8px oklch(0.2 0.02 135 / 0.28);
+  /* A card that stands off the page (`Card.Root variant="elevated"`), and the lift it takes under the pointer when it
+   * is a link or a button. Lower and softer than an overlay's, as it stays in the page. */
+  --shadow-card: 0 1px 2px oklch(0.2 0.02 135 / 0.1), 0 4px 12px -4px oklch(0.2 0.02 135 / 0.18);
+  --shadow-card-lift: 0 2px 4px oklch(0.2 0.02 135 / 0.1), 0 12px 24px -8px oklch(0.2 0.02 135 / 0.24);
 
   /* Primary scale, hue 134.8 (the hue of #74b24c). 500 is the brand fill. 700 is 4.8:1 on a light surface, enough
    * for a border, and 800 is 7.8:1, enough for text. */
@@ -94,11 +98,20 @@
   --color-on-warning: light-dark(oklch(0.2 0.042 85), oklch(0.15 0.032 85));
   --color-warning-text: light-dark(oklch(0.4 0.082 85), oklch(0.86 0.08 85));
   --color-warning-soft: light-dark(oklch(0.97 0.03 85), oklch(0.28 0.04 85));
+  /* A fill that has to show how much in the warning tone, a progress bar's or ring's, 3:1 against its track and the
+   * page: amber deepens to an orange on a light page, where it is only 1.3:1, and stays amber on a dark one */
+  --color-warning-edge: light-dark(oklch(0.58 0.13 70), var(--color-warning));
 
   --color-info: light-dark(oklch(0.44 0.145 255), oklch(0.72 0.148 255));
   --color-on-info: light-dark(#fff, oklch(0.15 0.04 255));
   --color-info-text: light-dark(oklch(0.42 0.139 255), oklch(0.82 0.092 255));
   --color-info-soft: light-dark(oklch(0.96 0.019 255), oklch(0.27 0.04 255));
+
+  /* Success, for now a fill that shows how much (3:1 against its track and the page, as `primary-edge`) and the words
+   * next to it (7:1), such as a progress that ended well. Its green is not the brand's, so it stays a success green in
+   * a product that re-skins the primary scale. */
+  --color-success-edge: light-dark(oklch(0.53 0.13 150), oklch(0.77 0.14 150));
+  --color-success-text: light-dark(oklch(0.42 0.1 150), oklch(0.84 0.1 150));
 
   /* The dim behind a dialog or a bottom sheet */
   --color-scrim: light-dark(oklch(0.2 0.02 135 / 0.5), oklch(0 0 0 / 0.65));
@@ -181,6 +194,44 @@
     1
   );
   --ease-press: cubic-bezier(0, 0, 0.58, 1);
+  /* The pace of what loops while something is under way, a spinner and a bar whose end is not known: half its average
+   * speed as each round starts and ends, one and a half times it in the middle, so it breathes instead of grinding. It
+   * ends a round as fast as it starts the next, so the loop has no seam. A sine, sampled like the springs. */
+  --ease-progress-loop: linear(
+    0,
+    0.016,
+    0.032,
+    0.05,
+    0.069,
+    0.09,
+    0.114,
+    0.141,
+    0.17,
+    0.203,
+    0.239,
+    0.278,
+    0.319,
+    0.362,
+    0.407,
+    0.453,
+    0.5,
+    0.547,
+    0.593,
+    0.638,
+    0.681,
+    0.722,
+    0.761,
+    0.797,
+    0.83,
+    0.859,
+    0.886,
+    0.91,
+    0.931,
+    0.95,
+    0.968,
+    0.984,
+    1
+  );
   --duration-smooth: 450ms;
   --duration-pop: 490ms;
   --duration-press: 90ms;
@@ -195,26 +246,61 @@
   --enter-distance: 0.75rem;
   --overlay-scale: 0.96;
   --sheet-distance: 100%;
+  /* How opaque a sheet is off its edge, as it slides in and out: fully, as the slide shows where it comes from and a
+   * sheet that faded as well would cross the screen as a pale ghost of itself. Reduced motion takes the slide away, so
+   * there it fades. For the dialog's sheet and the drawer. */
+  --sheet-from-opacity: 1;
+  /* How much of a folding section shows as it starts to open and as it ends closing: none. Reduced motion shows all of
+   * it, so the section only fades. */
+  --collapse-rows: 0fr;
+  /* How much of its time a chevron takes to turn as what it opens opens and closes: all of it. Reduced motion turns it
+   * at once. */
+  --chevron-turn: 1;
+  /* How big a radio's dot is as it starts to appear: nothing, so it grows from the middle of the circle. Reduced motion
+   * shows it whole, so it only fades in. */
+  --radio-dot-scale: 0;
+  /* How long something takes to travel to its new place: a switch's knob, a slider's handle, a dial's needle, a split, the
+   * bar under a tab, words making room for a tick. The smooth spring. Reduced motion puts it there at once, while its
+   * colors still fade. */
+  --duration-travel: var(--duration-smooth);
+  /* How much a handle grows while a finger holds it, a slider's or a dial's, so it shows above the finger. Reduced
+   * motion leaves it at its size, its color still saying it is held. */
+  --hold-scale: 1.25;
+  /* How much of the green line between two steps is drawn before the first one is done: none, so it fills from the
+   * step done toward the next. Reduced motion draws it whole, and it only fades in. */
+  --steps-line-scale: 0;
 
   --animate-pop-in: bloom-pop-in var(--duration-pop) var(--ease-pop) both;
-  --animate-spin-ring: bloom-spin 800ms linear infinite;
-  /* A third of a bar sliding across it, for a progress whose end is not known. Like the spinner it stays under reduced
-   * motion, as it is what tells the farmer something is happening. */
-  --animate-progress-slide: bloom-progress-slide 1.4s var(--ease-smooth) infinite;
+  /* What keeps moving while something is under way: a spinner turns, and a third of a bar slides across it, from out of
+   * sight on one side to out of sight on the other, for a progress whose end is not known. Both stay under reduced
+   * motion, as they are what tells the farmer something is happening, but there they go slower and at an even pace. */
+  --animate-spin-ring: bloom-spin 1s var(--ease-progress-loop) infinite;
+  --animate-progress-slide: bloom-progress-slide 1.6s var(--ease-progress-loop) infinite;
+  /* A skeleton's sheen: a soft band of light crosses a placeholder, then rests out of sight before the next pass, so a
+   * page of them breathes instead of flickering. It moves by `translate`, which the compositor runs. Unlike a spinner it
+   * says nothing a farmer needs, so reduced motion stops it and the placeholder stays still. */
+  --animate-skeleton-sheen: bloom-skeleton-sheen 2.2s var(--ease-progress-loop) infinite;
 
-  /* What opens and closes. These are keyframes and not transitions because a part that unmounts on exit waits for its
-   * animation to end. Under reduced motion the distances are zero and each one is a fade. */
+  /* What appears and leaves once, for an app's own parts, such as a notice that shows and goes. Bloom's parts that open
+   * and close use the `presence-*` utilities below instead, which turn round from where they are when the farmer changes
+   * their mind half way: a keyframe starts its exit from the open look, and a half-open part snaps open first. Under
+   * reduced motion the distances are zero and each one is a fade. */
   --animate-fade-in: bloom-fade-in var(--duration-smooth) var(--ease-smooth) both;
   --animate-fade-out: bloom-fade-out var(--duration-exit) var(--ease-smooth) both;
   --animate-overlay-in: bloom-overlay-in var(--duration-smooth) var(--ease-smooth) both;
   --animate-overlay-out: bloom-overlay-out var(--duration-exit) var(--ease-smooth) both;
   --animate-sheet-in: bloom-sheet-in var(--duration-sheet) var(--ease-smooth) both;
   --animate-sheet-out: bloom-sheet-out var(--duration-exit) var(--ease-smooth) both;
-  --animate-collapse-open: bloom-collapse-open var(--duration-smooth) var(--ease-smooth) both;
-  --animate-collapse-close: bloom-collapse-close var(--duration-exit) var(--ease-smooth) both;
+  /* A folding section's, which last as long as the fold and change nothing (see `presence-collapse`) */
+  --animate-collapse-open: bloom-collapse-open var(--duration-smooth) linear both;
+  --animate-collapse-close: bloom-collapse-close var(--duration-exit) linear both;
   /* Changes nothing for as long as an exit takes. A list inside a panel stays mounted until it ends, because a part
    * is unmounted when its own animation ends, and here it is the panel around it that leaves. */
   --animate-hold: bloom-hold var(--duration-exit) linear both;
+  /* A dialog that stays open when its dim is pressed, as an alert dialog does, swells a little and settles back, so the
+   * press reads as seen and the eye goes back to the question. It runs on the dialog's positioner, as zag watches the
+   * animations of the dialog itself to know when it has left. */
+  --animate-dialog-swell: bloom-dialog-swell var(--duration-smooth) linear;
 
   @keyframes bloom-pop-in {
     from {
@@ -227,9 +313,11 @@
     }
   }
 
+  /* `transform` and not `rotate`: on an <svg>, Chromium runs `rotate` and `scale` on the main thread, so a spinner
+   * would stop whenever the page is busy, which is when it is needed. It runs `transform` on the compositor. */
   @keyframes bloom-spin {
     to {
-      rotate: 360deg;
+      transform: rotate(360deg);
     }
   }
 
@@ -239,6 +327,17 @@
     }
     to {
       translate: 300%;
+    }
+  }
+
+  /* Across in the first 60% of the time, then out of sight for the rest */
+  @keyframes bloom-skeleton-sheen {
+    from {
+      translate: -100%;
+    }
+    60%,
+    to {
+      translate: 100%;
     }
   }
 
@@ -270,9 +369,29 @@
     }
   }
 
+  /* Out as fast as a press, back on the smooth spring, by half what an overlay grows by: under reduced motion, which
+   * zeroes that, it stays still */
+  @keyframes bloom-dialog-swell {
+    from {
+      animation-timing-function: var(--ease-press);
+    }
+    25% {
+      scale: calc(1 + (1 - var(--overlay-scale)) / 2);
+      animation-timing-function: var(--ease-smooth);
+    }
+  }
+
+  /* A floating panel's way out of its trigger, run on its positioner by `presence-drift` */
+  @keyframes bloom-presence-drift {
+    from {
+      translate: var(--presence-from, 0 calc(var(--enter-distance) * -0.5));
+    }
+  }
+
+  /* A custom property and not a look, so it can run under a part's own exit without fighting it */
   @keyframes bloom-hold {
     to {
-      opacity: 1;
+      --bloom-hold: 1;
     }
   }
 
@@ -292,34 +411,41 @@
     }
   }
 
-  /* The one animation that is not transform and opacity: a section that opens has to push down what follows it.
-   * `--height` is measured and set by the collapsible machine. Under reduced motion it is swapped for a fade. */
+  /* A section folds on a transition, so it can turn round half way. Zag reads the animation on it instead: it waits
+   * for this one to end before it hides a closing section, and takes `data-state` off an opening one once it has. Like
+   * `bloom-hold` they change a custom property and no look. Two names, so a closing one is never taken for the open
+   * one still running. */
   @keyframes bloom-collapse-open {
-    from {
-      height: 0;
-      opacity: 0;
-    }
     to {
-      height: var(--height);
+      --bloom-collapse: 1;
     }
   }
 
   @keyframes bloom-collapse-close {
-    from {
-      height: var(--height);
-    }
     to {
-      height: 0;
-      opacity: 0;
+      --bloom-collapse: 0;
     }
   }
 }
 
-/* The ring that shows where the keyboard or switch access is, 3px and offset so it clears the control's own border */
+/*
+ * The ring that shows where the keyboard or switch access is. It is drawn inside the control, so the control keeps its
+ * size and shape and nothing around it is covered. On a control with a 2px edge it sits just within the edge, which
+ * stays, so the edge thickens inward in the focus color, and an invalid control keeps its red edge outside the ring.
+ * Where there is no room for both, in a box, a radio, a switch or a handle, or no edge to keep, on a soft or ghost
+ * button or a row, the part sets `--focus-inset: 3px` and the ring takes the edge's place.
+ *
+ * On a fill the ring would sink into, a solid button or a ticked box, the part sets `--focus-gap` to the page's color
+ * and a 2px line of it keeps the ring apart from the fill. A part that zag focuses itself after a press, such as a
+ * slider's handle, sets `--focus-style: none` while the pointer has it, as the ring is for the keyboard. It reads zag's
+ * `data-focus-visible` too, for a box whose hidden input has the focus.
+ */
 @utility focus-ring {
-  &:focus-visible {
-    outline: 3px solid var(--color-focus);
-    outline-offset: 3px;
+  &:focus-visible,
+  &[data-focus-visible] {
+    outline: 3px var(--focus-style, solid) var(--color-focus);
+    outline-offset: calc(var(--focus-inset, 5px) * -1);
+    box-shadow: inset 0 0 0 var(--focus-inset, 5px) var(--focus-gap, transparent);
   }
 }
 
@@ -339,14 +465,139 @@
 }
 
 /* How a touched part moves. Its size follows the finger: down in 90ms while held, back up on the pop spring when let
- * go. Its place and its colors ease on the smooth spring, together. */
+ * go. Its colors go down with it, to the pressed look, as a phone has no hover to show one first, and ease back on the
+ * smooth spring. Its place eases on the smooth spring. */
 @utility motion-touch {
   transition:
     scale var(--press-duration, var(--duration-pop)) var(--press-ease, var(--ease-pop)),
     translate var(--duration-smooth) var(--ease-smooth),
-    background-color var(--duration-smooth) var(--ease-smooth),
-    border-color var(--duration-smooth) var(--ease-smooth),
-    color var(--duration-smooth) var(--ease-smooth);
+    background-color var(--press-duration, var(--duration-smooth)) var(--press-ease, var(--ease-smooth)),
+    border-color var(--press-duration, var(--duration-smooth)) var(--press-ease, var(--ease-smooth)),
+    color var(--press-duration, var(--duration-smooth)) var(--press-ease, var(--ease-smooth));
+}
+
+/*
+ * What opens and closes: a panel, a dialog, a sheet, the dim behind them. Each look is a transition, from
+ * `@starting-style` as the part appears and to its closed look as it leaves, so a change of mind half way turns it round
+ * from where it is. A keyframe animation would start its exit from the open look, and a half-open panel would snap open
+ * for a frame before leaving. Zag keeps a closing part mounted while an animation runs on it, so the closed state also
+ * runs `bloom-hold`, which changes nothing, for as long as the exit takes. A part on its way out takes no presses.
+ */
+@utility presence-fade {
+  transition: opacity var(--presence-duration, var(--duration-smooth)) var(--ease-smooth);
+
+  @starting-style {
+    opacity: 0;
+  }
+
+  &[data-state="closed"] {
+    --presence-duration: var(--duration-exit);
+    pointer-events: none;
+    opacity: 0;
+    animation: var(--animate-hold);
+  }
+}
+
+/* A floating panel or a card grows a little and drifts in from `--presence-from`, half the enter distance above it
+ * unless a placement says otherwise */
+@utility presence-overlay {
+  transition-property: opacity, scale, translate;
+  transition-duration: var(--presence-duration, var(--duration-smooth));
+  transition-timing-function: var(--ease-smooth);
+
+  @starting-style {
+    opacity: 0;
+    scale: var(--overlay-scale);
+    translate: var(--presence-from, 0 calc(var(--enter-distance) * -0.5));
+  }
+
+  &[data-state="closed"] {
+    --presence-duration: var(--duration-exit);
+    pointer-events: none;
+    opacity: 0;
+    scale: var(--overlay-scale);
+    animation: var(--animate-hold);
+  }
+}
+
+/*
+ * A panel that floats by its trigger comes out of it in two parts: the panel fades and grows with `presence-overlay`,
+ * with no drift of its own (`--presence-from: 0 0`), and the positioner zag places it with drifts it from
+ * `--presence-from`, which says on which side of the trigger it landed. The drift is keyframes and not a transition
+ * because keyframes read `--presence-from` on every frame: zag can flip a panel to the other side of its trigger a frame
+ * after it appears, while it is still unseen, and the drift then comes from the side it landed on. It runs once as the
+ * positioner appears and keeps running as the panel closes, so a change of mind half way never cuts it short. For the
+ * select, menu, combobox, popover, tooltip and hover card.
+ */
+@utility presence-drift {
+  animation: bloom-presence-drift var(--presence-duration, var(--duration-smooth)) var(--ease-smooth) both;
+}
+
+/* A sheet comes from the bottom edge, or from the one `--sheet-from` names, written with `--sheet-distance` so reduced
+ * motion still zeroes it. It slides in solid (`--sheet-from-opacity`), as a sheet that faded too would cross the screen
+ * as a pale ghost of itself, and it fades only under reduced motion, where it does not move. */
+@utility presence-sheet {
+  transition-property: opacity, translate;
+  transition-duration: var(--presence-duration, var(--duration-sheet));
+  transition-timing-function: var(--ease-smooth);
+
+  @starting-style {
+    opacity: var(--sheet-from-opacity);
+    translate: var(--sheet-from, 0 var(--sheet-distance));
+  }
+
+  &[data-state="closed"] {
+    --presence-duration: var(--duration-exit);
+    pointer-events: none;
+    opacity: var(--sheet-from-opacity);
+    translate: var(--sheet-from, 0 var(--sheet-distance));
+    animation: var(--animate-hold);
+  }
+}
+
+/*
+ * A section that folds open and shut, pushing down what follows it: a collapsible's content, an accordion's, a tree
+ * branch's, a side menu's. It is a grid of one row around one child, and the row grows from `--collapse-rows` to the
+ * child's full height as it fades in. It is the one transition that is not transform and opacity, and as a transition
+ * a change of mind half way folds it back from where it is. While it moves, its child clips what has not unfolded yet.
+ * Zag takes `data-state` off a collapsible once it has opened, and then the child stops clipping, so a ring inside it
+ * shows whole. A stack where one section closes as another opens sets `--collapse-exit-duration` to the opening's time,
+ * so the two move as one and what is below them holds still.
+ */
+@utility presence-collapse {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition-property: grid-template-rows, opacity;
+  transition-duration: var(--duration-smooth);
+  transition-timing-function: var(--ease-smooth);
+
+  /* A margin inside stays inside, where it folds with the rest */
+  & > * {
+    display: flow-root;
+    min-height: 0;
+  }
+
+  &[data-state] > * {
+    overflow: clip;
+  }
+
+  &[data-state="open"] {
+    animation: var(--animate-collapse-open);
+
+    @starting-style {
+      grid-template-rows: var(--collapse-rows);
+      opacity: 0;
+    }
+  }
+
+  &[data-state="closed"] {
+    pointer-events: none;
+    grid-template-rows: var(--collapse-rows);
+    opacity: 0;
+    transition-duration: var(--collapse-exit-duration, var(--duration-exit));
+    animation: var(--animate-collapse-close);
+    animation-duration: var(--collapse-exit-duration, var(--duration-exit));
+  }
 }
 
 /* A control that shrinks under the finger itself, such as a button, with the timing of `motion-touch` */
@@ -354,14 +605,44 @@
   transition:
     scale var(--press-duration, var(--duration-pop)) var(--press-ease, var(--ease-pop)),
     translate var(--duration-smooth) var(--ease-smooth),
-    background-color var(--duration-smooth) var(--ease-smooth),
-    border-color var(--duration-smooth) var(--ease-smooth),
-    color var(--duration-smooth) var(--ease-smooth);
+    background-color var(--press-duration, var(--duration-smooth)) var(--press-ease, var(--ease-smooth)),
+    border-color var(--press-duration, var(--duration-smooth)) var(--press-ease, var(--ease-smooth)),
+    color var(--press-duration, var(--duration-smooth)) var(--press-ease, var(--ease-smooth));
 
-  &:where(:not(:disabled, [aria-disabled="true"], [aria-busy="true"])):active {
+  /* `:active` matches a disabled or busy button, and a zag part that is not a native one: those do not go down */
+  &:where(:not(:disabled, [aria-disabled="true"], [aria-busy="true"], [data-disabled], [data-readonly])):active {
     scale: var(--press-scale);
   }
 }
+
+/*
+ * A placeholder for what is loading: the lines and shapes of a skeleton, and the rows of a list while its options load.
+ * It is a tint a step off the ground it sits on, with its sheen drawn by `::after` and clipped to its shape. The part
+ * that uses it hides it from assistive technology.
+ */
+@utility skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: color-mix(in oklab, var(--color-neutral-soft), var(--color-border) 45%);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    translate: -100%;
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      light-dark(oklch(1 0 0 / 0.7), oklch(1 0 0 / 0.08)),
+      transparent
+    );
+    animation: var(--animate-skeleton-sheen);
+  }
+}
+
+/* A button, a tab or a page of a pagination held down by a finger or a key, unless the press does nothing because it
+ * is disabled, read-only or busy. They take their pressed colors under it, as a phone has no hover to show one first. */
+@custom-variant pressing (&:active:not(:disabled, [aria-disabled="true"], [aria-busy="true"], [data-disabled], [data-readonly]));
 
 @layer base {
   /* The system's setting, unless `data-theme` on <html> says otherwise. `light-dark()` above follows this. */
@@ -394,6 +675,7 @@
     :root {
       --ease-smooth: cubic-bezier(0.25, 0.8, 0.25, 1);
       --ease-pop: cubic-bezier(0.34, 1.3, 0.64, 1);
+      --ease-progress-loop: cubic-bezier(0.36, 0.18, 0.64, 0.82);
     }
   }
 
@@ -406,11 +688,19 @@
       --pop-in-scale: 1;
       --overlay-scale: 1;
       --sheet-distance: 0px;
+      --sheet-from-opacity: 0;
       --enter-distance: 0px;
       --ease-pop: var(--ease-smooth);
       --duration-pop: var(--duration-smooth);
-      --animate-collapse-open: var(--animate-fade-in);
-      --animate-collapse-close: var(--animate-fade-out);
+      --collapse-rows: 1fr;
+      --chevron-turn: 0;
+      --radio-dot-scale: 1;
+      --duration-travel: 0s;
+      --hold-scale: 1;
+      --animate-spin-ring: bloom-spin 1.6s linear infinite;
+      --animate-progress-slide: bloom-progress-slide 2.4s linear infinite;
+      --steps-line-scale: 1;
+      --animate-skeleton-sheen: none;
     }
   }
 
@@ -420,11 +710,19 @@
     --pop-in-scale: 1;
     --overlay-scale: 1;
     --sheet-distance: 0px;
+    --sheet-from-opacity: 0;
     --enter-distance: 0px;
     --ease-pop: var(--ease-smooth);
     --duration-pop: var(--duration-smooth);
-    --animate-collapse-open: var(--animate-fade-in);
-    --animate-collapse-close: var(--animate-fade-out);
+    --collapse-rows: 1fr;
+    --chevron-turn: 0;
+    --radio-dot-scale: 1;
+    --duration-travel: 0s;
+    --hold-scale: 1;
+    --animate-spin-ring: bloom-spin 1.6s linear infinite;
+    --animate-progress-slide: bloom-progress-slide 2.4s linear infinite;
+    --steps-line-scale: 1;
+    --animate-skeleton-sheen: none;
   }
 
   /* More contrast: ink goes to black or white and every edge to the strong one. `data-contrast="more"` on <html>

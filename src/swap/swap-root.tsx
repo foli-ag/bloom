@@ -25,12 +25,18 @@ export function SwapRoot(props: SwapRootProps): Element {
   return <Seed.Root {...omit(props, "class")} class={swapRoot({ class: props.class })} />
 }
 
-// The indicator not shown is hidden with `visibility`, which keeps its room in the cell, as `display: none` would not.
-// It turns hidden only once its exit has played: a transition on `visibility` holds it visible for its length.
+// The indicator not shown fades and shrinks to where the next one will pop in from, then turns hidden with
+// `visibility`, which keeps its room in the cell, as `display: none` would not, and leaves it out of the button's name.
+// A delayed transition on `visibility` holds it visible until the fade has played. These are the root's, as only the
+// root knows which one is shown, on the first render too.
 export const swapRoot = tv({
   base: [
     "place-items-center",
-    "[&[data-swap=on]>[data-type=off]]:invisible [&[data-swap=on]>[data-type=off]]:delay-(--duration-exit)",
-    "[&[data-swap=off]>[data-type=on]]:invisible [&[data-swap=off]>[data-type=on]]:delay-(--duration-exit)",
+    "[&[data-swap=on]>[data-type=off]]:invisible [&[data-swap=on]>[data-type=off]]:opacity-0",
+    "[&[data-swap=on]>[data-type=off]]:scale-(--pop-in-scale)",
+    "[&[data-swap=on]>[data-type=off]]:[transition:opacity_var(--duration-exit)_var(--ease-smooth),scale_var(--duration-exit)_var(--ease-smooth),visibility_0s_var(--duration-exit)]",
+    "[&[data-swap=off]>[data-type=on]]:invisible [&[data-swap=off]>[data-type=on]]:opacity-0",
+    "[&[data-swap=off]>[data-type=on]]:scale-(--pop-in-scale)",
+    "[&[data-swap=off]>[data-type=on]]:[transition:opacity_var(--duration-exit)_var(--ease-smooth),scale_var(--duration-exit)_var(--ease-smooth),visibility_0s_var(--duration-exit)]",
   ],
 })

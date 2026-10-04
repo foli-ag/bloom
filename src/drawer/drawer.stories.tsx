@@ -45,12 +45,13 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const content = () => document.querySelector<HTMLElement>('[data-scope="drawer"][data-part="content"]')!
+const grabber = () => document.querySelector<HTMLElement>('[data-scope="drawer"][data-part="grabber"]')!
 
 /**
- * Drags `element` down by `dy` pixels with a touch pointer, the way a thumb does. Zag follows the pointer from its
- * first move, so the events are dispatched one by one.
+ * Drags `element` down by `dy` pixels, or up when it is negative, with a touch pointer, the way a thumb does. Zag
+ * follows the pointer from its first move, so the events are dispatched one by one.
  */
-async function swipeDown(element: HTMLElement, dy: number) {
+async function swipe(element: HTMLElement, dy: number) {
   const { left, top } = element.getBoundingClientRect()
   const init = { bubbles: true, pointerId: 1, pointerType: "touch", isPrimary: true, clientX: left + 20, button: 0 }
   element.dispatchEvent(new PointerEvent("pointerdown", { ...init, clientY: top + 20, buttons: 1 }))
@@ -58,9 +59,13 @@ async function swipeDown(element: HTMLElement, dy: number) {
     element.dispatchEvent(
       new PointerEvent("pointermove", { ...init, clientY: top + 20 + (dy * step) / 10, buttons: 1 }),
     )
-    await new Promise(requestAnimationFrame)
+    await frame()
   }
   element.dispatchEvent(new PointerEvent("pointerup", { ...init, clientY: top + 20 + dy }))
+}
+
+function frame() {
+  return new Promise((resolve) => requestAnimationFrame(resolve))
 }
 
 /**
@@ -118,24 +123,103 @@ export const TestOpeningAndClosing: Story = {
   },
 }
 
-/** Swiped down a little it settles back in place. Swiped far enough it goes and the dim clears. */
+/**
+ * Swiped down a little it settles back in place, and the dim with it. Swiped far enough it goes on down from where the
+ * thumb left it, without coming back up first, and the dim clears.
+ */
 export const TestSwipedAway: Story = {
   name: "Test: Swiped away",
   args: { defaultOpen: true },
   play: async ({ args }) => {
     const page = within(document.body)
     const drawer = await page.findByRole("dialog")
+    const backdrop = document.querySelector<HTMLElement>('[data-scope="drawer"][data-part="backdrop"]')!
     await settled()
     const top = drawer.getBoundingClientRect().top
 
-    await swipeDown(content(), 30)
+    await swipe(content(), 30)
     await settled()
     expect(drawer).toBeVisible()
     expect(drawer.getBoundingClientRect().top).toBeCloseTo(top, 0)
+    // However the dim is drawn, all of it is back
+    const layers = [backdrop, ...backdrop.querySelectorAll("*")]
+    expect(layers.map((layer) => getComputedStyle(layer).opacity)).toEqual(layers.map(() => "1"))
 
-    await swipeDown(content(), 400)
+    await swipe(content(), 400)
+    const tops = await topsUntilGone(drawer)
+    expect(tops[0]).toBeGreaterThan(top + 300)
+    expect(tops).toEqual([...tops].sort((a, b) => a - b))
     await waitFor(() => expect(page.queryByRole("dialog")).toBeNull())
     expect(args.onOpenChange).toHaveBeenLastCalledWith({ open: false })
+  },
+}
+
+/** The top of `element` on every frame until it leaves the page, rounded to the pixel */
+async function topsUntilGone(element: HTMLElement) {
+  const tops = [Math.round(element.getBoundingClientRect().top)]
+  for (let count = 0; count < 120; count++) {
+    await frame()
+    if (!element.isConnected) break
+    tops.push(Math.round(element.getBoundingClientRect().top))
+  }
+  return tops
+}
+
+/**
+ * Closed half way up, it turns round from where it is: it goes back down from there, where a keyframe exit would start
+ * from the open look and jump up first. The opening is slowed down so the few milliseconds the test takes to press
+ * Escape barely move it.
+ */
+export const TestClosedWhileOpening: Story = {
+  name: "Test: Closed while opening",
+  play: async () => {
+    const root = document.documentElement
+    root.style.setProperty("--duration-sheet", "10s")
+    try {
+      const page = within(document.body)
+      await userEvent.click(page.getByRole("button", { name: "Filtrer" }))
+      const drawer = await page.findByRole("dialog")
+      await waitFor(() => expect(drawer.getBoundingClientRect().top).toBeLessThan(innerHeight - 40), { timeout: 3000 })
+      const before = drawer.getBoundingClientRect().top
+
+      await userEvent.keyboard("{Escape}")
+      const tops = await topsUntilGone(drawer)
+      expect(tops[0]).toBeGreaterThan(before - 10)
+      expect(tops).toEqual([...tops].sort((a, b) => a - b))
+      expect(tops.at(-1)).toBeGreaterThan(innerHeight - 10)
+    } finally {
+      root.style.removeProperty("--duration-sheet")
+    }
+  },
+}
+
+/**
+ * Swiped away and opened again before it has left, it turns round from where it is. Zag keeps its swipe state a frame
+ * into the reopening, which once made the drawer jump back up by all it had slid out. The exit is slowed down, so the
+ * drawer is well on its way out when the trigger is pressed.
+ */
+export const TestOpenedAgainWhileSwipedAway: Story = {
+  name: "Test: Opened again while swiped away",
+  args: { defaultOpen: true },
+  play: async () => {
+    const root = document.documentElement
+    const page = within(document.body)
+    const drawer = await page.findByRole("dialog")
+    await settled()
+    root.style.setProperty("--duration-exit", "3s")
+    try {
+      await swipe(content(), 300)
+      const letGo = drawer.getBoundingClientRect().top
+      await waitFor(() => expect(drawer.getBoundingClientRect().top).toBeGreaterThan(letGo + 60))
+      const before = drawer.getBoundingClientRect().top
+
+      await userEvent.click(page.getByRole("button", { name: "Filtrer" }))
+      expect(Math.abs(drawer.getBoundingClientRect().top - before)).toBeLessThan(20)
+      await settled()
+      expect(drawer.getBoundingClientRect().bottom).toBeCloseTo(innerHeight, 0)
+    } finally {
+      root.style.removeProperty("--duration-exit")
+    }
   },
 }
 
@@ -182,6 +266,84 @@ export const TestOnTheRight: Story = {
     const panel = drawer.getBoundingClientRect()
     expect(panel.right).toBeCloseTo(innerWidth, 0)
     expect(panel.height).toBeCloseTo(innerHeight, 0)
+  },
+}
+
+const allCultures = [
+  "Blé tendre",
+  "Blé dur",
+  "Orge d'hiver",
+  "Orge de printemps",
+  "Avoine",
+  "Seigle",
+  "Triticale",
+  "Colza",
+  "Tournesol",
+  "Maïs grain",
+  "Maïs ensilage",
+  "Sorgho",
+  "Pois protéagineux",
+  "Féverole",
+  "Soja",
+  "Lin",
+  "Chanvre",
+  "Betterave sucrière",
+  "Pomme de terre",
+  "Prairie temporaire",
+]
+
+// The same drawer with a list long enough to scroll once it is all the way open
+function AllCultures(props: Drawer.RootProps) {
+  return (
+    <Drawer.Root {...props}>
+      <Drawer.Trigger as={Button} variant="outline">
+        Filtrer
+      </Drawer.Trigger>
+      <Drawer.Backdrop />
+      <Drawer.Positioner>
+        <Drawer.Content>
+          <Drawer.Grabber>
+            <Drawer.Grabber.Indicator />
+          </Drawer.Grabber>
+          <Drawer.Title>Filtrer les parcelles</Drawer.Title>
+          <Drawer.Description>Ne montrer que les parcelles de ces cultures.</Drawer.Description>
+          <div role="group" aria-label="Cultures">
+            <For each={allCultures}>{(culture) => <Checkbox>{culture}</Checkbox>}</For>
+          </div>
+          <Drawer.Trigger.Close as={Button} tone="neutral" variant="outline" block>
+            Fermer
+          </Drawer.Trigger.Close>
+        </Drawer.Content>
+      </Drawer.Positioner>
+    </Drawer.Root>
+  )
+}
+
+/**
+ * With `snapPoints` it rests half open on a phone, its list cut by the bottom edge. Swiped up by its grabber it opens
+ * all the way, and the grabber stays at its top while the list scrolls under it, so it can still be pulled down.
+ */
+export const TestWithSnapPoints: Story = {
+  name: "Test: With snap points",
+  args: { defaultOpen: true },
+  globals: { viewport: { value: "mobile2", isRotated: false } },
+  render: (args) => <AllCultures {...args} snapPoints={[0.5, 1]} />,
+  play: async () => {
+    const drawer = await within(document.body).findByRole("dialog")
+    await settled()
+    const half = drawer.getBoundingClientRect()
+    expect(innerHeight - half.top).toBeCloseTo(document.documentElement.clientHeight / 2, 0)
+
+    await swipe(grabber(), -200)
+    await settled()
+    const open = drawer.getBoundingClientRect()
+    expect(open.bottom).toBeCloseTo(innerHeight, 0)
+    expect(open.top).toBeLessThan(half.top - 100)
+
+    drawer.scrollTop = drawer.scrollHeight
+    await frame()
+    expect(drawer.scrollTop).toBeGreaterThan(0)
+    expect(grabber().getBoundingClientRect().top - open.top).toBeLessThan(4)
   },
 }
 

@@ -13,6 +13,6 @@ export type FocusChangeDetails = Seed.FocusChangeDetails
 export type ValueChangeDetails = Seed.ValueChangeDetails
 export type ValueInvalidDetails = Seed.ValueInvalidDetails
 
-// Seeds' own, with no look. The buttons render as a `Button`.
-export const Trigger: typeof Seed.Trigger = Seed.Trigger
+// In a `field` control the buttons are seeds' own, with no look, rendered as a `Button`. In a stepper they are its own.
+export * as Trigger from "./number-input-trigger.js"
 export const Context: typeof Seed.Context = Seed.Context

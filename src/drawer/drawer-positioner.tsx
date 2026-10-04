@@ -19,11 +19,12 @@ export function DrawerPositioner(props: DrawerPositionerProps): Element {
   )
 }
 
+// A drawer on the left or the right edge places itself with an auto margin, as `justify-start` would follow the
+// writing direction and `data-swipe-direction` is physical
 const positioner = tv({
   base: [
     "fixed inset-0 z-50 flex",
     "data-[swipe-direction=down]:items-end data-[swipe-direction=down]:justify-center",
     "data-[swipe-direction=up]:items-start data-[swipe-direction=up]:justify-center",
-    "data-[swipe-direction=left]:justify-start data-[swipe-direction=right]:justify-end",
   ],
 })

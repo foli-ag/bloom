@@ -6,7 +6,10 @@ export type TreeViewItemProps = Omit<Seed.ItemProps, "class"> & {
   class?: string | undefined
 }
 
-/** A node with no children, a row holding its `Item.Text` and `Item.Indicator`. A tap selects it. */
+/**
+ * A node with no children, a row holding its `Item.Text` and `Item.Indicator`. A tap selects it. Its words start where
+ * a branch's do at the same level, after the room of a chevron.
+ */
 export function TreeViewItem(props: TreeViewItemProps): Element {
-  return <Seed.Item {...omit(props, "class")} class={row({ class: props.class })} />
+  return <Seed.Item {...omit(props, "class")} class={row({ leaf: true, class: props.class })} />
 }

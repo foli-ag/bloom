@@ -11,4 +11,5 @@ export function TreeViewBranch(props: TreeViewBranchProps): Element {
   return <Seed.Branch {...omit(props, "class")} class={branch({ class: props.class })} />
 }
 
-const branch = tv({ base: "flex flex-col gap-0.5 outline-none" })
+// No gap under the row: the content keeps its own, inside what folds
+const branch = tv({ base: "flex flex-col outline-none" })

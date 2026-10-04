@@ -19,7 +19,7 @@ export function PopoverPositioner(props: PopoverPositionerProps): Element {
       <Seed.Positioner
         {...omit(props, "class")}
         // Hidden with the content once it has closed, or the dim would stay over the page on a phone
-        class={sheetPositioner({ class: ["has-[>[hidden]]:hidden", props.class] })}
+        class={sheetPositioner({ holds: "content", class: ["has-[>[hidden]]:hidden", props.class] })}
         data-state={api().open ? "open" : "closed"}
       />
     </Portal>

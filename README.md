@@ -9,40 +9,47 @@ does not tree-shake, so a root entry would load every component.
 | Component | Import | What it is |
 |---|---|---|
 | `Button` | `@foliag/bloom/button` | 48px, or 56px as `size="lg"`. Tones, four emphasis levels, `loading`, `as` for links |
-| `Input` | `@foliag/bloom/input` | 48px text field with an `invalid` state. Labels and help are the app's, for now |
-| `Checkbox` | `@foliag/bloom/checkbox` | A box and its words as one full-width row, with an indeterminate state |
+| `Input` | `@foliag/bloom/input` | 48px text field with an `invalid` state. `Input.Start` and `Input.End` put a mark, a unit or a button in its box |
+| `Checkbox` | `@foliag/bloom/checkbox` | A box and its words as one full-width row, with an indeterminate state, a sentence under its title, or a tile (`variant="card"`) |
 | `Switch` | `@foliag/bloom/switch` | A setting that applies at once: words first, the switch at the end of the row |
-| `RadioGroup` | `@foliag/bloom/radio-group` | One choice among a few, all in view, stacked or side by side |
-| `ToggleGroup` | `@foliag/bloom/toggle-group` | A row of equal segments pressed like buttons, one at a time or several |
+| `RadioGroup` | `@foliag/bloom/radio-group` | One choice among a few, all in view, stacked, side by side, or as tiles with a picture and a sentence (`variant="card"`) |
+| `ToggleGroup` | `@foliag/bloom/toggle-group` | A row of equal segments pressed like buttons, or a track with a pill that slides to the choice (`variant="segmented"`) |
 | `Slider` | `@foliag/bloom/slider` | A value or a range along a line, with a 48px target around each handle |
-| `Select` | `@foliag/bloom/select` | One choice from a list. A dropdown from 640px, a bottom sheet on a phone |
-| `Combobox` | `@foliag/bloom/combobox` | A choice from a long list, narrowed down by typing |
+| `Select` | `@foliag/bloom/select` | One choice from a list, or several as chips. A dropdown from 640px, a bottom sheet on a phone. `loading` shows skeleton rows |
+| `Combobox` | `@foliag/bloom/combobox` | A choice from a long list, narrowed down by typing, or several as chips removed with Backspace |
 | `Menu` | `@foliag/bloom/menu` | Actions on one thing behind one button. A dropdown, or a bottom sheet on a phone |
-| `Dialog` | `@foliag/bloom/dialog` | A question or a short task over the page, `role="alertdialog"` for one that interrupts |
+| `Dialog` | `@foliag/bloom/dialog` | A question or a short task over the page, in three widths, `role="alertdialog"` for one that interrupts. `phone="full-screen"` for a long form on a phone |
 | `Popover` | `@foliag/bloom/popover` | A few words or a small task next to what it is about |
 | `Steps` | `@foliag/bloom/steps` | A form cut into numbered steps, across or down the side |
-| `NavigationMenu` | `@foliag/bloom/navigation-menu` | The sections of an app in a bar, some with a panel of links |
-| `Collapsible` | `@foliag/bloom/collapsible` | Something shown or hidden by one button |
-| `Accordion` | `@foliag/bloom/accordion` | A stack of sections, each opened by its title |
-| `Avatar` | `@foliag/bloom/avatar` | A photo in a circle, with initials while it loads and when it fails |
-| `NumberInput` | `@foliag/bloom/number-input` | A number typed or stepped with two buttons. `locale` is required, so "2,5" reads right |
+| `NavigationMenu` | `@foliag/bloom/navigation-menu` | The sections of an app in a bar, with a `Viewport` whose panel slides between sections, or `variant="bottom"`: a phone's bar of 3 to 5 pages |
+| `Collapsible` | `@foliag/bloom/collapsible` | Something shown or hidden by one button, or `variant="card"`: a card whose first row opens its body |
+| `Accordion` | `@foliag/bloom/accordion` | A stack of sections, each opened by its title: in one card, `separated` cards, or `flush` inside a panel |
+| `Avatar` | `@foliag/bloom/avatar` | A photo in a circle, or a square for an organisation, with initials while it loads and when it fails. `AvatarGroup` overlaps several as a list |
+| `NumberInput` | `@foliag/bloom/number-input` | A number typed or stepped with two buttons, or `variant="stepper"` on its Control: a large − and + around the value. `locale` is required |
 | `PasswordInput` | `@foliag/bloom/password-input` | A password field with a button that shows it as plain text |
 | `PinInput` | `@foliag/bloom/pin-input` | One box per character of a code. The name of each box is the app's |
-| `Editable` | `@foliag/bloom/editable` | Text edited in place, committed with Enter or put back with Escape |
+| `Editable` | `@foliag/bloom/editable` | Text edited in place, from a pencil in its box: Enter or the tick keeps it, Escape or the cross puts it back |
 | `Clipboard` | `@foliag/bloom/clipboard` | A value with a button that copies it, its words changing once copied |
 | `Toggle` | `@foliag/bloom/toggle` | One button that stays pressed, like a lone `ToggleGroup` segment |
 | `Swap` | `@foliag/bloom/swap` | Two indicators in one place, the change popping in |
-| `Progress` | `@foliag/bloom/progress` | A bar or a ring. With `value={null}` the ring turns: bloom's spinner |
-| `Tabs` | `@foliag/bloom/tabs` | Panels shown one at a time from a row of 48px tabs |
+| `Progress` | `@foliag/bloom/progress` | A bar, segments or a ring, in a tone. With `value={null}` the ring turns: bloom's spinner |
+| `Tabs` | `@foliag/bloom/tabs` | Panels shown one at a time from a row of 48px tabs, or in a track with a sliding pill (`variant="segmented"`) |
 | `RatingGroup` | `@foliag/bloom/rating-group` | A mark given with stars, half marks with `allowHalf` |
 | `Drawer` | `@foliag/bloom/drawer` | A sheet on an edge that follows the finger and closes when swiped away |
 | `Tooltip` | `@foliag/bloom/tooltip` | A label for the mouse and the keyboard. It never opens from a tap |
 | `HoverCard` | `@foliag/bloom/hover-card` | A card next to a link, for the mouse and the keyboard. It never opens from a tap |
-| `Pagination` | `@foliag/bloom/pagination` | Pages of a list as 48px squares, the current one filled |
-| `Carousel` | `@foliag/bloom/carousel` | Slides that scroll a page at a time, with dots and a counter |
+| `Pagination` | `@foliag/bloom/pagination` | Pages of a list as 48px squares, the current one filled, or `compact`: the triggers and the position between them |
+| `Carousel` | `@foliag/bloom/carousel` | Slides that scroll a page at a time, with dots and a counter. `peek` shows the next slide at the edge |
 | `Splitter` | `@foliag/bloom/splitter` | Panels resized by a handle with a 48px grip, or the keyboard |
 | `AngleSlider` | `@foliag/bloom/angle-slider` | A dial for a direction in degrees, such as the wind or the rows |
 | `TreeView` | `@foliag/bloom/tree-view` | Nested rows that open and close, such as a farm's blocks and parcels |
+| `Textarea` | `@foliag/bloom/textarea` | Text over several lines in the field's box, growing with the text up to ten lines |
+| `Card` | `@foliag/bloom/card` | A surface for one thing, outlined, elevated or soft. As a link or a button the whole card is one target |
+| `Badge` | `@foliag/bloom/badge` | A short status or a count in six tones, soft, solid or outlined, with a dot or the tone's mark |
+| `Alert` | `@foliag/bloom/alert` | News in the page with its tone's mark, `urgent` for `role="alert"`. Dismissed, it folds away |
+| `Skeleton` | `@foliag/bloom/skeleton` | Lines, a circle or a rectangle standing in for what loads, with a calm sheen that stops under reduced motion |
+| `Separator` | `@foliag/bloom/separator` | A line across or down, with words such as "ou" in the middle, or decorative |
+| `Breadcrumb` | `@foliag/bloom/breadcrumb` | Where the page sits in the app. On a phone a long trail folds its start into one button |
 
 ## Use
 
@@ -113,11 +120,24 @@ These are held by the stories, which run axe and fail on a violation, so a chang
 - **Type.** Barlow Semi Condensed at weight 500 and up, 18px body, nothing under 16px, all in `rem`.
 - **Motion.** Smooth before lively. Whatever moves or changes color eases on one critically damped spring
   (`--ease-smooth`), so the parts of one change arrive together and nothing swings back and forth. What appears by
-  growing pops once, 4% past its size (`--ease-pop`). A finger going down is met in 90ms, so even a quick tap shows,
-  and the control comes back up when it lifts. All CSS, only the transform and opacity of small elements, except a
-  section that opens, which has to push down what follows it. `Foundations/Motion` fails if a curve starts to wobble.
-  Under `prefers-reduced-motion`, movement becomes a fade and nothing overshoots.
-- **Never color alone.** Invalid, danger and warning carry an icon, a second line or text as well.
+  growing pops once, 4% past its size (`--ease-pop`). A finger going down is met in 90ms, colors included, so even a
+  quick tap shows, and the control comes back up when it lifts. What opens and closes does so on transitions (the
+  `presence-*` utilities in `theme.css`), so a change of mind half way turns it round from where it is instead of
+  snapping, and nothing animates as a page loads. Only transform and opacity move, on the compositor, except a section
+  that folds and a split moved by a key, which have to push what follows them; what follows a finger has no transition
+  while it does. `Foundations/Motion` fails if a curve starts to wobble or a panel closed half way snaps open. Under
+  reduced motion nothing moves or overshoots, fades and colors stay, and a spinner keeps turning, slower.
+  `skills/bloom-motion` films an animation frame by frame to check it.
+- **Focus.** The ring that shows where the keyboard is sits inside the control, within its edge, so the control keeps
+  its size and shape and covers nothing next to it. It appears at once, a line of the page's color keeps it off a fill,
+  and on a part zag focuses after a press it shows for the keyboard only. `Foundations/Focus` fails if a ring reaches
+  outside its control.
+- **Never color alone.** Invalid, danger and warning carry an icon, a second line or text as well. A progress tone is
+  backed by the label and value words and the tone's mark.
+
+Parts drawn by the component itself take no `as`: the stepper's − and + and the Editable's pencil, tick and cross are
+bloom's own, and their children are their names.
+
 
 ## Settings
 
@@ -167,7 +187,7 @@ Actions, for a developer to try the component. The stories after it show one sta
 named `Test: …` (`export const TestWithTheKeyboard` is `name: "Test: With the keyboard"`). A story is a test when it has
 a `play` function, or when it exists only to run axe in the dark theme or with more contrast.
 
-`src/foundations/` holds the stories for colors, type and motion, and the helper that measures contrast in the browser.
+`src/foundations/` holds the stories for colors, type, motion and focus, and the helper that measures contrast in the browser.
 It stays out of `dist/` too. The toolbar sets `data-theme`, `data-contrast` and `data-motion` on `<html>`. `a11y.test` is
 `error` with the AAA contrast rule on, so axe fails a story in the test run as it does in the browser.
 

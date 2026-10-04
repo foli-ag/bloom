@@ -11,4 +11,7 @@ export function DrawerDescription(props: DrawerDescriptionProps): Element {
   return <Seed.Description {...omit(props, "class")} class={description({ class: props.class })} />
 }
 
-const description = tv({ base: "text-base text-muted" })
+// Right under the title it sits half a gap closer, so the two read as one heading above what follows
+const description = tv({
+  base: "text-base text-muted [[data-scope=drawer][data-part=content]>[data-part=title]+&]:-mt-2",
+})

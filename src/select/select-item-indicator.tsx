@@ -10,8 +10,8 @@ export type SelectItemIndicatorProps = Omit<Seed.ItemIndicatorProps, "class" | "
 /** A tick at the end of a chosen row, which pops in as it is chosen */
 export function SelectItemIndicator(props: SelectItemIndicatorProps): Element {
   return (
-    <Seed.Item.Indicator {...omit(props, "class")} class={optionIndicator({ class: props.class })}>
-      <Mark class="size-6 animate-pop-in">
+    <Seed.Item.Indicator hidden={false} {...omit(props, "class")} class={optionIndicator({ class: props.class })}>
+      <Mark class="size-6">
         <path d={tick} />
       </Mark>
     </Seed.Item.Indicator>

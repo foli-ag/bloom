@@ -13,7 +13,7 @@ export function SplitterResizeTriggerIndicator(props: SplitterResizeTriggerIndic
 
 const indicator = tv({
   base: [
-    "pointer-events-none rounded-full bg-strong transition-colors duration-(--duration-smooth) ease-smooth",
+    "pointer-events-none rounded-full bg-strong transition-[background-color] duration-(--duration-smooth) ease-smooth",
     "data-[orientation=horizontal]:h-12 data-[orientation=horizontal]:w-1.5",
     "data-[orientation=vertical]:h-1.5 data-[orientation=vertical]:w-12",
     "group-hover/trigger:bg-ink data-dragging:bg-primary-edge data-disabled:bg-disabled-ink",

@@ -9,6 +9,7 @@ export type { ProgressCircleTrackProps as CircleTrackProps } from "./progress-ci
 export { ProgressLabel as Label, type ProgressLabelProps as LabelProps } from "./progress-label.jsx"
 export { ProgressRange as Range, type ProgressRangeProps as RangeProps } from "./progress-range.jsx"
 export { ProgressRoot as Root, type ProgressRootProps as RootProps } from "./progress-root.jsx"
+export type { ProgressTone as Tone } from "./progress-look.js"
 export { ProgressTrack as Track, type ProgressTrackProps as TrackProps } from "./progress-track.jsx"
 export {
   ProgressValueText as ValueText,

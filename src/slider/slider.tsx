@@ -1,7 +1,8 @@
 import { Slider as Seed, useSliderContext } from "@foliag/seeds/slider"
 import type { JSX } from "@solidjs/web"
-import { createMemo, createUniqueId, For, omit, Show, type Element } from "solid-js"
+import { createMemo, createUniqueId, For, omit, Show, untrack, type Element } from "solid-js"
 import { tv } from "tailwind-variants"
+import { createFollowing, forwardRef, notePointer } from "../internal/pointer.js"
 
 export type RootProps = Omit<Seed.RootProps, "class"> & {
   /** Merged after the component's own classes, and wins over them */
@@ -60,17 +61,46 @@ export type ControlProps = Omit<Seed.ControlProps, "class"> & {
   class?: string | undefined
 }
 
-/** The line and its handles. A handle is 28px inside a 48px target that reaches a finger's width. */
+/**
+ * The line and its handles. A handle is 28px inside a 48px target that reaches a finger's width.
+ *
+ * A press on the line, an arrow key or Page Up glides the handle and the filled part to the new value, together, on the
+ * smooth spring. Once the finger moves, they follow it exactly, with nothing easing behind it.
+ */
 export function Control(props: ControlProps): Element {
   const api = useSliderContext()
+  const rest = omit(props, "class", "children")
+  const [following, follow] = createFollowing()
   // Which handle is which is its position, not its value, so the list is a count and the handles are not rebuilt
   // while one is dragged
   const count = createMemo(() => api().value.length)
   const positions = createMemo(() => Array.from({ length: count() }, (_, index) => index))
+  // Where the filled part starts and ends along the line, as zag works them out for the origin and the values
+  const extent = createMemo(() => {
+    const style = api().getRootProps().style as Record<string, string>
+    const from = Number.parseFloat(style["--slider-range-start"] ?? "0") / 100
+    const to = 1 - Number.parseFloat(style["--slider-range-end"] ?? "0") / 100
+    return { from, size: Math.max(0, to - from) }
+  })
   return (
-    <Seed.Control {...omit(props, "class", "children")} class={control({ class: props.class })}>
+    <Seed.Control
+      {...rest}
+      ref={(element: HTMLElement) => {
+        follow(element)
+        notePointer(element)
+        forwardRef(
+          untrack(() => rest.ref),
+          element,
+        )
+      }}
+      data-following={following() ? "" : undefined}
+      class={control({ class: props.class })}
+    >
       <Seed.Track class={track()}>
-        <Seed.Range class={range()} />
+        <Seed.Range
+          class={range()}
+          style={{ left: "0", right: "0", "--slider-from": `${extent().from}`, "--slider-size": `${extent().size}` }}
+        />
       </Seed.Track>
       <Show when={props.children} fallback={<For each={positions()}>{(index) => <Thumb index={index} />}</For>}>
         {props.children}
@@ -92,20 +122,25 @@ export function Thumb(props: ThumbProps): Element {
   const api = useSliderContext()
   const nameId = createUniqueId()
   return (
-    <Seed.Thumb
-      {...omit(props, "class", "children")}
-      class={thumb({ class: props.class })}
-      // The handle's name is its own words followed by the label. Said the other way round, both handles of a range
-      // would be named like the slider.
-      aria-labelledby={props.children ? `${nameId} ${api().getLabelProps().id}` : undefined}
-    >
-      <Show when={props.children}>
-        <span id={nameId} class="sr-only">
-          {props.children}
-        </span>
-      </Show>
-      <Seed.HiddenInput />
-    </Seed.Thumb>
+    <span class={rail()} style={{ "--slider-at": `${api().getThumbPercent(props.index)}` }}>
+      <Seed.Thumb
+        {...omit(props, "class", "children")}
+        class={thumb({ class: props.class })}
+        // At the start of its rail, which moves it, centered on that point by its own translate. Zag centers it with a
+        // transform, which the scale of a held handle would scale too, pulling it 3.5px off its value.
+        style={{ "inset-inline-start": "0", transform: "none" }}
+        // The handle's name is its own words followed by the label. Said the other way round, both handles of a range
+        // would be named like the slider.
+        aria-labelledby={props.children ? `${nameId} ${api().getLabelProps().id}` : undefined}
+      >
+        <Show when={props.children}>
+          <span id={nameId} class="sr-only">
+            {props.children}
+          </span>
+        </Show>
+        <Seed.HiddenInput />
+      </Seed.Thumb>
+    </span>
   )
 }
 
@@ -120,8 +155,16 @@ const valueText = tv({
   base: "text-base font-semibold tracking-body text-ink tabular-nums data-disabled:text-muted",
 })
 
+// `--slider-glide` is how long the handles and the filled part take to reach a new value: the travel time, at once under
+// reduced motion, and nothing while they follow the pointer. A held handle grows by `--hold-scale`. The handle's focus
+// ring and the line of the page's color that keeps it off the green are gone after a press, as the ring is the
+// keyboard's.
 const control = tv({
-  base: "relative col-span-2 flex h-12 w-full items-center data-disabled:cursor-not-allowed",
+  base: [
+    "group/control relative col-span-2 flex h-12 w-full items-center data-disabled:cursor-not-allowed",
+    "[--focus-gap:var(--color-surface)] data-pointer:[--focus-style:none] data-pointer:[--focus-gap:transparent]",
+    "[--slider-glide:var(--duration-travel)] data-following:[--slider-glide:0s]",
+  ],
 })
 
 // The line has a 2px edge that reaches 3:1 against the page. The filled part is the green of an edge and not the brand
@@ -129,23 +172,44 @@ const control = tv({
 const track = tv({
   base: [
     "h-3 flex-1 overflow-hidden rounded-full border-2 border-strong bg-neutral-soft",
-    "data-disabled:border-disabled data-disabled:bg-disabled",
+    "data-disabled:border-disabled data-disabled:bg-disabled data-invalid:border-danger-text",
   ],
 })
 
+// The filled part spans the whole line, and is moved to where it starts and shrunk to its length, which the compositor
+// does without laying anything out. Its ends are under a handle or cut round by the line, so the shrinking never shows.
 const range = tv({
-  base: "h-full rounded-full bg-primary-edge data-disabled:bg-disabled-ink data-invalid:bg-danger-text",
+  base: [
+    "h-full origin-left bg-primary-edge rtl:origin-right",
+    "[translate:calc(var(--slider-from)*100%)_0] rtl:[translate:calc(var(--slider-from)*-100%)_0]",
+    "[scale:var(--slider-size)_1] transition-[translate,scale] duration-(--slider-glide) ease-smooth",
+    "data-disabled:bg-disabled-ink data-invalid:bg-danger-text",
+  ],
 })
 
-// The handle's target is a 48px square around it, laid over its neighbors. It grows as soon as it is held and settles back when let go.
+// The line a handle travels along: as long as the control less the handle, measured by zag, so that the handle stays
+// inside the line at both ends. It is moved by its share of its own length, so the handle glides on the compositor and
+// a change in width moves it at once instead of easing. It takes no presses, the handle in it does.
+const rail = tv({
+  base: [
+    "pointer-events-none absolute inset-y-0 z-10 flex items-center has-data-focus:z-20",
+    "start-[calc(var(--slider-thumb-width,0px)/2)] end-[calc(var(--slider-thumb-width,0px)/2)]",
+    "[translate:calc(var(--slider-at)*100%)_0] rtl:[translate:calc(var(--slider-at)*-100%)_0]",
+    "transition-[translate] duration-(--slider-glide) ease-smooth",
+  ],
+})
+
+// The handle's target is a 48px square around it. It grows as soon as it is held and settles back when let go. Zag marks
+// the control invalid and not the handle, which takes a second, inner line then, as a field does, so that the change is
+// not a color alone.
 const thumb = tv({
   base: [
-    "z-10 size-7 rounded-full border-2 border-primary-edge bg-primary outline-none",
+    "pointer-events-auto size-7 -translate-x-1/2 rounded-full border-2 border-primary-edge bg-primary rtl:translate-x-1/2",
     "before:absolute before:-inset-2.5 before:content-['']",
     "motion-touch data-dragging:[--press-duration:var(--duration-press)] data-dragging:[--press-ease:var(--ease-press)]",
-    "hover:bg-primary-400 data-dragging:scale-125 data-dragging:bg-primary-300",
-    "focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-focus",
+    "hover:bg-primary-400 data-dragging:scale-(--hold-scale) data-dragging:bg-primary-300",
+    "focus-ring [--focus-inset:3px]",
     "data-disabled:border-disabled data-disabled:bg-disabled-ink",
-    "data-invalid:border-danger-text",
+    "group-data-invalid/control:border-danger-text group-data-invalid/control:shadow-[inset_0_0_0_1px_var(--color-danger-text)]",
   ],
 })

@@ -24,6 +24,10 @@
       "types": "./dist/accordion/index.d.ts",
       "default": "./dist/accordion/index.js"
     },
+    "./alert": {
+      "types": "./dist/alert/index.d.ts",
+      "default": "./dist/alert/index.js"
+    },
     "./angle-slider": {
       "types": "./dist/angle-slider/index.d.ts",
       "default": "./dist/angle-slider/index.js"
@@ -32,9 +36,21 @@
       "types": "./dist/avatar/index.d.ts",
       "default": "./dist/avatar/index.js"
     },
+    "./badge": {
+      "types": "./dist/badge/index.d.ts",
+      "default": "./dist/badge/index.js"
+    },
+    "./breadcrumb": {
+      "types": "./dist/breadcrumb/index.d.ts",
+      "default": "./dist/breadcrumb/index.js"
+    },
     "./button": {
       "types": "./dist/button/index.d.ts",
       "default": "./dist/button/index.js"
+    },
+    "./card": {
+      "types": "./dist/card/index.d.ts",
+      "default": "./dist/card/index.js"
     },
     "./carousel": {
       "types": "./dist/carousel/index.d.ts",
@@ -120,6 +136,14 @@
       "types": "./dist/select/index.d.ts",
       "default": "./dist/select/index.js"
     },
+    "./separator": {
+      "types": "./dist/separator/index.d.ts",
+      "default": "./dist/separator/index.js"
+    },
+    "./skeleton": {
+      "types": "./dist/skeleton/index.d.ts",
+      "default": "./dist/skeleton/index.js"
+    },
     "./slider": {
       "types": "./dist/slider/index.d.ts",
       "default": "./dist/slider/index.js"
@@ -143,6 +167,10 @@
     "./tabs": {
       "types": "./dist/tabs/index.d.ts",
       "default": "./dist/tabs/index.js"
+    },
+    "./textarea": {
+      "types": "./dist/textarea/index.d.ts",
+      "default": "./dist/textarea/index.js"
     },
     "./toggle": {
       "types": "./dist/toggle/index.d.ts",
