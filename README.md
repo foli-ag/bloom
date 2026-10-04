@@ -35,6 +35,7 @@ does not tree-shake, so a root entry would load every component.
 | `Progress` | `@foliag/bloom/progress` | A bar or a ring. With `value={null}` the ring turns: bloom's spinner |
 | `Tabs` | `@foliag/bloom/tabs` | Panels shown one at a time from a row of 48px tabs |
 | `RatingGroup` | `@foliag/bloom/rating-group` | A mark given with stars, half marks with `allowHalf` |
+| `Drawer` | `@foliag/bloom/drawer` | A sheet on an edge that follows the finger and closes when swiped away |
 
 ## Use
 

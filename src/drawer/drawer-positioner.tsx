@@ -1,0 +1,29 @@
+import { Drawer as Seed } from "@foliag/seeds/drawer"
+import { Portal } from "@solidjs/web"
+import { omit, type Element } from "solid-js"
+import { tv } from "tailwind-variants"
+
+export type DrawerPositionerProps = Omit<Seed.PositionerProps, "class"> & {
+  class?: string | undefined
+}
+
+/**
+ * Holds the drawer against its edge, the bottom one unless `swipeDirection` says otherwise. It is drawn at the end of
+ * `<body>`, so nothing the drawer sits in can clip it.
+ */
+export function DrawerPositioner(props: DrawerPositionerProps): Element {
+  return (
+    <Portal>
+      <Seed.Positioner {...omit(props, "class")} class={positioner({ class: props.class })} />
+    </Portal>
+  )
+}
+
+const positioner = tv({
+  base: [
+    "fixed inset-0 z-50 flex",
+    "data-[swipe-direction=down]:items-end data-[swipe-direction=down]:justify-center",
+    "data-[swipe-direction=up]:items-start data-[swipe-direction=up]:justify-center",
+    "data-[swipe-direction=left]:justify-start data-[swipe-direction=right]:justify-end",
+  ],
+})

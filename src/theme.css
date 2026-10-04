@@ -276,17 +276,19 @@
     }
   }
 
+  /* A sheet comes from the bottom edge. A drawer on another edge sets `--sheet-from`, written with `--sheet-distance`
+   * so reduced motion still zeroes it. */
   @keyframes bloom-sheet-in {
     from {
       opacity: 0;
-      translate: 0 var(--sheet-distance);
+      translate: var(--sheet-from, 0 var(--sheet-distance));
     }
   }
 
   @keyframes bloom-sheet-out {
     to {
       opacity: 0;
-      translate: 0 var(--sheet-distance);
+      translate: var(--sheet-from, 0 var(--sheet-distance));
     }
   }
 
