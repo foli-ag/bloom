@@ -92,6 +92,10 @@
       "types": "./dist/radio-group/index.d.ts",
       "default": "./dist/radio-group/index.js"
     },
+    "./rating-group": {
+      "types": "./dist/rating-group/index.d.ts",
+      "default": "./dist/rating-group/index.js"
+    },
     "./select": {
       "types": "./dist/select/index.d.ts",
       "default": "./dist/select/index.js"
