@@ -20,6 +20,10 @@
     "skills"
   ],
   "exports": {
+    "./avatar": {
+      "types": "./dist/avatar/index.d.ts",
+      "default": "./dist/avatar/index.js"
+    },
     "./button": {
       "types": "./dist/button/index.d.ts",
       "default": "./dist/button/index.js"
