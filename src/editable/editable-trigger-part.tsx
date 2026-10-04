@@ -13,7 +13,7 @@ export const editableTriggerMark =
 export const editableTrigger = tv({
   base: [
     "relative flex min-w-12 items-center justify-center gap-2 rounded-control border-2 border-transparent bg-clip-padding",
-    "pressable motion-press focus-ring font-semibold [--focus-inset:3px]",
+    "pressable motion-press focus-ring font-semibold",
     "disabled:cursor-not-allowed disabled:bg-transparent disabled:text-disabled-ink",
     "group-data-settled/area:starting:scale-(--pop-in-scale)",
   ],

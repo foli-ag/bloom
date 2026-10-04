@@ -266,7 +266,7 @@ const item = tv({
 const entry = tv({
   base: [
     "relative inline-flex min-h-12 pressable items-center gap-2 rounded-control px-3 py-2 text-start",
-    "text-base font-semibold tracking-body text-ink no-underline focus-ring [--focus-inset:3px]",
+    "text-base font-semibold tracking-body text-ink no-underline focus-ring",
     "transition-[color,background-color] duration-[var(--press-duration,var(--duration-smooth))]",
     "ease-[var(--press-ease,var(--ease-smooth))]",
     "hover:bg-neutral-soft active:bg-[color-mix(in_oklab,var(--color-neutral-soft),var(--color-ink)_8%)]",
@@ -303,7 +303,7 @@ const bottomEntry = tv({
   base: [
     "grid min-h-16 w-full pressable grid-rows-[2rem_auto] content-center justify-items-center gap-1",
     "rounded-control px-1 py-2 text-center text-sm font-medium tracking-body text-muted no-underline",
-    "focus-ring [--focus-inset:3px]",
+    "focus-ring",
     "transition-[color] duration-(--duration-smooth) ease-smooth",
     "aria-[current=page]:font-semibold aria-[current=page]:text-ink",
     "[&>:first-child]:relative [&>:first-child]:col-start-1 [&>:first-child]:row-start-1 [&>:first-child]:self-center",

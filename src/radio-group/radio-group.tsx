@@ -211,10 +211,7 @@ const control = tv({
   ],
   variants: {
     variant: {
-      row: [
-        "focus-ring [--focus-inset:3px] data-invalid:[--color-focus:var(--color-danger-text)]",
-        "not-data-disabled:data-[state=checked]:[--focus-gap:var(--color-surface)]",
-      ],
+      row: ["focus-ring data-invalid:[--color-focus:var(--color-danger-text)]"],
       card: "col-start-2 row-start-1",
     },
   },

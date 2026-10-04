@@ -21,10 +21,9 @@ const item = tv({
   base: [
     "inline-flex size-12 pressable items-center justify-center rounded-control border-2 border-transparent",
     "text-base font-semibold tracking-body text-ink tabular-nums",
-    "motion-press focus-ring [--focus-inset:3px]",
+    "motion-press focus-ring",
     "hover:border-strong hover:bg-neutral-soft pressing:border-strong pressing:bg-neutral-soft",
     "data-selected:border-primary-edge data-selected:bg-primary data-selected:text-on-primary",
-    "data-selected:[--focus-gap:var(--color-surface)]",
     "data-selected:hover:bg-primary-400 data-selected:pressing:border-primary-edge data-selected:pressing:bg-primary-300",
   ],
   variants: { compact: { row: "", always: "hidden", phone: "max-sm:hidden" } },

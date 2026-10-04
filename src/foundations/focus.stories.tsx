@@ -22,9 +22,8 @@ const tones = ["primary", "neutral", "danger"] as const
 const variants = ["solid", "soft", "outline", "ghost"] as const
 
 /**
- * Where the keyboard is. The ring is drawn inside the control's own edge, over its border, so a control keeps its size
- * and its shape when it takes focus and nothing around it is covered. On a fill the ring would sink into, a line of the
- * page's color keeps it apart. Press Tab to walk through them.
+ * Where the keyboard is. The control's own edge turns the focus color and thickens to 3px, over its border, so a control
+ * keeps its size and its shape when it takes focus and nothing around it is covered. Press Tab to walk through them.
  */
 export const Rings: Story = {
   render: () => (

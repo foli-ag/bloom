@@ -20,7 +20,7 @@ export function TabsContent(props: TabsContentProps): Element {
 // is clicked or reached with the keyboard, and not before, so the first page does not fade in with the screen around it.
 const content = tv({
   base: [
-    "min-w-0 flex-1 rounded-box py-4 text-ink focus-ring [--focus-inset:3px]",
+    "min-w-0 flex-1 rounded-box py-4 text-ink focus-ring",
     "data-[orientation=vertical]:px-4 data-[orientation=vertical]:py-0",
     "data-[state=closed]:hidden",
     "transition-opacity duration-(--duration-smooth) ease-smooth group-data-focus/tabs:starting:opacity-0",

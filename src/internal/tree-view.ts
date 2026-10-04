@@ -15,7 +15,7 @@ export const row = tv({
     "transition-[color,background-color] duration-[var(--press-duration,var(--duration-smooth))]",
     "ease-[var(--press-ease,var(--ease-smooth))]",
     "hover:bg-neutral-soft active:bg-[color-mix(in_oklab,var(--color-neutral-soft),var(--color-ink)_8%)]",
-    "focus-ring [--focus-inset:3px]",
+    "focus-ring",
     "data-selected:bg-primary-soft data-selected:font-semibold",
     "data-disabled:cursor-not-allowed data-disabled:text-disabled-ink",
     "data-disabled:hover:bg-transparent data-disabled:active:bg-transparent",

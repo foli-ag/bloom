@@ -46,7 +46,7 @@ const thumb = tv({
   base: [
     "group/thumb pointer-events-none absolute inset-0 rounded-full",
     "transition-[rotate] duration-(--dial-glide) ease-smooth",
-    "focus-ring [--focus-inset:3px]",
+    "focus-ring",
   ],
 })
 

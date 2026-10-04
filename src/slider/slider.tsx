@@ -157,12 +157,11 @@ const valueText = tv({
 
 // `--slider-glide` is how long the handles and the filled part take to reach a new value: the travel time, at once under
 // reduced motion, and nothing while they follow the pointer. A held handle grows by `--hold-scale`. The handle's focus
-// ring and the line of the page's color that keeps it off the green are gone after a press, as the ring is the
-// keyboard's.
+// ring is gone after a press, as the ring is the keyboard's.
 const control = tv({
   base: [
     "group/control relative col-span-2 flex h-12 w-full items-center data-disabled:cursor-not-allowed",
-    "[--focus-gap:var(--color-surface)] data-pointer:[--focus-style:none] data-pointer:[--focus-gap:transparent]",
+    "data-pointer:[--focus-style:none]",
     "[--slider-glide:var(--duration-travel)] data-following:[--slider-glide:0s]",
   ],
 })
@@ -208,7 +207,7 @@ const thumb = tv({
     "before:absolute before:-inset-2.5 before:content-['']",
     "motion-touch data-dragging:[--press-duration:var(--duration-press)] data-dragging:[--press-ease:var(--ease-press)]",
     "hover:bg-primary-400 data-dragging:scale-(--hold-scale) data-dragging:bg-primary-300",
-    "focus-ring [--focus-inset:3px]",
+    "focus-ring",
     "data-disabled:border-disabled data-disabled:bg-disabled-ink",
     "group-data-invalid/control:border-danger-text group-data-invalid/control:shadow-[inset_0_0_0_1px_var(--color-danger-text)]",
   ],

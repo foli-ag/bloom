@@ -23,6 +23,6 @@ const trigger = tv({
     "flex pressable items-center justify-between gap-3 px-4 py-2 text-start data-placeholder-shown:text-muted",
     "[[data-part=control]>&]:absolute [[data-part=control]>&]:inset-0 [[data-part=control]>&]:min-h-0",
     "[[data-part=control]>&]:rounded-[calc(var(--radius-control)-2px)] [[data-part=control]>&]:border-0",
-    "[[data-part=control]>&]:bg-transparent [[data-part=control]>&]:shadow-none [[data-part=control]>&]:[--focus-inset:3px]",
+    "[[data-part=control]>&]:bg-transparent [[data-part=control]>&]:shadow-none",
   ],
 })

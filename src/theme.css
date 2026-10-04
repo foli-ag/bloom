@@ -429,23 +429,24 @@
 }
 
 /*
- * The ring that shows where the keyboard or switch access is. It is drawn inside the control, so the control keeps its
- * size and shape and nothing around it is covered. On a control with a 2px edge it sits just within the edge, which
- * stays, so the edge thickens inward in the focus color, and an invalid control keeps its red edge outside the ring.
- * Where there is no room for both, in a box, a radio, a switch or a handle, or no edge to keep, on a soft or ghost
- * button or a row, the part sets `--focus-inset: 3px` and the ring takes the edge's place.
+ * The ring that shows where the keyboard or switch access is. It is the control's own edge in the focus color, 3px
+ * from the outside in, over the 2px border where there is one, which takes the focus color too so no other color shows
+ * beside the ring. The control keeps its size and shape, nothing around it is covered, and nothing is drawn within it. A control without a border, a soft or ghost button or a row, gets the
+ * same edge. A part whose edge is not its box's, a segmented control's pill, sets `--focus-inset` to where it is.
  *
- * On a fill the ring would sink into, a solid button or a ticked box, the part sets `--focus-gap` to the page's color
- * and a 2px line of it keeps the ring apart from the fill. A part that zag focuses itself after a press, such as a
- * slider's handle, sets `--focus-style: none` while the pointer has it, as the ring is for the keyboard. It reads zag's
- * `data-focus-visible` too, for a box whose hidden input has the focus.
+ * A part that zag focuses itself after a press, such as a slider's handle, sets `--focus-style: none` while the pointer
+ * has it, as the ring is for the keyboard. It reads zag's `data-focus-visible` too, for a box whose hidden input has
+ * the focus.
  */
 @utility focus-ring {
   &:focus-visible,
   &[data-focus-visible] {
     outline: 3px var(--focus-style, solid) var(--color-focus);
-    outline-offset: calc(var(--focus-inset, 5px) * -1);
-    box-shadow: inset 0 0 0 var(--focus-inset, 5px) var(--focus-gap, transparent);
+    outline-offset: calc(var(--focus-inset, 3px) * -1);
+
+    &:not([data-pointer] *) {
+      border-color: var(--color-focus);
+    }
   }
 }
 

@@ -41,6 +41,6 @@ const item = tv({ base: "hidden shrink-0 max-sm:group-data-folded/trail:flex" })
 const trigger = tv({
   base: [
     "inline-flex size-12 pressable items-center justify-center rounded-box text-primary-text",
-    "motion-press hover:bg-primary-soft pressing:bg-primary-soft focus-ring [--focus-inset:3px]",
+    "motion-press hover:bg-primary-soft pressing:bg-primary-soft focus-ring",
   ],
 })

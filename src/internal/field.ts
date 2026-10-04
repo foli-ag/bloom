@@ -26,7 +26,7 @@ export const fieldBox = tv({
     "w-full rounded-control border-2 border-strong bg-raised font-medium tracking-body text-ink",
     "shadow-[inset_0_0_0_1px_transparent]",
     fieldTransition,
-    "hover:border-ink focus-visible:border-ink focus-ring",
+    "hover:border-ink focus-visible:border-focus focus-ring",
     "data-[state=open]:border-ink",
     "aria-invalid:border-danger-text aria-invalid:shadow-[inset_0_0_0_1px_var(--color-danger-text)]",
     "data-invalid:border-danger-text data-invalid:shadow-[inset_0_0_0_1px_var(--color-danger-text)]",
@@ -47,7 +47,7 @@ export const fieldBox = tv({
  * own and the box takes its states, from the input or from zag's `data-*` on the box itself: darker under the pointer,
  * the ring while the input has the focus, the second line while it is invalid, greyed while it is disabled.
  *
- * The ring is the one `focus-ring` draws, inside the edge, shown while a direct child that is not a button has the
+ * The ring is the one `focus-ring` draws, over the edge, shown while a direct child that is not a button has the
  * focus, which a text field always shows. A button inside the box draws its own ring, so the keyboard is in one place.
  */
 export const fieldFrame = tv({
@@ -55,9 +55,9 @@ export const fieldFrame = tv({
     "flex w-full items-stretch rounded-control border-2 border-strong bg-raised font-medium tracking-body text-ink",
     "shadow-[inset_0_0_0_1px_transparent]",
     fieldTransition,
-    "hover:border-ink has-[>:focus-visible:not(button)]:border-ink",
+    "hover:border-ink has-[>:focus-visible:not(button)]:border-focus",
     "has-[>:focus-visible:not(button)]:[outline:3px_var(--focus-style,solid)_var(--color-focus)]",
-    "has-[>:focus-visible:not(button)]:[outline-offset:calc(var(--focus-inset,5px)*-1)]",
+    "has-[>:focus-visible:not(button)]:[outline-offset:calc(var(--focus-inset,3px)*-1)]",
     "data-invalid:border-danger-text data-invalid:shadow-[inset_0_0_0_1px_var(--color-danger-text)]",
     "has-[>input[aria-invalid=true]]:border-danger-text",
     "has-[>input[aria-invalid=true]]:shadow-[inset_0_0_0_1px_var(--color-danger-text)]",

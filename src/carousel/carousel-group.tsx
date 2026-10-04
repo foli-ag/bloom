@@ -60,7 +60,7 @@ function reducedMotion() {
 // root sets. A peeking row needs a gap however the app set it, so `!` wins over the inline gap, and the group sets its
 // own slide size, which its grid reads before the root's.
 const group = tv({
-  base: "rounded-card focus-ring [--focus-inset:3px]",
+  base: "rounded-card focus-ring",
   variants: {
     peek: {
       true: [

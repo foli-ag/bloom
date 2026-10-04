@@ -31,7 +31,7 @@ const trigger = tv({
     "data-[orientation=vertical]:before:-inset-y-[18px]",
     "hover:bg-neutral-soft data-dragging:bg-primary-soft",
     // The browser focuses the bar itself when it is pressed, which does not ring it, so the ring is the keyboard's alone
-    "focus-ring [--focus-inset:3px]",
+    "focus-ring",
     "data-disabled:bg-disabled",
   ],
 })

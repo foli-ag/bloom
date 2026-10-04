@@ -147,9 +147,8 @@ const root = tv({
 //
 // A segment does not shrink under the finger as a lone button does, which would pull its edges off its neighbors'. Its
 // fill darkens in 90ms instead, or lightens on a segment that is on, and its words go down a little (`words`). The focus
-// ring is drawn inside the segment, just within its edge, so it covers no neighbor, and the focused segment rises above
-// its neighbors so its whole edge shows. On a segment that is on, a line of the page's color keeps it off the green. A
-// disabled segment is grey whatever its state, which its tick still shows.
+// ring is the segment's edge in the focus color, so it covers no neighbor, and the focused segment rises above its
+// neighbors so its whole edge shows. A disabled segment is grey whatever its state, which its tick still shows.
 const item = tv({
   base: [
     "group/item relative inline-flex min-h-12 pressable items-center justify-center border-2 border-strong bg-raised px-5 py-2",
@@ -160,7 +159,6 @@ const item = tv({
     "data-[state=on]:z-10 not-data-disabled:data-[state=on]:border-primary-edge not-data-disabled:data-[state=on]:bg-primary",
     "not-data-disabled:data-[state=on]:text-on-primary",
     "not-data-disabled:data-[state=on]:hover:bg-primary-400 data-[state=on]:active:bg-primary-300",
-    "not-data-disabled:data-[state=on]:[--focus-gap:var(--color-surface)]",
     "data-disabled:cursor-not-allowed data-disabled:border-disabled data-disabled:bg-disabled data-disabled:text-disabled-ink",
     "data-[orientation=horizontal]:-ms-0.5 data-[orientation=horizontal]:first:rounded-s-control data-[orientation=horizontal]:last:rounded-e-control",
     "data-[orientation=vertical]:-mt-0.5 data-[orientation=vertical]:first:rounded-t-control data-[orientation=vertical]:last:rounded-b-control",

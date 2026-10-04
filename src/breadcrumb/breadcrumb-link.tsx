@@ -40,7 +40,7 @@ const link = tv({
     "block max-w-[min(16rem,45vw)] min-w-0 truncate rounded-box px-2 py-3 leading-6",
     "text-primary-text underline decoration-2 underline-offset-4",
     "[&[href]]:pressable [&[href]]:motion-press hover:[&[href]]:bg-primary-soft pressing:[&[href]]:bg-primary-soft",
-    "focus-ring [--focus-inset:3px]",
+    "focus-ring",
     "aria-[current=page]:text-ink aria-[current=page]:no-underline",
   ],
 })

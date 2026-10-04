@@ -128,9 +128,9 @@ These are held by the stories, which run axe and fail on a violation, so a chang
   while it does. `Foundations/Motion` fails if a curve starts to wobble or a panel closed half way snaps open. Under
   reduced motion nothing moves or overshoots, fades and colors stay, and a spinner keeps turning, slower.
   `skills/bloom-motion` films an animation frame by frame to check it.
-- **Focus.** The ring that shows where the keyboard is sits inside the control, within its edge, so the control keeps
-  its size and shape and covers nothing next to it. It appears at once, a line of the page's color keeps it off a fill,
-  and on a part zag focuses after a press it shows for the keyboard only. `Foundations/Focus` fails if a ring reaches
+- **Focus.** Where the keyboard is, the control's edge turns the focus color, 3px thick over its border, so the control
+  keeps its size and shape and covers nothing next to it. It appears at once, and on a part zag focuses after a press
+  it shows for the keyboard only. `Foundations/Focus` fails if a ring reaches
   outside its control.
 - **Never color alone.** Invalid, danger and warning carry an icon, a second line or text as well. A progress tone is
   backed by the label and value words and the tone's mark.

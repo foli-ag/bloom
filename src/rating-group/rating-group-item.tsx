@@ -40,7 +40,7 @@ const item = tv({
   base: [
     "group/item inline-flex size-12 pressable items-center justify-center rounded-control",
     "motion-touch not-data-disabled:not-data-readonly:active:scale-(--press-scale-small)",
-    "focus-ring [--focus-inset:3px]",
+    "focus-ring",
     "data-disabled:cursor-not-allowed data-readonly:cursor-default",
   ],
 })

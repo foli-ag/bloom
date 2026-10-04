@@ -95,14 +95,7 @@ const button = tv({
   ],
   variants: {
     tone: { primary: "", neutral: "", danger: "" },
-    // A ring would sink into a solid fill, so a line of the page's color keeps it apart. Soft and ghost buttons have no
-    // edge to keep, so their ring takes its place.
-    variant: {
-      solid: "[--focus-gap:var(--color-surface)]",
-      soft: "[--focus-inset:3px]",
-      outline: "",
-      ghost: "[--focus-inset:3px]",
-    },
+    variant: { solid: "", soft: "", outline: "", ghost: "" },
     size: {
       md: "min-h-12 px-5 py-2 text-base",
       lg: "min-h-14 px-6 py-3 text-lg",

@@ -126,7 +126,7 @@ const trigger = tv({
     "transition-[color,background-color] duration-[var(--press-duration,var(--duration-smooth))]",
     "ease-[var(--press-ease,var(--ease-smooth))]",
     "hover:bg-neutral-soft active:bg-[color-mix(in_oklab,var(--color-neutral-soft),var(--color-ink)_8%)]",
-    "focus-ring [--focus-inset:3px]",
+    "focus-ring",
     "disabled:cursor-not-allowed disabled:text-disabled-ink disabled:hover:bg-transparent disabled:active:bg-transparent",
   ],
   variants: {

@@ -223,6 +223,6 @@ const trigger = tv({
   base: [
     "pointer-events-auto relative inline-flex size-8 shrink-0 pressable items-center justify-center rounded-[0.3rem]",
     "before:absolute before:-inset-2 before:content-['']",
-    "motion-press hover:bg-current/12 pressing:bg-current/18 focus-ring [--focus-inset:3px]",
+    "motion-press hover:bg-current/12 pressing:bg-current/18 focus-ring",
   ],
 })

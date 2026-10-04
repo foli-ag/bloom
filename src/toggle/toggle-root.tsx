@@ -41,7 +41,6 @@ export const toggleRoot = tv({
     "motion-press hover:border-ink focus-ring",
     "not-disabled:data-[state=on]:border-primary-edge not-disabled:data-[state=on]:bg-primary",
     "not-disabled:data-[state=on]:text-on-primary not-disabled:data-[state=on]:hover:bg-primary-400",
-    "not-disabled:data-[state=on]:[--focus-gap:var(--color-surface)]",
     "disabled:cursor-not-allowed disabled:border-disabled disabled:bg-disabled disabled:text-disabled-ink",
   ],
 })

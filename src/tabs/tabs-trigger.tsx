@@ -39,7 +39,7 @@ const trigger = tv({
     "transition-[color,background-color] duration-(--duration-smooth) ease-smooth hover:text-ink aria-selected:text-ink",
     "pressing:bg-neutral-soft pressing:duration-(--duration-press) pressing:ease-press",
     // `outline-none` sets the style Tailwind's width reads back, so the ring names its own
-    "focus-ring [--focus-inset:3px]",
+    "focus-ring",
     "data-[orientation=vertical]:justify-start",
     "data-disabled:cursor-not-allowed data-disabled:text-disabled-ink",
   ],

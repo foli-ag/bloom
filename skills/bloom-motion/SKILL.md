@@ -93,7 +93,7 @@ The tokens are in `src/theme.css`, the rules in the README's "Motion" paragraph.
 
 ### Focus
 
-- The ring is drawn inside the control, never outside it: `focus-ring` puts a 3px ring just within a 2px edge, which stays, so the edge thickens inward and an invalid field keeps its red edge outside the ring. Where there is no room or no edge, a box, a radio, a switch, a handle, a soft or ghost button, a row, the part sets `--focus-inset: 3px` and the ring takes the edge's place. On a fill the ring would sink into, a solid button or a ticked box, the part sets `--focus-gap: var(--color-surface)` and a 2px line keeps the ring apart. `Foundations/Focus` fails if a ring reaches outside its control.
+- The ring is the control's edge, never outside it nor a second line within it: `focus-ring` draws a 3px outline from the outer edge in, over the 2px border, so focus reads as the border turning the focus color. A part whose edge is not its box's, a segmented control's pill, sets `--focus-inset` to where that edge is. `Foundations/Focus` fails if a ring reaches outside its control.
 - A ring appears at once. In Tailwind 4, `transition-colors` includes `outline-color` and eases the ring in: list the properties instead. `outline-none` sets the style that `outline-3` reads back, so the pair never draws a ring.
 - A part zag focuses itself after a press, a slider's handle, a dial, a star, would show the ring on every tap: the control sets `data-pointer` on pointerdown and clears it on a key (`notePointer`), and turns `--focus-style` to none from it. Test a ring with Tab and with a tap.
 

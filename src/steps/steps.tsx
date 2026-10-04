@@ -162,7 +162,7 @@ const item = tv({
 const trigger = tv({
   base: [
     "flex min-h-12 pressable gap-2 rounded-control p-1 text-sm font-medium tracking-body text-muted",
-    "transition-[color] duration-(--duration-smooth) ease-smooth focus-ring [--focus-inset:3px]",
+    "transition-[color] duration-(--duration-smooth) ease-smooth focus-ring",
     "data-current:font-semibold data-current:text-ink data-complete:text-ink",
     "data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:items-center",
     "data-[orientation=horizontal]:text-center",
@@ -232,7 +232,7 @@ const separator = tv({
 // A step's page fades in from `@starting-style`, 8px in from the side the farmer is going, which `data-from` says
 const content = tv({
   base: [
-    "rounded-control focus-ring [--focus-inset:3px] [--from-side:1] rtl:[--from-side:-1]",
+    "rounded-control focus-ring [--from-side:1] rtl:[--from-side:-1]",
     "transition-[opacity,translate] duration-(--duration-smooth) ease-smooth",
     "data-from:starting:opacity-0",
     "data-[from=before]:starting:translate-x-[calc(var(--enter-distance)*2/3*var(--from-side))]",

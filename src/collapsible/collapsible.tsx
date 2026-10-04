@@ -123,7 +123,7 @@ const root = tv({
 })
 
 const trigger = tv({
-  base: "group/trigger pressable focus-ring [--focus-inset:3px]",
+  base: "group/trigger pressable focus-ring",
   variants: {
     variant: {
       // A quiet button: it goes down under the finger as a `Button` does, and its ring appears at once

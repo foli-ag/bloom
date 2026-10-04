@@ -110,7 +110,7 @@ const root = tv({
         "[&:is(a[href],button)]:hover:after:opacity-100 disabled:hover:after:opacity-0",
       ],
       soft: [
-        "rounded-card border-2 border-transparent bg-neutral-soft text-ink [--focus-inset:3px]",
+        "rounded-card border-2 border-transparent bg-neutral-soft text-ink",
         // Muted text on the tint falls just short of 7:1, so it leans a little toward the ink
         "[&_[data-part=description]]:text-[color-mix(in_oklab,var(--color-muted),var(--color-ink)_30%)]",
         "[&:is(a[href],button)]:hover:border-strong [&:is(a[href],button)]:pressing:border-strong",
