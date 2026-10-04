@@ -14,6 +14,7 @@ does not tree-shake, so a root entry would load every component.
 | `Switch` | `@foliag/bloom/switch` | A setting that applies at once: words first, the switch at the end of the row |
 | `RadioGroup` | `@foliag/bloom/radio-group` | One choice among a few, all in view, stacked or side by side |
 | `ToggleGroup` | `@foliag/bloom/toggle-group` | A row of equal segments pressed like buttons, one at a time or several |
+| `Slider` | `@foliag/bloom/slider` | A value or a range along a line, with a 48px target around each handle |
 
 ## Use
 
