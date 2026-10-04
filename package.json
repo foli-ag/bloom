@@ -60,6 +60,10 @@
       "types": "./dist/navigation-menu/index.d.ts",
       "default": "./dist/navigation-menu/index.js"
     },
+    "./number-input": {
+      "types": "./dist/number-input/index.d.ts",
+      "default": "./dist/number-input/index.js"
+    },
     "./popover": {
       "types": "./dist/popover/index.d.ts",
       "default": "./dist/popover/index.js"
