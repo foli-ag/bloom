@@ -9,6 +9,7 @@ does not tree-shake, so a root entry would load every component.
 | Component | Import | What it is |
 |---|---|---|
 | `Button` | `@foliag/bloom/button` | 48px, or 56px as `size="lg"`. Tones, four emphasis levels, `loading`, `as` for links |
+| `Input` | `@foliag/bloom/input` | 48px text field with an `invalid` state. Labels and help are the app's, for now |
 
 ## Use
 

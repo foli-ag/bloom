@@ -24,6 +24,10 @@
       "types": "./dist/button/index.d.ts",
       "default": "./dist/button/index.js"
     },
+    "./input": {
+      "types": "./dist/input/index.d.ts",
+      "default": "./dist/input/index.js"
+    },
     "./theme.css": "./dist/theme.css",
     "./fonts.css": "./dist/fonts.css",
     "./package.json": "./package.json"
