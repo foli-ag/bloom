@@ -120,6 +120,10 @@
       "types": "./dist/slider/index.d.ts",
       "default": "./dist/slider/index.js"
     },
+    "./splitter": {
+      "types": "./dist/splitter/index.d.ts",
+      "default": "./dist/splitter/index.js"
+    },
     "./steps": {
       "types": "./dist/steps/index.d.ts",
       "default": "./dist/steps/index.js"
