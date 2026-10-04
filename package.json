@@ -48,6 +48,10 @@
       "types": "./dist/dialog/index.d.ts",
       "default": "./dist/dialog/index.js"
     },
+    "./editable": {
+      "types": "./dist/editable/index.d.ts",
+      "default": "./dist/editable/index.js"
+    },
     "./input": {
       "types": "./dist/input/index.d.ts",
       "default": "./dist/input/index.js"
