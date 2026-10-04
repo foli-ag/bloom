@@ -60,6 +60,10 @@
       "types": "./dist/editable/index.d.ts",
       "default": "./dist/editable/index.js"
     },
+    "./hover-card": {
+      "types": "./dist/hover-card/index.d.ts",
+      "default": "./dist/hover-card/index.js"
+    },
     "./input": {
       "types": "./dist/input/index.d.ts",
       "default": "./dist/input/index.js"
