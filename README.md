@@ -30,6 +30,7 @@ does not tree-shake, so a root entry would load every component.
 | `PinInput` | `@foliag/bloom/pin-input` | One box per character of a code. The name of each box is the app's |
 | `Editable` | `@foliag/bloom/editable` | Text edited in place, committed with Enter or put back with Escape |
 | `Clipboard` | `@foliag/bloom/clipboard` | A value with a button that copies it, its words changing once copied |
+| `Toggle` | `@foliag/bloom/toggle` | One button that stays pressed, like a lone `ToggleGroup` segment |
 
 ## Use
 

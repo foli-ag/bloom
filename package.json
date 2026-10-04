@@ -104,6 +104,10 @@
       "types": "./dist/switch/index.d.ts",
       "default": "./dist/switch/index.js"
     },
+    "./toggle": {
+      "types": "./dist/toggle/index.d.ts",
+      "default": "./dist/toggle/index.js"
+    },
     "./toggle-group": {
       "types": "./dist/toggle-group/index.d.ts",
       "default": "./dist/toggle-group/index.js"
