@@ -68,6 +68,10 @@
       "types": "./dist/password-input/index.d.ts",
       "default": "./dist/password-input/index.js"
     },
+    "./pin-input": {
+      "types": "./dist/pin-input/index.d.ts",
+      "default": "./dist/pin-input/index.js"
+    },
     "./popover": {
       "types": "./dist/popover/index.d.ts",
       "default": "./dist/popover/index.js"
