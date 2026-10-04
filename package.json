@@ -100,6 +100,10 @@
       "types": "./dist/steps/index.d.ts",
       "default": "./dist/steps/index.js"
     },
+    "./swap": {
+      "types": "./dist/swap/index.d.ts",
+      "default": "./dist/swap/index.js"
+    },
     "./switch": {
       "types": "./dist/switch/index.d.ts",
       "default": "./dist/switch/index.js"

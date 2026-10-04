@@ -31,6 +31,7 @@ does not tree-shake, so a root entry would load every component.
 | `Editable` | `@foliag/bloom/editable` | Text edited in place, committed with Enter or put back with Escape |
 | `Clipboard` | `@foliag/bloom/clipboard` | A value with a button that copies it, its words changing once copied |
 | `Toggle` | `@foliag/bloom/toggle` | One button that stays pressed, like a lone `ToggleGroup` segment |
+| `Swap` | `@foliag/bloom/swap` | Two indicators in one place, the change popping in |
 
 ## Use
 
