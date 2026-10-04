@@ -30,10 +30,32 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A tap on a star gives that mark and fills every star up to it, and the mark goes into the form. Its props are in the
+ * Controls panel.
+ */
+export const Playground: Story = {
+  argTypes: {
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    required: { control: "boolean" },
+    allowHalf: { control: "boolean" },
+  },
+}
+
+export const ReadOnly: Story = {
+  args: { readOnly: true, defaultValue: 4 },
+}
+
+export const Disabled: Story = {
+  args: { disabled: true, defaultValue: 3 },
+}
+
+/**
  * A tap on a star gives that mark and fills every star up to it. Each star is named in French by the app, not
  * "3 stars", and the mark goes into the form.
  */
-export const Default: Story = {
+export const TestTapOnAStar: Story = {
+  name: "Test: Tap on a star",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     expect(canvas.getByRole("radiogroup", { name: "Qualité de la levée" })).toBeInTheDocument()
@@ -51,7 +73,8 @@ export const Default: Story = {
 }
 
 /** The arrow keys move the mark from the keyboard */
-export const WithTheKeyboard: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   args: { defaultValue: 2 },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
@@ -63,27 +86,22 @@ export const WithTheKeyboard: Story = {
 }
 
 /** With `allowHalf`, a star can be half filled */
-export const HalfMarks: Story = {
+export const TestHalfMarks: Story = {
+  name: "Test: Half marks",
   args: { allowHalf: true, defaultValue: 3.5 },
   play: ({ canvasElement }) => {
     expect(canvasElement.querySelectorAll("[data-part=item][data-half]")).toHaveLength(1)
   },
 }
 
-export const ReadOnly: Story = {
-  args: { readOnly: true, defaultValue: 4 },
-}
-
-export const Disabled: Story = {
-  args: { disabled: true, defaultValue: 3 },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   args: { defaultValue: 4 },
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   args: { defaultValue: 4 },
   globals: { contrast: "more" },
 }

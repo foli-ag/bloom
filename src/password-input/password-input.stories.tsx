@@ -30,10 +30,39 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * Hidden as it is typed, with a button that shows it in plain text so the farmer can check it. Its props are in the
+ * Controls panel.
+ */
+export const Playground: Story = {
+  args: { name: "mot-de-passe" },
+  argTypes: {
+    name: { control: "text" },
+    autoComplete: { control: "inline-radio", options: ["current-password", "new-password"] },
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    invalid: { control: "boolean" },
+    required: { control: "boolean" },
+  },
+}
+
+export const Shown: Story = {
+  args: { defaultVisible: true },
+}
+
+export const Invalid: Story = {
+  args: { invalid: true },
+}
+
+export const Disabled: Story = {
+  args: { disabled: true },
+}
+
+/**
  * Hidden as it is typed. "Afficher" shows it in plain text so the farmer can check it, and focus stays in the field
  * to go on typing. The button then reads "Masquer". The password goes into the form either way.
  */
-export const Default: Story = {
+export const TestShowingAndHidingThePassword: Story = {
+  name: "Test: Showing and hiding the password",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const field = canvas.getByLabelText("Mot de passe")
@@ -54,31 +83,22 @@ export const Default: Story = {
 }
 
 /** For an account being created: the browser offers to make up a strong password */
-export const NewPassword: Story = {
+export const TestNewPassword: Story = {
+  name: "Test: New password",
   args: { autoComplete: "new-password" },
   play: ({ canvasElement }) => {
     expect(within(canvasElement).getByLabelText("Mot de passe")).toHaveAttribute("autocomplete", "new-password")
   },
 }
 
-export const Shown: Story = {
-  args: { defaultVisible: true },
-}
-
-export const Invalid: Story = {
-  args: { invalid: true },
-}
-
-export const Disabled: Story = {
-  args: { disabled: true },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   args: { defaultVisible: true },
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   args: { defaultVisible: true },
   globals: { contrast: "more" },
 }

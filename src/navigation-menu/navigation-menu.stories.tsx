@@ -43,10 +43,25 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A named landmark with a list of sections, where the page being shown is marked as current and a section opens its
+ * panel of links under it. Its props are in the Controls panel.
+ */
+export const Playground: Story = {
+  argTypes: {
+    orientation: { control: "inline-radio", options: ["horizontal", "vertical"] },
+    openDelay: { control: { type: "number", min: 0 } },
+    closeDelay: { control: { type: "number", min: 0 } },
+    disableClickTrigger: { control: "boolean" },
+    disableHoverTrigger: { control: "boolean" },
+  },
+}
+
+/**
  * A named landmark with a list of sections. The page being shown is marked as current. A section opens its panel of
  * links under it, the arrow keys move between sections, and Escape closes the panel with focus back on its section.
  */
-export const Default: Story = {
+export const TestOpeningASection: Story = {
+  name: "Test: Opening a section",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const nav = canvas.getByRole("navigation", { name: "Navigation principale" })
@@ -71,7 +86,8 @@ export const Default: Story = {
 }
 
 /** On a phone the panel spans the bar, under the sections, rather than hang off the edge of the screen */
-export const OnAPhone: Story = {
+export const TestOnAPhone: Story = {
+  name: "Test: On a phone",
   globals: { viewport: { value: "mobile1", isRotated: false } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
@@ -87,7 +103,8 @@ export const OnAPhone: Story = {
 }
 
 /** Stacked, for a side bar or a menu in a dialog. A panel opens in place and pushes the next sections down. */
-export const Vertical: Story = {
+export const TestVertical: Story = {
+  name: "Test: Vertical",
   args: { orientation: "vertical", class: "w-72" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
@@ -100,13 +117,15 @@ export const Vertical: Story = {
   },
 }
 
-export const OpenInDarkTheme: Story = {
+export const TestOpenInDarkTheme: Story = {
+  name: "Test: Open in dark theme",
   args: { defaultValue: "parcelles" },
   globals: { theme: "dark" },
   play: settled,
 }
 
-export const OpenWithMoreContrast: Story = {
+export const TestOpenWithMoreContrast: Story = {
+  name: "Test: Open with more contrast",
   args: { defaultValue: "parcelles" },
   globals: { contrast: "more" },
   play: settled,

@@ -35,19 +35,17 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
- * Tapping the words chooses a row, and the dot springs in. The arrow keys move the choice inside the group, and Tab
- * leaves it. The group is named by its label.
+ * One choice among a few, all in view at once. Tapping the words chooses a row, and the dot springs in. Its props are
+ * in the Controls panel.
  */
-export const Default: Story = {
-  play: async ({ canvasElement, args }) => {
-    const canvas = within(canvasElement)
-    expect(canvas.getByRole("radiogroup", { name: "Culture" })).toBeVisible()
-    await userEvent.click(canvas.getByText("Maïs"))
-    expect(canvas.getByRole("radio", { name: "Maïs" })).toBeChecked()
-    expect(args.onValueChange).toHaveBeenLastCalledWith({ value: "mais" })
-    await userEvent.keyboard("{ArrowDown}")
-    expect(canvas.getByRole("radio", { name: "Colza" })).toBeChecked()
-    expect(canvas.getByRole("radio", { name: "Maïs" })).not.toBeChecked()
+export const Playground: Story = {
+  argTypes: {
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    invalid: { control: "boolean" },
+    required: { control: "boolean" },
+    orientation: { control: "inline-radio", options: ["horizontal", "vertical"] },
+    name: { control: "text" },
   },
 }
 
@@ -72,8 +70,27 @@ export const Invalid: Story = {
   args: { invalid: true },
 }
 
+/**
+ * Tapping the words chooses a row, and the dot springs in. The arrow keys move the choice inside the group, and Tab
+ * leaves it. The group is named by its label.
+ */
+export const TestChoosesWithTapAndArrowKeys: Story = {
+  name: "Test: Chooses with a tap and the arrow keys",
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    expect(canvas.getByRole("radiogroup", { name: "Culture" })).toBeVisible()
+    await userEvent.click(canvas.getByText("Maïs"))
+    expect(canvas.getByRole("radio", { name: "Maïs" })).toBeChecked()
+    expect(args.onValueChange).toHaveBeenLastCalledWith({ value: "mais" })
+    await userEvent.keyboard("{ArrowDown}")
+    expect(canvas.getByRole("radio", { name: "Colza" })).toBeChecked()
+    expect(canvas.getByRole("radio", { name: "Maïs" })).not.toBeChecked()
+  },
+}
+
 /** Controlled by the app, which can refuse or reset a choice */
-export const Controlled: Story = {
+export const TestControlled: Story = {
+  name: "Test: Controlled by the app",
   render: () => <ControlledCrops />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
@@ -82,12 +99,14 @@ export const Controlled: Story = {
   },
 }
 
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
   args: { defaultValue: "mais" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
   args: { defaultValue: "mais" },
 }

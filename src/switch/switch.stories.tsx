@@ -14,37 +14,16 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
- * The whole row is the target, 48px tall. The knob slides across and carries a tick when the setting is on.
- * Screen readers announce "on" and "off", because the native input carries `role="switch"`.
+ * The whole row is the target, 48px tall. The knob slides across and carries a tick when the setting is on. Its props
+ * are in the Controls panel.
  */
-export const Default: Story = {
-  play: async ({ canvasElement, args }) => {
-    const canvas = within(canvasElement)
-    const control = canvas.getByRole("switch", { name: "Arrosage automatique" })
-    expect(control).not.toBeChecked()
-    await userEvent.click(canvas.getByText("Arrosage automatique"))
-    expect(control).toBeChecked()
-    expect(args.onCheckedChange).toHaveBeenLastCalledWith(expect.objectContaining({ checked: true }))
-    await userEvent.keyboard(" ")
-    expect(control).not.toBeChecked()
-  },
-}
-
-/** On: the knob slides 24px to the end and turns dark on the green track as the tick draws in, together. */
-export const Checked: Story = {
-  args: { defaultChecked: true },
-  play: ({ canvasElement }) => {
-    const thumb = canvasElement.querySelector("[data-part=thumb]")
-    expect(thumb).toHaveAttribute("data-state", "checked")
-    expect(getComputedStyle(thumb!).translate).not.toBe("none")
-  },
-}
-
-export const KeyboardFocus: Story = {
-  play: async ({ canvasElement }) => {
-    await userEvent.tab()
-    expect(within(canvasElement).getByRole("switch")).toHaveFocus()
-    expect(canvasElement.querySelector("[data-part=control]")).toHaveAttribute("data-focus-visible")
+export const Playground: Story = {
+  argTypes: {
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    invalid: { control: "boolean" },
+    required: { control: "boolean" },
+    name: { control: "text" },
   },
 }
 
@@ -62,12 +41,52 @@ export const Settings: Story = {
   parameters: { layout: "padded" },
 }
 
-export const InDarkTheme: Story = {
+/**
+ * The whole row is the target, 48px tall. The knob slides across and carries a tick when the setting is on.
+ * Screen readers announce "on" and "off", because the native input carries `role="switch"`.
+ */
+export const TestTogglesFromLabelAndSpace: Story = {
+  name: "Test: Toggles from its label and Space",
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    const control = canvas.getByRole("switch", { name: "Arrosage automatique" })
+    expect(control).not.toBeChecked()
+    await userEvent.click(canvas.getByText("Arrosage automatique"))
+    expect(control).toBeChecked()
+    expect(args.onCheckedChange).toHaveBeenLastCalledWith(expect.objectContaining({ checked: true }))
+    await userEvent.keyboard(" ")
+    expect(control).not.toBeChecked()
+  },
+}
+
+/** On: the knob slides 24px to the end and turns dark on the green track as the tick draws in, together. */
+export const TestKnobSlidesWhenChecked: Story = {
+  name: "Test: Knob slides when checked",
+  args: { defaultChecked: true },
+  play: ({ canvasElement }) => {
+    const thumb = canvasElement.querySelector("[data-part=thumb]")
+    expect(thumb).toHaveAttribute("data-state", "checked")
+    expect(getComputedStyle(thumb!).translate).not.toBe("none")
+  },
+}
+
+export const TestKeyboardFocus: Story = {
+  name: "Test: Keyboard focus",
+  play: async ({ canvasElement }) => {
+    await userEvent.tab()
+    expect(within(canvasElement).getByRole("switch")).toHaveFocus()
+    expect(canvasElement.querySelector("[data-part=control]")).toHaveAttribute("data-focus-visible")
+  },
+}
+
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
   args: { defaultChecked: true },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
   args: { defaultChecked: true },
 }

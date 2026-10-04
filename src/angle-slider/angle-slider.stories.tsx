@@ -45,10 +45,29 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * The needle is a slider named by the label, with the angle and the compass point said together. Its props are in the
+ * Controls panel.
+ */
+export const Playground: Story = {
+  args: { step: 5 },
+  argTypes: {
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    invalid: { control: "boolean" },
+    step: { control: "number" },
+  },
+}
+
+export const Disabled: Story = {
+  args: { disabled: true },
+}
+
+/**
  * The needle is a slider named by the label, with the angle and the compass point said together. The arrow keys turn
  * it by 5 degrees, and the value goes into the form.
  */
-export const Default: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const needle = canvas.getByRole("slider", { name: "Direction du vent" })
@@ -67,7 +86,8 @@ export const Default: Story = {
 }
 
 /** A press on the dial points the needle there: on the right edge is east */
-export const PressToPoint: Story = {
+export const TestPressToPoint: Story = {
+  name: "Test: Press to point",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const dial = canvasElement.querySelector<HTMLElement>("[data-part=control]")!
@@ -82,14 +102,12 @@ export const PressToPoint: Story = {
   },
 }
 
-export const Disabled: Story = {
-  args: { disabled: true },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
 }

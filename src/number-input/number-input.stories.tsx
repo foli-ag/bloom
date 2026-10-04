@@ -33,10 +33,37 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A dose, typed the French way with a comma or stepped with the two buttons on its sides. Its props are in the
+ * Controls panel.
+ */
+export const Playground: Story = {
+  args: { name: "dose", min: 0, max: 10, step: 0.5 },
+  argTypes: {
+    name: { control: "text" },
+    min: { control: "number" },
+    max: { control: "number" },
+    step: { control: "number" },
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    invalid: { control: "boolean" },
+    required: { control: "boolean" },
+  },
+}
+
+export const Invalid: Story = {
+  args: { defaultValue: "4", invalid: true },
+}
+
+export const Disabled: Story = {
+  args: { defaultValue: "4", disabled: true },
+}
+
+/**
  * Typed the French way, with a comma. The buttons step by half a litre, named by their own words and not by zag's
  * English ones, and the value goes into the form.
  */
-export const Default: Story = {
+export const TestTypingAndStepping: Story = {
+  name: "Test: Typing and stepping",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const field = canvas.getByRole("spinbutton", { name: "Dose (L/ha)" })
@@ -55,7 +82,8 @@ export const Default: Story = {
 }
 
 /** A dose past the maximum is put back to it when the field loses focus */
-export const PutBackInRange: Story = {
+export const TestPutBackInRange: Story = {
+  name: "Test: Put back in range",
   play: async ({ canvasElement }) => {
     const field = within(canvasElement).getByRole("spinbutton")
     await userEvent.type(field, "14")
@@ -65,7 +93,8 @@ export const PutBackInRange: Story = {
 }
 
 /** The arrow keys step it from the keyboard */
-export const WithTheKeyboard: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   args: { defaultValue: "4" },
   play: async ({ canvasElement }) => {
     const field = within(canvasElement).getByRole("spinbutton")
@@ -75,20 +104,14 @@ export const WithTheKeyboard: Story = {
   },
 }
 
-export const Invalid: Story = {
-  args: { defaultValue: "4", invalid: true },
-}
-
-export const Disabled: Story = {
-  args: { defaultValue: "4", disabled: true },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   args: { defaultValue: "4" },
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   args: { defaultValue: "4" },
   globals: { contrast: "more" },
 }

@@ -58,10 +58,42 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * Typing narrows the list, the arrow keys move through it while focus stays in the field, and Enter chooses. Its props
+ * are in the Controls panel.
+ */
+export const Playground: Story = {
+  args: { placeholder: "Tapez le nom" },
+  argTypes: {
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    invalid: { control: "boolean" },
+    required: { control: "boolean" },
+    placeholder: { control: "text" },
+    inputBehavior: { control: "inline-radio", options: ["none", "autohighlight", "autocomplete"] },
+    selectionBehavior: { control: "inline-radio", options: ["replace", "clear", "preserve"] },
+    openOnClick: { control: "boolean" },
+    openOnKeyPress: { control: "boolean" },
+    allowCustomValue: { control: "boolean" },
+    closeOnSelect: { control: "boolean" },
+    loopFocus: { control: "boolean" },
+  },
+}
+
+export const Open: Story = {
+  args: { defaultOpen: true },
+  play: settled,
+}
+
+export const Invalid: Story = {
+  args: { invalid: true },
+}
+
+/**
  * Typing narrows the list, the arrow keys move through it while focus stays in the field, and Enter chooses. The
  * field then shows the commune, and the clear button, named by its own words, empties it.
  */
-export const Default: Story = {
+export const TestTypingToChooseAndClear: Story = {
+  name: "Test: Typing to choose and clear",
   play: async ({ args }) => {
     const page = within(document.body)
     const field = page.getByRole("combobox", { name: "Commune" })
@@ -84,7 +116,8 @@ export const Default: Story = {
 }
 
 /** A tap anywhere on the field opens the whole list, so a thumb need not find the chevron */
-export const TapToOpen: Story = {
+export const TestTapToOpen: Story = {
+  name: "Test: Tap to open",
   play: async () => {
     const page = within(document.body)
     await userEvent.click(page.getByRole("combobox", { name: "Commune" }))
@@ -97,7 +130,8 @@ export const TapToOpen: Story = {
  * When nothing matches, the panel says so in the app's words, as a status a screen reader reads out. The empty list is
  * hidden, as a listbox has to hold options.
  */
-export const NothingMatches: Story = {
+export const TestNothingMatches: Story = {
+  name: "Test: Nothing matches",
   play: async () => {
     const page = within(document.body)
     await userEvent.type(page.getByRole("combobox", { name: "Commune" }), "zz")
@@ -108,21 +142,14 @@ export const NothingMatches: Story = {
   },
 }
 
-export const Open: Story = {
-  args: { defaultOpen: true },
-  play: settled,
-}
-
-export const OpenInDarkTheme: Story = {
+export const TestOpenInDarkTheme: Story = {
+  name: "Test: Open in dark theme",
   ...Open,
   globals: { theme: "dark" },
 }
 
-export const OpenWithMoreContrast: Story = {
+export const TestOpenWithMoreContrast: Story = {
+  name: "Test: Open with more contrast",
   ...Open,
   globals: { contrast: "more" },
-}
-
-export const Invalid: Story = {
-  args: { invalid: true },
 }

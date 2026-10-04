@@ -32,10 +32,37 @@ type Story = StoryObj<typeof meta>
 
 /**
  * One option at a time, which makes the group a radio group for a screen reader. The pressed segment fills with the
+ * primary color and a tick springs in, so it does not rely on color alone. Its props are in the Controls panel.
+ */
+export const Playground: Story = {
+  args: { defaultValue: ["semaine"] },
+  argTypes: {
+    // Only read when the group mounts, so changing it here would do nothing
+    defaultValue: { table: { disable: true } },
+    disabled: { control: "boolean" },
+    multiple: { control: "boolean" },
+    deselectable: { control: "boolean" },
+    loopFocus: { control: "boolean" },
+    rovingFocus: { control: "boolean" },
+    orientation: { control: "inline-radio", options: ["horizontal", "vertical"] },
+  },
+}
+
+export const Vertical: Story = {
+  args: { orientation: "vertical", defaultValue: ["jour"] },
+}
+
+export const Disabled: Story = {
+  args: { disabled: true, defaultValue: ["jour"] },
+}
+
+/**
+ * One option at a time, which makes the group a radio group for a screen reader. The pressed segment fills with the
  * primary color and a tick springs in, so it does not rely on color alone. Every segment is as wide as the widest, and
  * none changes width when the choice moves. Arrow keys move between segments.
  */
-export const Default: Story = {
+export const TestOnePressedAtATime: Story = {
+  name: "Test: One pressed at a time",
   args: { defaultValue: ["semaine"] },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
@@ -58,7 +85,8 @@ export const Default: Story = {
 }
 
 /** Several can be pressed, and each is announced as a toggle button. */
-export const Multiple: Story = {
+export const TestSeveralPressed: Story = {
+  name: "Test: Several pressed",
   args: { multiple: true, defaultValue: ["jour"] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
@@ -69,20 +97,14 @@ export const Multiple: Story = {
   },
 }
 
-export const Vertical: Story = {
-  args: { orientation: "vertical", defaultValue: ["jour"] },
-}
-
-export const Disabled: Story = {
-  args: { disabled: true, defaultValue: ["jour"] },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
   args: { defaultValue: ["semaine"] },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
   args: { defaultValue: ["semaine"] },
 }

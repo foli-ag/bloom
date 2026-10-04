@@ -26,10 +26,29 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * The button is announced as expanded or collapsed, and the content grows to its height as the chevron turns. Its props
+ * are in the Controls panel.
+ */
+export const Playground: Story = {
+  argTypes: {
+    disabled: { control: "boolean" },
+  },
+}
+
+export const Open: Story = {
+  args: { defaultOpen: true },
+}
+
+export const Disabled: Story = {
+  args: { disabled: true },
+}
+
+/**
  * The button is announced as expanded or collapsed. The content grows to its height as the chevron turns, and folds
  * back the same way. Under reduced motion it only fades.
  */
-export const Default: Story = {
+export const TestOpeningAndClosing: Story = {
+  name: "Test: Opening and closing",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const trigger = canvas.getByRole("button", { name: "Détails de la parcelle" })
@@ -48,12 +67,9 @@ export const Default: Story = {
   },
 }
 
-export const Open: Story = {
-  args: { defaultOpen: true },
-}
-
 /** With reduced motion the content is at its full height at once, and only fades in. */
-export const WithReducedMotion: Story = {
+export const TestWithReducedMotion: Story = {
+  name: "Test: With reduced motion",
   globals: { motion: "reduced" },
   play: async ({ canvasElement }) => {
     await userEvent.click(within(canvasElement).getByRole("button", { name: "Détails de la parcelle" }))
@@ -62,16 +78,14 @@ export const WithReducedMotion: Story = {
   },
 }
 
-export const Disabled: Story = {
-  args: { disabled: true },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
   args: { defaultOpen: true },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
   args: { defaultOpen: true },
 }

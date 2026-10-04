@@ -64,10 +64,39 @@ async function swipeDown(element: HTMLElement, dy: number) {
 }
 
 /**
+ * A panel that rises from the bottom, named by its title and described by the sentence under it. Its props are in the
+ * Controls panel.
+ */
+export const Playground: Story = {
+  args: {
+    role: "dialog",
+    modal: true,
+    closeOnInteractOutside: true,
+    closeOnEscape: true,
+    restoreFocus: true,
+    swipeDirection: "down",
+  },
+  argTypes: {
+    role: { control: "inline-radio", options: ["dialog", "alertdialog"] },
+    modal: { control: "boolean" },
+    closeOnInteractOutside: { control: "boolean" },
+    closeOnEscape: { control: "boolean" },
+    restoreFocus: { control: "boolean" },
+    swipeDirection: { control: "inline-radio", options: ["down", "up", "start", "end"] },
+  },
+}
+
+export const Open: Story = {
+  args: { defaultOpen: true },
+  play: settled,
+}
+
+/**
  * It rises from the bottom, named by its title and described by the sentence under it. Focus moves into it, Escape
  * closes it and focus comes back to the trigger. Its close button, named by its own words, closes it too.
  */
-export const Default: Story = {
+export const TestOpeningAndClosing: Story = {
+  name: "Test: Opening and closing",
   play: async ({ args }) => {
     const page = within(document.body)
     const trigger = page.getByRole("button", { name: "Filtrer" })
@@ -90,7 +119,8 @@ export const Default: Story = {
 }
 
 /** Swiped down a little it settles back in place. Swiped far enough it goes and the dim clears. */
-export const SwipedAway: Story = {
+export const TestSwipedAway: Story = {
+  name: "Test: Swiped away",
   args: { defaultOpen: true },
   play: async ({ args }) => {
     const page = within(document.body)
@@ -110,7 +140,8 @@ export const SwipedAway: Story = {
 }
 
 /** On a phone it spans the screen and sits on its bottom edge */
-export const OnAPhone: Story = {
+export const TestOnAPhone: Story = {
+  name: "Test: On a phone",
   args: { defaultOpen: true },
   globals: { viewport: { value: "mobile2", isRotated: false } },
   play: async () => {
@@ -123,7 +154,8 @@ export const OnAPhone: Story = {
 }
 
 /** With reduced motion it does not slide: it is in place from the first frame, and only fades in */
-export const WithReducedMotion: Story = {
+export const TestWithReducedMotion: Story = {
+  name: "Test: With reduced motion",
   globals: { motion: "reduced" },
   play: async () => {
     const page = within(document.body)
@@ -141,7 +173,8 @@ export const WithReducedMotion: Story = {
 }
 
 /** On the end edge, the right in French, for a panel of details next to a list on a wide screen */
-export const OnTheRight: Story = {
+export const TestOnTheRight: Story = {
+  name: "Test: On the right",
   args: { defaultOpen: true, swipeDirection: "end" },
   play: async () => {
     const drawer = await within(document.body).findByRole("dialog")
@@ -152,17 +185,14 @@ export const OnTheRight: Story = {
   },
 }
 
-export const Open: Story = {
-  args: { defaultOpen: true },
-  play: settled,
-}
-
-export const OpenInDarkTheme: Story = {
+export const TestOpenInDarkTheme: Story = {
+  name: "Test: Open in dark theme",
   ...Open,
   globals: { theme: "dark" },
 }
 
-export const OpenWithMoreContrast: Story = {
+export const TestOpenWithMoreContrast: Story = {
+  name: "Test: Open with more contrast",
   ...Open,
   globals: { contrast: "more" },
 }

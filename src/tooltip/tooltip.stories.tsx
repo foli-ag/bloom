@@ -24,6 +24,21 @@ function Export(props: Tooltip.RootProps) {
   )
 }
 
+const placements = [
+  "top",
+  "top-start",
+  "top-end",
+  "right",
+  "right-start",
+  "right-end",
+  "bottom",
+  "bottom-start",
+  "bottom-end",
+  "left",
+  "left-start",
+  "left-end",
+] as const satisfies readonly NonNullable<Tooltip.PositioningOptions["placement"]>[]
+
 const meta = {
   title: "Components/Tooltip",
   component: Export,
@@ -34,10 +49,48 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A few words that describe the button, shown after a moment when a mouse rests on it and at once when the keyboard
+ * reaches it. Its props are in the Controls panel.
+ */
+export const Playground: Story = {
+  args: {
+    disabled: false,
+    openDelay: 300,
+    closeDelay: 150,
+    closeOnClick: true,
+    closeOnEscape: true,
+    closeOnScroll: true,
+    interactive: false,
+  },
+  argTypes: {
+    disabled: { control: "boolean" },
+    openDelay: { control: { type: "number", min: 0, step: 50 } },
+    closeDelay: { control: { type: "number", min: 0, step: 50 } },
+    closeOnClick: { control: "boolean" },
+    closeOnEscape: { control: "boolean" },
+    closeOnScroll: { control: "boolean" },
+    interactive: { control: "boolean" },
+    // `positioning` is an object: the select picks its `placement`
+    positioning: {
+      name: "positioning.placement",
+      control: "select",
+      options: placements,
+      mapping: Object.fromEntries(placements.map((placement) => [placement, { placement }])),
+    },
+  },
+}
+
+export const Open: Story = {
+  args: { defaultOpen: true },
+  play: settled,
+}
+
+/**
  * The keyboard reaching the button shows it at once, as the button's description. Escape hides it and focus stays on
  * the button.
  */
-export const Default: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   play: async () => {
     const page = within(document.body)
     const trigger = page.getByRole("button", { name: "Exporter" })
@@ -53,7 +106,8 @@ export const Default: Story = {
 }
 
 /** A mouse resting on the button shows it after a moment, under the button without covering it, and leaving hides it */
-export const WithAMouse: Story = {
+export const TestWithAMouse: Story = {
+  name: "Test: With a mouse",
   play: async () => {
     const page = within(document.body)
     const trigger = page.getByRole("button", { name: "Exporter" })
@@ -68,7 +122,8 @@ export const WithAMouse: Story = {
 }
 
 /** A finger never shows it: zag ignores touch, so on a phone it is never seen */
-export const NotOnTouch: Story = {
+export const TestNotOnTouch: Story = {
+  name: "Test: Not on touch",
   play: async () => {
     const page = within(document.body)
     const trigger = page.getByRole("button", { name: "Exporter" })
@@ -80,17 +135,14 @@ export const NotOnTouch: Story = {
   },
 }
 
-export const Open: Story = {
-  args: { defaultOpen: true },
-  play: settled,
-}
-
-export const OpenInDarkTheme: Story = {
+export const TestOpenInDarkTheme: Story = {
+  name: "Test: Open in dark theme",
   ...Open,
   globals: { theme: "dark" },
 }
 
-export const OpenWithMoreContrast: Story = {
+export const TestOpenWithMoreContrast: Story = {
+  name: "Test: Open with more contrast",
   ...Open,
   globals: { contrast: "more" },
 }

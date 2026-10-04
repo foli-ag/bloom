@@ -7,39 +7,26 @@ const meta = {
   title: "Components/Input",
   component: Input,
   tags: ["autodocs"],
-  argTypes: { size: { control: "inline-radio", options: ["md", "lg"] } },
+  argTypes: {
+    size: { control: "inline-radio", options: ["md", "lg"] },
+    invalid: { control: "boolean" },
+    disabled: { control: "boolean" },
+    readonly: { control: "boolean" },
+    required: { control: "boolean" },
+    placeholder: { control: "text" },
+  },
   decorators: [(Story) => <div class="w-[min(24rem,90vw)]">{Story()}</div>],
 } satisfies Meta<InputProps>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** A field is a visible label, the input, and help under it. The input is wired to the help with `aria-describedby`. */
-export const Default: Story = {
-  render: (args) => <ParcelName {...args} />,
-  play: async ({ canvasElement }) => {
-    const input = within(canvasElement).getByLabelText("Nom de la parcelle")
-    await userEvent.type(input, "Les Œillets")
-    expect(input).toHaveValue("Les Œillets")
-    expect(input).toHaveAccessibleDescription("Le nom que vous lui donnez, par exemple « Les Œillets ».")
-  },
-}
-
 /**
- * An invalid input says so in three ways that do not depend on color: `aria-invalid`, a second line on its edge, and
- * text that names the problem and is read out with the field.
+ * A field is a visible label, the input, and help under it, wired together with `aria-describedby`. Its props are in
+ * the Controls panel.
  */
-export const Invalid: Story = {
-  render: (args) => (
-    <Field label="Surface en hectares" id="surface" hint="Saisissez un nombre, avec une virgule : 12,5" problem>
-      <Input {...args} id="surface" name="surface" invalid value="douze" aria-describedby="surface-hint" />
-    </Field>
-  ),
-  play: ({ canvasElement }) => {
-    const input = within(canvasElement).getByLabelText("Surface en hectares")
-    expect(input).toBeInvalid()
-    expect(input).toHaveAccessibleDescription("Saisissez un nombre, avec une virgule : 12,5")
-  },
+export const Playground: Story = {
+  render: (args) => <ParcelName {...args} />,
 }
 
 /** `inputmode="decimal"` opens the numeric pad with a decimal key on a phone. */
@@ -72,12 +59,44 @@ export const Disabled: Story = {
   ),
 }
 
-export const InDarkTheme: Story = {
+/** A field is a visible label, the input, and help under it. The input is wired to the help with `aria-describedby`. */
+export const TestTypingInTheField: Story = {
+  name: "Test: Typing in the field",
+  render: (args) => <ParcelName {...args} />,
+  play: async ({ canvasElement }) => {
+    const input = within(canvasElement).getByLabelText("Nom de la parcelle")
+    await userEvent.type(input, "Les Œillets")
+    expect(input).toHaveValue("Les Œillets")
+    expect(input).toHaveAccessibleDescription("Le nom que vous lui donnez, par exemple « Les Œillets ».")
+  },
+}
+
+/**
+ * An invalid input says so in three ways that do not depend on color: `aria-invalid`, a second line on its edge, and
+ * text that names the problem and is read out with the field.
+ */
+export const TestInvalidFieldAndItsProblem: Story = {
+  name: "Test: Invalid field and its problem",
+  render: (args) => (
+    <Field label="Surface en hectares" id="surface" hint="Saisissez un nombre, avec une virgule : 12,5" problem>
+      <Input {...args} id="surface" name="surface" invalid value="douze" aria-describedby="surface-hint" />
+    </Field>
+  ),
+  play: ({ canvasElement }) => {
+    const input = within(canvasElement).getByLabelText("Surface en hectares")
+    expect(input).toBeInvalid()
+    expect(input).toHaveAccessibleDescription("Saisissez un nombre, avec une virgule : 12,5")
+  },
+}
+
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   render: (args) => <ParcelName {...args} />,
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   render: (args) => <ParcelName {...args} />,
   globals: { contrast: "more" },
 }

@@ -19,38 +19,32 @@ function InviteLink(props: Partial<Clipboard.RootProps>) {
   )
 }
 
+// The test browser has no clipboard to write to, so the stories that press Copy catch the write. The others leave it
+// alone, which lets the Playground copy for real.
+function catchClipboardWrite() {
+  const writeText = spyOn(navigator.clipboard, "writeText").mockResolvedValue(undefined)
+  return () => writeText.mockRestore()
+}
+
 const meta = {
   title: "Components/Clipboard",
   component: InviteLink,
   tags: ["autodocs"],
   args: { onStatusChange: fn() },
-  // The test browser has no clipboard to write to, so the write is caught here
-  beforeEach: () => {
-    const writeText = spyOn(navigator.clipboard, "writeText").mockResolvedValue(undefined)
-    return () => writeText.mockRestore()
-  },
 } satisfies Meta<typeof InviteLink>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 /**
- * The link reads in a field that cannot be typed in. The button copies it and says so in its own words for a moment,
- * named by them and not by zag's English "Copy to clipboard", then goes back.
+ * The link reads in a field that cannot be typed in, with a button that copies it. Its props are in the Controls
+ * panel.
  */
-export const Default: Story = {
-  args: { timeout: 800 },
-  play: async ({ canvasElement, args }) => {
-    const canvas = within(canvasElement)
-    const field = canvas.getByRole("textbox", { name: "Lien d'invitation pour un saisonnier" })
-    expect(field).toHaveValue(link)
-    expect(field).toHaveAttribute("readonly")
-
-    await userEvent.click(canvas.getByRole("button", { name: "Copier" }))
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(link)
-    expect(args.onStatusChange).toHaveBeenCalledWith({ copied: true })
-    expect(await canvas.findByRole("button", { name: "Copié" })).toBeVisible()
-    await waitFor(() => expect(canvas.getByRole("button", { name: "Copier" })).toBeVisible(), { timeout: 2000 })
+export const Playground: Story = {
+  args: { value: link },
+  argTypes: {
+    value: { control: "text" },
+    timeout: { control: "number" },
   },
 }
 
@@ -69,9 +63,33 @@ export const AsText: Story = {
   ),
 }
 
+/**
+ * The link reads in a field that cannot be typed in. The button copies it and says so in its own words for a moment,
+ * named by them and not by zag's English "Copy to clipboard", then goes back.
+ */
+export const TestCopyingTheLink: Story = {
+  name: "Test: Copying the link",
+  args: { timeout: 800 },
+  beforeEach: catchClipboardWrite,
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    const field = canvas.getByRole("textbox", { name: "Lien d'invitation pour un saisonnier" })
+    expect(field).toHaveValue(link)
+    expect(field).toHaveAttribute("readonly")
+
+    await userEvent.click(canvas.getByRole("button", { name: "Copier" }))
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(link)
+    expect(args.onStatusChange).toHaveBeenCalledWith({ copied: true })
+    expect(await canvas.findByRole("button", { name: "Copié" })).toBeVisible()
+    await waitFor(() => expect(canvas.getByRole("button", { name: "Copier" })).toBeVisible(), { timeout: 2000 })
+  },
+}
+
 /** Just copied, to be measured by axe and looked at */
-export const Copied: Story = {
+export const TestJustCopied: Story = {
+  name: "Test: Just copied",
   args: { timeout: 60_000 },
+  beforeEach: catchClipboardWrite,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     await userEvent.click(canvas.getByRole("button", { name: "Copier" }))
@@ -79,10 +97,12 @@ export const Copied: Story = {
   },
 }
 
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
 }

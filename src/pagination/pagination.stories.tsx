@@ -46,10 +46,25 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A navigation named in French, its pages named by the app and its triggers by their own words. Its props are in the
+ * Controls panel.
+ */
+export const Playground: Story = {
+  args: { count: 120, pageSize: 20, siblingCount: 1, boundaryCount: 1 },
+  argTypes: {
+    count: { control: { type: "number", min: 0 } },
+    pageSize: { control: { type: "number", min: 1 } },
+    siblingCount: { control: { type: "number", min: 0 } },
+    boundaryCount: { control: { type: "number", min: 0 } },
+  },
+}
+
+/**
  * A navigation named in French, its pages named by the app and its triggers by their own words. A tap on a page shows
  * it, the triggers step one page, and the first and last pages have no way further.
  */
-export const Default: Story = {
+export const TestMovingBetweenPages: Story = {
+  name: "Test: Moving between pages",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     canvas.getByRole("navigation", { name: "Pages des interventions" })
@@ -75,7 +90,8 @@ export const Default: Story = {
 }
 
 /** Many pages: those far from the current one are left out behind dots, which say nothing to a screen reader */
-export const ManyPages: Story = {
+export const TestManyPages: Story = {
+  name: "Test: Many pages",
   args: { count: 400, defaultPage: 10 },
   play: ({ canvasElement }) => {
     const dots = canvasElement.querySelectorAll("[data-part=ellipsis]")
@@ -85,7 +101,8 @@ export const ManyPages: Story = {
 }
 
 /** On a phone the row wraps instead of running off the screen */
-export const OnAPhone: Story = {
+export const TestOnAPhone: Story = {
+  name: "Test: On a phone",
   args: { count: 400, defaultPage: 10 },
   globals: { viewport: { value: "mobile2", isRotated: false } },
   play: ({ canvasElement }) => {
@@ -94,12 +111,14 @@ export const OnAPhone: Story = {
   },
 }
 
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   args: { defaultPage: 2 },
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   args: { defaultPage: 2 },
   globals: { contrast: "more" },
 }

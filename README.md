@@ -162,6 +162,11 @@ Stories live next to their component as `src/<component>/<component>.stories.tsx
 `vite.config.ts` runs every story as a test in headless Chromium, so a story with a `play` function is also an
 interaction test. `tsconfig.build.json` leaves stories out of `dist/`.
 
+Each component's file opens with a `Playground` story: no `play`, the props in the Controls panel and the events in
+Actions, for a developer to try the component. The stories after it show one state each. Tests come last, in stories
+named `Test: …` (`export const TestWithTheKeyboard` is `name: "Test: With the keyboard"`). A story is a test when it has
+a `play` function, or when it exists only to run axe in the dark theme or with more contrast.
+
 `src/foundations/` holds the stories for colors, type and motion, and the helper that measures contrast in the browser.
 It stays out of `dist/` too. The toolbar sets `data-theme`, `data-contrast` and `data-motion` on `<html>`. `a11y.test` is
 `error` with the AAA contrast rule on, so axe fails a story in the test run as it does in the browser.

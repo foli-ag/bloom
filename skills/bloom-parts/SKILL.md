@@ -74,6 +74,8 @@ An app's bundler keeps only the parts it uses, so the layout is seeds' own:
 
 ## Stories
 
-Each component has stories next to it, `src/<component>/<component>.stories.tsx`, with a `play` test of what a farmer
-does with it, a dark and a more-contrast story, and a phone story (`globals: { viewport: { value: "mobile2" } }`)
-when it changes shape below 640px. axe runs on every story. Stories write the parts out in full, as an app would.
+Each component has stories next to it, `src/<component>/<component>.stories.tsx`. The first is `Playground`, with no
+`play` and the props as controls, for a developer to try it. Then come stories that each show one state. Tests come last,
+in stories named `Test: …`: a `play` test of what a farmer does with it, a dark and a more-contrast story, and a phone
+story (`globals: { viewport: { value: "mobile2" } }`) when it changes shape below 640px. axe runs on every story.
+Stories write the parts out in full, as an app would.

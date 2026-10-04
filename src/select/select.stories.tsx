@@ -60,10 +60,42 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A field named by its label: the list drops down under it, a tap chooses and closes it, and the choice goes into the
+ * form. Its props are in the Controls panel.
+ */
+export const Playground: Story = {
+  argTypes: {
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    invalid: { control: "boolean" },
+    required: { control: "boolean" },
+    multiple: { control: "boolean" },
+    closeOnSelect: { control: "boolean" },
+    loopFocus: { control: "boolean" },
+    deselectable: { control: "boolean" },
+  },
+}
+
+// The value is written here and not in `args`, which Storybook turns into a store that zag cannot compare
+export const Open: Story = {
+  render: () => <Culture defaultOpen defaultValue={["colza"]} />,
+  play: settled,
+}
+
+export const Invalid: Story = {
+  args: { invalid: true },
+}
+
+export const Disabled: Story = {
+  args: { disabled: true },
+}
+
+/**
  * The field is named by its label. The list drops down under it, a tap chooses and closes it, and the choice goes into
  * the form. The clear button appears once something is chosen, named by its own words.
  */
-export const Default: Story = {
+export const TestChoosingAndClearing: Story = {
+  name: "Test: Choosing and clearing",
   play: async ({ canvasElement, args }) => {
     const page = within(document.body)
     const field = page.getByRole("combobox", { name: "Culture" })
@@ -90,7 +122,8 @@ export const Default: Story = {
 }
 
 /** From the keyboard: the arrow keys open it and move, Enter chooses, and focus is back on the field. */
-export const WithTheKeyboard: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   play: async () => {
     const page = within(document.body)
     const field = page.getByRole("combobox", { name: "Culture" })
@@ -110,7 +143,8 @@ export const WithTheKeyboard: Story = {
  * On a phone the list rises from the bottom as a sheet, with a close button at its foot. That button closes the sheet
  * without choosing, and focus goes back to the field.
  */
-export const OnAPhone: Story = {
+export const TestOnAPhone: Story = {
+  name: "Test: On a phone",
   globals: { viewport: { value: "mobile2", isRotated: false } },
   play: async ({ args }) => {
     const page = within(document.body)
@@ -130,7 +164,8 @@ export const OnAPhone: Story = {
 }
 
 /** With reduced motion the sheet does not rise: it is in place from the first frame, and only fades in. */
-export const OnAPhoneWithReducedMotion: Story = {
+export const TestOnAPhoneWithReducedMotion: Story = {
+  name: "Test: On a phone with reduced motion",
   globals: { viewport: { value: "mobile2", isRotated: false }, motion: "reduced" },
   play: async () => {
     const page = within(document.body)
@@ -148,7 +183,8 @@ export const OnAPhoneWithReducedMotion: Story = {
 }
 
 /** From 640px the close button is not shown, as the list is a dropdown that a tap anywhere else closes. */
-export const NoCloseButtonOnWideScreens: Story = {
+export const TestNoCloseButtonOnWideScreens: Story = {
+  name: "Test: No close button on wide screens",
   play: async () => {
     const page = within(document.body)
     await userEvent.click(page.getByRole("combobox", { name: "Culture" }))
@@ -157,26 +193,14 @@ export const NoCloseButtonOnWideScreens: Story = {
   },
 }
 
-// The value is written here and not in `args`, which Storybook turns into a store that zag cannot compare
-export const Open: Story = {
-  render: () => <Culture defaultOpen defaultValue={["colza"]} />,
-  play: settled,
-}
-
-export const OpenInDarkTheme: Story = {
+export const TestOpenInDarkTheme: Story = {
+  name: "Test: Open in dark theme",
   ...Open,
   globals: { theme: "dark" },
 }
 
-export const OpenWithMoreContrast: Story = {
+export const TestOpenWithMoreContrast: Story = {
+  name: "Test: Open with more contrast",
   ...Open,
   globals: { contrast: "more" },
-}
-
-export const Invalid: Story = {
-  args: { invalid: true },
-}
-
-export const Disabled: Story = {
-  args: { disabled: true },
 }

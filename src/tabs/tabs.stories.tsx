@@ -33,6 +33,16 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+/** A tap on a tab shows its page, named after it, and the bar slides under it. Its props are in the Controls panel. */
+export const Playground: Story = {
+  argTypes: {
+    orientation: { control: "inline-radio", options: ["horizontal", "vertical"] },
+    activationMode: { control: "inline-radio", options: ["automatic", "manual"] },
+    loopFocus: { control: "boolean" },
+    deselectable: { control: "boolean" },
+  },
+}
+
 /** Under the tab whose page shows */
 function expectIndicatorUnder(tab: HTMLElement) {
   const bar = document.querySelector("[data-scope=tabs][data-part=indicator]")!.getBoundingClientRect()
@@ -46,7 +56,8 @@ function expectIndicatorUnder(tab: HTMLElement) {
  * A tap on a tab shows its page, named after it, and the bar slides under it. The page it replaces is gone at once,
  * so the two never show together.
  */
-export const Default: Story = {
+export const TestTappingATab: Story = {
+  name: "Test: Tapping a tab",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     expect(canvas.getByRole("tablist", { name: "Les Grands Champs" })).toBeVisible()
@@ -66,7 +77,8 @@ export const Default: Story = {
 }
 
 /** The arrow keys move between the tabs and show each page; Tab then goes into the page */
-export const WithTheKeyboard: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     await userEvent.tab()
@@ -86,7 +98,8 @@ export const WithTheKeyboard: Story = {
 const phonePages = ["Résumé", "Interventions", "Analyses de sol", "Photos", "Documents"]
 
 /** On a phone the row is wider than the screen and scrolls sideways; the bar stays under its tab */
-export const OnAPhone: Story = {
+export const TestOnAPhone: Story = {
+  name: "Test: On a phone",
   globals: { viewport: { value: "mobile1", isRotated: false } },
   render: (args) => (
     <Tabs.Root defaultValue="Analyses de sol" onValueChange={args.onValueChange}>
@@ -109,7 +122,8 @@ export const OnAPhone: Story = {
 }
 
 /** Down the side, the bar runs beside the chosen tab */
-export const Vertical: Story = {
+export const TestVertical: Story = {
+  name: "Test: Vertical",
   args: { orientation: "vertical" },
   play: async ({ canvasElement }) => {
     const tab = within(canvasElement).getByRole("tab", { name: "Analyses de sol" })
@@ -122,12 +136,14 @@ export const Vertical: Story = {
   },
 }
 
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
   play: settled,
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
   play: settled,
 }

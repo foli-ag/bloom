@@ -12,14 +12,17 @@ const meta = {
     tone: { control: "inline-radio", options: ["primary", "neutral", "danger"] },
     variant: { control: "inline-radio", options: ["solid", "soft", "outline", "ghost"] },
     size: { control: "inline-radio", options: ["md", "lg"] },
+    block: { control: "boolean" },
+    loading: { control: "boolean" },
+    disabled: { control: "boolean" },
   },
 } satisfies Meta<ButtonProps>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** 48px tall, 18px text, dark ink on the brand green. */
-export const Default: Story = {}
+/** 48px tall, 18px text, dark ink on the brand green. Its props are in the Controls panel. */
+export const Playground: Story = {}
 
 /** 56px, for the one action a screen is about. `block` stretches it across the width, within the thumb's reach. */
 export const Large: Story = {
@@ -33,40 +36,9 @@ export const Tones: Story = {
   parameters: { layout: "padded" },
 }
 
-export const TonesInDarkTheme: Story = {
-  ...Tones,
-  globals: { theme: "dark" },
-}
-
-export const TonesWithMoreContrast: Story = {
-  ...Tones,
-  globals: { contrast: "more" },
-}
-
-/** Shows the busy state at rest. The next story is the one to read for how it behaves. */
+/** Shows the busy state at rest. The "Test: Saving flow" story is the one to read for how it behaves. */
 export const Loading: Story = {
   args: { loading: true, children: "Enregistrement…" },
-}
-
-/**
- * The flow a farmer on a poor connection goes through. The button is busy, the app changes its words, and a second tap
- * does nothing: the handler runs once. The button keeps focus throughout, because `disabled` would send it back to
- * the top of the page.
- */
-export const Saving: Story = {
-  render: () => <SavingFlow />,
-  play: async ({ canvasElement }) => {
-    const button = within(canvasElement).getByRole("button", { name: "Enregistrer" })
-    await userEvent.click(button)
-    await userEvent.click(button)
-    await waitFor(() => expect(button).toHaveAttribute("aria-busy", "true"))
-    expect(button).toHaveAccessibleName("Enregistrement…")
-    expect(button).toHaveFocus()
-    await userEvent.keyboard("{Enter}")
-    await waitFor(() => expect(button).toHaveAccessibleName("Enregistré"), { timeout: 2500 })
-    expect(button).not.toHaveAttribute("aria-busy")
-    expect(canvasElement.querySelector("[data-saves]")).toHaveTextContent("1 envoi")
-  },
 }
 
 export const Disabled: Story = {
@@ -80,6 +52,40 @@ export const AsLink: Story = {
       Mes champs
     </Button>
   ),
+}
+
+export const TestTonesInDarkTheme: Story = {
+  ...Tones,
+  name: "Test: Tones in dark theme",
+  globals: { theme: "dark" },
+}
+
+export const TestTonesWithMoreContrast: Story = {
+  ...Tones,
+  name: "Test: Tones with more contrast",
+  globals: { contrast: "more" },
+}
+
+/**
+ * The flow a farmer on a poor connection goes through. The button is busy, the app changes its words, and a second tap
+ * does nothing: the handler runs once. The button keeps focus throughout, because `disabled` would send it back to
+ * the top of the page.
+ */
+export const TestSavingFlow: Story = {
+  name: "Test: Saving flow",
+  render: () => <SavingFlow />,
+  play: async ({ canvasElement }) => {
+    const button = within(canvasElement).getByRole("button", { name: "Enregistrer" })
+    await userEvent.click(button)
+    await userEvent.click(button)
+    await waitFor(() => expect(button).toHaveAttribute("aria-busy", "true"))
+    expect(button).toHaveAccessibleName("Enregistrement…")
+    expect(button).toHaveFocus()
+    await userEvent.keyboard("{Enter}")
+    await waitFor(() => expect(button).toHaveAccessibleName("Enregistré"), { timeout: 2500 })
+    expect(button).not.toHaveAttribute("aria-busy")
+    expect(canvasElement.querySelector("[data-saves]")).toHaveTextContent("1 envoi")
+  },
 }
 
 const tones = ["primary", "neutral", "danger"] as const

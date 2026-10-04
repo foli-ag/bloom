@@ -36,10 +36,37 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * The handle is 28px inside a 48px target, grows while dragged, and the value reads out beside the label. Its props
+ * are in the Controls panel.
+ */
+export const Playground: Story = {
+  argTypes: {
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    invalid: { control: "boolean" },
+    min: { control: "number" },
+    max: { control: "number" },
+    step: { control: "number" },
+    largeStep: { control: "number" },
+    origin: { control: "inline-radio", options: ["start", "center", "end"] },
+    thumbAlignment: { control: "inline-radio", options: ["contain", "center"] },
+  },
+}
+
+export const Disabled: Story = {
+  args: { disabled: true },
+}
+
+export const Invalid: Story = {
+  args: { invalid: true, defaultValue: [95] },
+}
+
+/**
  * The handle is 28px inside a 48px target. It grows while dragged and the value reads out beside the label. The
  * arrow keys move it by one step, Page Up and Page Down by ten, Home and End to the ends.
  */
-export const Default: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   play: async ({ canvasElement, args }) => {
     const handle = within(canvasElement).getByRole("slider", { name: "Humidité du sol" })
     expect(handle).toHaveAttribute("aria-valuenow", "40")
@@ -54,7 +81,8 @@ export const Default: Story = {
 }
 
 /** A press anywhere on the line moves the handle there, here to the middle. */
-export const ClickOnTheLine: Story = {
+export const TestClickOnTheLine: Story = {
+  name: "Test: Click on the line",
   play: async ({ canvasElement }) => {
     const control = canvasElement.querySelector<HTMLElement>("[data-part=control]")!
     const { width } = control.getBoundingClientRect()
@@ -69,7 +97,8 @@ export const ClickOnTheLine: Story = {
  * Two handles make a range, and each is named by its own words and then the label: "Minimum, Humidité du sol". The
  * value reads "20 – 70 %", as the app writes it: joined by a comma it would read as twenty point seventy.
  */
-export const Range: Story = {
+export const TestRangeWithTwoHandles: Story = {
+  name: "Test: Range with two handles",
   args: { defaultValue: [20, 70], range: true },
   play: ({ canvasElement }) => {
     const canvas = within(canvasElement)
@@ -79,18 +108,12 @@ export const Range: Story = {
   },
 }
 
-export const Disabled: Story = {
-  args: { disabled: true },
-}
-
-export const Invalid: Story = {
-  args: { invalid: true, defaultValue: [95] },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
 }

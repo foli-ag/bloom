@@ -65,10 +65,30 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A question that interrupts, as a card in the middle of the screen from 640px. Its props are in the Controls panel.
+ */
+export const Playground: Story = {
+  args: { role: "alertdialog", modal: true, closeOnEscape: true, restoreFocus: true },
+  argTypes: {
+    role: { control: "inline-radio", options: ["dialog", "alertdialog"] },
+    modal: { control: "boolean" },
+    closeOnEscape: { control: "boolean" },
+    restoreFocus: { control: "boolean" },
+  },
+}
+
+/** Open, to be measured by axe and looked at */
+export const Open: Story = {
+  args: { defaultOpen: true },
+  play: settled,
+}
+
+/**
  * A question that interrupts, as a card in the middle of the screen from 640px. Focus goes to the button that backs
  * out, Escape closes it and focus comes back to the trigger. A tap on the dim does not answer it.
  */
-export const Default: Story = {
+export const TestAsAnAlertDialog: Story = {
+  name: "Test: As an alert dialog",
   play: async ({ args }) => {
     const page = within(document.body)
     const trigger = page.getByRole("button", { name: "Supprimer la parcelle" })
@@ -97,7 +117,8 @@ export const Default: Story = {
 }
 
 /** On a phone it is a sheet on the bottom edge, its buttons at full width and the main one last, under the thumb. */
-export const OnAPhone: Story = {
+export const TestOnAPhone: Story = {
+  name: "Test: On a phone",
   globals: { viewport: { value: "mobile2", isRotated: false } },
   play: async () => {
     const page = within(document.body)
@@ -114,18 +135,14 @@ export const OnAPhone: Story = {
   },
 }
 
-/** Open, to be measured by axe and looked at */
-export const Open: Story = {
-  args: { defaultOpen: true },
-  play: settled,
-}
-
-export const OpenInDarkTheme: Story = {
+export const TestOpenInDarkTheme: Story = {
+  name: "Test: Open in dark theme",
   ...Open,
   globals: { theme: "dark" },
 }
 
-export const OpenWithMoreContrast: Story = {
+export const TestOpenWithMoreContrast: Story = {
+  name: "Test: Open with more contrast",
   ...Open,
   globals: { contrast: "more" },
 }
@@ -192,7 +209,8 @@ function NewIntervention(props: Dialog.RootProps) {
  * A short form. Focus starts in its first field. A select inside it opens its own sheet over the dialog, and
  * choosing closes only that sheet. A tap on the dim closes this dialog, as it asks no question.
  */
-export const WithAForm: Story = {
+export const TestWithAForm: Story = {
+  name: "Test: With a form",
   render: (args) => <NewIntervention onOpenChange={args.onOpenChange} />,
   play: async () => {
     const page = within(document.body)

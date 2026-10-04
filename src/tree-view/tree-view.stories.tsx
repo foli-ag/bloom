@@ -108,13 +108,26 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+/**
+ * The farm's blocks and fields as a tree: a tap on a block opens it and a tap on a field selects it. Its props are in
+ * the Controls panel.
+ */
+export const Playground: Story = {
+  args: { expandOnClick: true },
+  argTypes: {
+    selectionMode: { control: "inline-radio", options: ["single", "multiple"] },
+    expandOnClick: { control: "boolean" },
+  },
+}
+
 const branch = (name: string) => within(document.body).getByRole("treeitem", { name: new RegExp(`^${name}`) })
 
 /**
  * The tree is named by its label, not by zag's English "Tree View". A tap on a block opens it and a tap on a field
  * selects it, with a tick at the end of its row.
  */
-export const Default: Story = {
+export const TestOpeningAndSelecting: Story = {
+  name: "Test: Opening and selecting",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const tree = canvas.getByRole("tree", { name: "Parcelles" })
@@ -139,7 +152,8 @@ export const Default: Story = {
  * From the keyboard: the right arrow opens a block and steps into it, the down arrow moves, Enter selects, and the left
  * arrow goes back out to the block and closes it.
  */
-export const WithTheKeyboard: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     await userEvent.tab()
@@ -161,7 +175,8 @@ export const WithTheKeyboard: Story = {
 }
 
 /** Each level steps in by 24px, and every row is 48px tall */
-export const Levels: Story = {
+export const TestLevels: Story = {
+  name: "Test: Levels",
   args: { defaultExpandedValue: ["ilot-2"] },
   play: async ({ canvasElement }) => {
     await settled()
@@ -175,7 +190,8 @@ export const Levels: Story = {
 }
 
 /** With boxes, checking a block checks its fields, and a block with some of its fields checked shows a dash */
-export const WithBoxes: Story = {
+export const TestWithBoxes: Story = {
+  name: "Test: With boxes",
   args: { checkable: true, defaultExpandedValue: ["ilot-2"], defaultCheckedValue: [], onCheckedChange: fn() },
   play: async ({ canvasElement }) => {
     await settled()
@@ -187,13 +203,15 @@ export const WithBoxes: Story = {
   },
 }
 
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   args: { defaultExpandedValue: ["ilot-1"], defaultSelectedValue: ["noue"] },
   globals: { theme: "dark" },
   play: settled,
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   args: { defaultExpandedValue: ["ilot-1"], defaultSelectedValue: ["noue"] },
   globals: { contrast: "more" },
   play: settled,

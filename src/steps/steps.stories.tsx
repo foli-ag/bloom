@@ -49,11 +49,28 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * The current step is announced as selected and its content shows, and Next moves on and ticks the step left behind.
+ * Its props are in the Controls panel.
+ */
+export const Playground: Story = {
+  argTypes: {
+    orientation: { control: "inline-radio", options: ["horizontal", "vertical"] },
+    linear: { control: "boolean" },
+  },
+}
+
+/** Down the side, for more steps than fit across a phone. The line to the next step turns green once it is done. */
+export const Vertical: Story = {
+  args: { orientation: "vertical", defaultStep: 1 },
+}
+
+/**
  * The current step is announced as selected, and its content shows. Next moves on and ticks the step left behind,
  * whose number gives way to the tick. A step already done is a button back to it. Past the last step the completed
  * content shows, and Next is disabled.
  */
-export const Default: Story = {
+export const TestMovingThroughTheSteps: Story = {
+  name: "Test: Moving through the steps",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const parcel = canvas.getByRole("tab", { name: "Parcelle" })
@@ -79,7 +96,8 @@ export const Default: Story = {
 }
 
 /** On a phone the three steps fit across the screen, their names under their circles, and nothing scrolls sideways */
-export const OnAPhone: Story = {
+export const TestOnAPhone: Story = {
+  name: "Test: On a phone",
   globals: { viewport: { value: "mobile1", isRotated: false } },
   play: async ({ canvasElement }) => {
     for (const tab of within(canvasElement).getAllByRole("tab")) {
@@ -89,17 +107,14 @@ export const OnAPhone: Story = {
   },
 }
 
-/** Down the side, for more steps than fit across a phone. The line to the next step turns green once it is done. */
-export const Vertical: Story = {
-  args: { orientation: "vertical", defaultStep: 1 },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   args: { defaultStep: 1 },
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   args: { defaultStep: 1 },
   globals: { contrast: "more" },
 }

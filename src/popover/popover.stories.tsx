@@ -27,6 +27,21 @@ function DoseHelp(props: Popover.RootProps) {
   )
 }
 
+const placements = [
+  "top",
+  "top-start",
+  "top-end",
+  "right",
+  "right-start",
+  "right-end",
+  "bottom",
+  "bottom-start",
+  "bottom-end",
+  "left",
+  "left-start",
+  "left-end",
+] as const satisfies readonly NonNullable<Popover.PositioningOptions["placement"]>[]
+
 const meta = {
   title: "Components/Popover",
   component: DoseHelp,
@@ -37,11 +52,36 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+/** A small panel that hangs under its trigger, which is announced as expanded. Its props are in the Controls panel. */
+export const Playground: Story = {
+  args: { modal: false, autoFocus: true, closeOnEscape: true, closeOnInteractOutside: true, restoreFocus: true },
+  argTypes: {
+    modal: { control: "boolean" },
+    autoFocus: { control: "boolean" },
+    closeOnEscape: { control: "boolean" },
+    closeOnInteractOutside: { control: "boolean" },
+    restoreFocus: { control: "boolean" },
+    // `positioning` is an object: the select picks its `placement`
+    positioning: {
+      name: "positioning.placement",
+      control: "select",
+      options: placements,
+      mapping: Object.fromEntries(placements.map((placement) => [placement, { placement }])),
+    },
+  },
+}
+
+export const Open: Story = {
+  args: { defaultOpen: true },
+  play: settled,
+}
+
 /**
  * It hangs under its trigger, which is announced as expanded. Its close is named by its own words, not by the
  * English label zag gives it, and sends focus back to the trigger.
  */
-export const Default: Story = {
+export const TestOpeningAndClosing: Story = {
+  name: "Test: Opening and closing",
   play: async ({ args }) => {
     const page = within(document.body)
     const trigger = page.getByRole("button", { name: "Comment est calculée la dose ?" })
@@ -59,7 +99,8 @@ export const Default: Story = {
 }
 
 /** On a phone it rises from the bottom as a sheet over a dim, and a tap on the dim closes it. */
-export const OnAPhone: Story = {
+export const TestOnAPhone: Story = {
+  name: "Test: On a phone",
   globals: { viewport: { value: "mobile2", isRotated: false } },
   play: async () => {
     const page = within(document.body)
@@ -80,17 +121,14 @@ export const OnAPhone: Story = {
   },
 }
 
-export const Open: Story = {
-  args: { defaultOpen: true },
-  play: settled,
-}
-
-export const OpenInDarkTheme: Story = {
+export const TestOpenInDarkTheme: Story = {
+  name: "Test: Open in dark theme",
   ...Open,
   globals: { theme: "dark" },
 }
 
-export const OpenWithMoreContrast: Story = {
+export const TestOpenWithMoreContrast: Story = {
+  name: "Test: Open with more contrast",
   ...Open,
   globals: { contrast: "more" },
 }

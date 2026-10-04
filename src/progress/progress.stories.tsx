@@ -34,10 +34,26 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A bar named "Envoi des photos" that fills to its value, which shows next to the label. Its props are in the Controls
+ * panel: move `value` and the bar follows.
+ */
+export const Playground: Story = {
+  args: { value: 40 },
+  argTypes: {
+    value: { control: "number" },
+    min: { control: "number" },
+    max: { control: "number" },
+    // Mount only, and `value` is what moves the bar here
+    defaultValue: { table: { disable: true } },
+  },
+}
+
+/**
  * The bar is named by its label and says its value in French, "40 %", where zag would name it "40%" alone. The value
  * shows next to the label, and the bar fills to it.
  */
-export const Default: Story = {
+export const TestLabelAndValue: Story = {
+  name: "Test: Label and value",
   play: async ({ canvasElement }) => {
     const bar = within(canvasElement).getByRole("progressbar", { name: "Envoi des photos" })
     expect(bar).toHaveAttribute("aria-valuenow", "40")
@@ -51,7 +67,8 @@ export const Default: Story = {
 }
 
 /** The app moves the value as photos go out: the bar follows on the smooth spring, and is complete at the end. */
-export const Sending: Story = {
+export const TestSending: Story = {
+  name: "Test: Sending photos",
   render: () => <Sender />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
@@ -96,7 +113,8 @@ function Sender() {
  * While nobody knows how long it takes, a short piece slides along the bar, and the value text is empty. A screen
  * reader hears the app's own words, "Envoi en cours".
  */
-export const NotKnown: Story = {
+export const TestNotKnown: Story = {
+  name: "Test: Value not known",
   args: { defaultValue: null },
   play: ({ canvasElement }) => {
     const bar = within(canvasElement).getByRole("progressbar", { name: "Envoi des photos" })
@@ -108,7 +126,8 @@ export const NotKnown: Story = {
 }
 
 /** A ring with the value, the same bar in less room */
-export const Ring: Story = {
+export const TestRing: Story = {
+  name: "Test: Ring",
   render: () => (
     <Progress.Root defaultValue={75} translations={percent} class="inline-grid grid-cols-[auto_auto]">
       <Progress.Circle size="lg">
@@ -129,7 +148,8 @@ export const Ring: Story = {
  * Bloom's spinner: a ring with no value turns, and keeps turning under reduced motion, since it is what tells the
  * farmer something is happening. With no label, its name is the app's words.
  */
-export const Spinner: Story = {
+export const TestSpinner: Story = {
+  name: "Test: Spinner",
   globals: { motion: "reduced" },
   render: () => (
     <Progress.Root defaultValue={null} translations={{ value: () => "Chargement des parcelles" }}>
@@ -146,15 +166,18 @@ export const Spinner: Story = {
   },
 }
 
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
 }
 
-export const RingInDarkTheme: Story = {
-  ...Ring,
+export const TestRingInDarkTheme: Story = {
+  ...TestRing,
+  name: "Test: Ring in dark theme",
   globals: { theme: "dark" },
 }

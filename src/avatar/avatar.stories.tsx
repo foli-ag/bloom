@@ -18,33 +18,13 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
- * The picture is announced once, as "Marie Dupont", and the initials under it are not read out. When the photo has
- * loaded it takes the initials' place.
+ * A person's initials in a circle, which their photo replaces once it has loaded. Its props are in the Controls panel:
+ * give `src` the address of a photo.
  */
-export const Photo: Story = {
-  args: { src: photo },
-  play: async ({ canvasElement, args }) => {
-    const avatar = within(canvasElement).getByRole("img", { name: "Marie Dupont" })
-    await waitFor(() => expect(args.onStatusChange).toHaveBeenCalledWith({ status: "loaded" }))
-    expect(avatar.querySelector("[data-part=image]")).toBeVisible()
-    expect(avatar.querySelector("[data-part=fallback]")).not.toBeVisible()
-  },
-}
-
-/** A photo that does not load, as on a poor connection, leaves the initials in place. */
-export const PhotoThatFails: Story = {
-  args: { src: "data:image/png;base64,broken" },
-  play: async ({ canvasElement, args }) => {
-    const avatar = within(canvasElement).getByRole("img", { name: "Marie Dupont" })
-    await waitFor(() => expect(args.onStatusChange).toHaveBeenCalledWith({ status: "error" }))
-    expect(avatar.querySelector("[data-part=fallback]")).toBeVisible()
-    expect(avatar).toHaveTextContent("MD")
-  },
-}
-
-export const Initials: Story = {
-  play: ({ canvasElement }) => {
-    expect(within(canvasElement).getByRole("img", { name: "Marie Dupont" })).toHaveTextContent("MD")
+export const Playground: Story = {
+  argTypes: {
+    size: { control: "inline-radio", options: ["sm", "md", "lg"] },
+    src: { control: "text" },
   },
 }
 
@@ -58,10 +38,46 @@ export const Sizes: Story = {
   ),
 }
 
-export const InDarkTheme: Story = {
+/**
+ * The picture is announced once, as "Marie Dupont", and the initials under it are not read out. When the photo has
+ * loaded it takes the initials' place.
+ */
+export const TestPhotoReplacesTheInitials: Story = {
+  name: "Test: Photo replaces the initials",
+  args: { src: photo },
+  play: async ({ canvasElement, args }) => {
+    const avatar = within(canvasElement).getByRole("img", { name: "Marie Dupont" })
+    await waitFor(() => expect(args.onStatusChange).toHaveBeenCalledWith({ status: "loaded" }))
+    expect(avatar.querySelector("[data-part=image]")).toBeVisible()
+    expect(avatar.querySelector("[data-part=fallback]")).not.toBeVisible()
+  },
+}
+
+/** A photo that does not load, as on a poor connection, leaves the initials in place. */
+export const TestPhotoThatFails: Story = {
+  name: "Test: Photo that fails",
+  args: { src: "data:image/png;base64,broken" },
+  play: async ({ canvasElement, args }) => {
+    const avatar = within(canvasElement).getByRole("img", { name: "Marie Dupont" })
+    await waitFor(() => expect(args.onStatusChange).toHaveBeenCalledWith({ status: "error" }))
+    expect(avatar.querySelector("[data-part=fallback]")).toBeVisible()
+    expect(avatar).toHaveTextContent("MD")
+  },
+}
+
+export const TestInitials: Story = {
+  name: "Test: Initials",
+  play: ({ canvasElement }) => {
+    expect(within(canvasElement).getByRole("img", { name: "Marie Dupont" })).toHaveTextContent("MD")
+  },
+}
+
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
 }

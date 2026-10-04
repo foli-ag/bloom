@@ -40,6 +40,18 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+/**
+ * A map and a list side by side with a bar between them, which a drag or the arrow keys move. Its props are in the
+ * Controls panel.
+ */
+export const Playground: Story = {
+  args: { keyboardResizeBy: 5 },
+  argTypes: {
+    orientation: { control: "inline-radio", options: ["horizontal", "vertical"] },
+    keyboardResizeBy: { control: "number" },
+  },
+}
+
 // zag measures the root on the frame after mounting and puts an uncontrolled split back to its default then
 const measured = async () => {
   await new Promise(requestAnimationFrame)
@@ -50,7 +62,8 @@ const measured = async () => {
  * The bar between the map and the list is a separator named by its own words. The arrow keys move it by 5%, and Home
  * and End take it to the limits the panels set.
  */
-export const Default: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   play: async ({ canvasElement }) => {
     await measured()
     const bar = within(canvasElement).getByRole("separator", { name: "Largeur de la carte" })
@@ -68,7 +81,8 @@ export const Default: Story = {
 }
 
 /** The bar is 12px in the layout but takes a press 48px across, over the edge of both panels */
-export const WideTarget: Story = {
+export const TestWideTarget: Story = {
+  name: "Test: Wide target",
   play: async ({ canvasElement }) => {
     await measured()
     const bar = within(canvasElement).getByRole("separator")
@@ -81,7 +95,8 @@ export const WideTarget: Story = {
 }
 
 /** Stacked, the bar runs across and the grip lies flat */
-export const Stacked: Story = {
+export const TestStacked: Story = {
+  name: "Test: Stacked",
   args: { orientation: "vertical" },
   play: async ({ canvasElement }) => {
     await measured()
@@ -91,10 +106,12 @@ export const Stacked: Story = {
   },
 }
 
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
 }

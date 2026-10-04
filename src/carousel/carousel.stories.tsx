@@ -60,10 +60,31 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A row of visits seen one at a time, with triggers and dots to move between them. Its props are in the Controls panel.
+ */
+export const Playground: Story = {
+  argTypes: {
+    slidesPerPage: { control: "number" },
+    loop: { control: "boolean" },
+    allowMouseDrag: { control: "boolean" },
+    autoplay: { control: "boolean" },
+    autoSize: { control: "boolean" },
+    snapType: { control: "inline-radio", options: ["mandatory", "proximity"] },
+    spacing: { control: "text" },
+    padding: { control: "text" },
+  },
+}
+
+export const OnAPhone: Story = {
+  globals: { viewport: { value: "mobile2", isRotated: false } },
+}
+
+/**
  * The triggers step one visit at a time and are named by their own words, not zag's English ones. The slide in view
  * and the progress follow, and a dot jumps straight to its visit.
  */
-export const Default: Story = {
+export const TestSteppingThroughTheVisits: Story = {
+  name: "Test: Stepping through the visits",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const previous = canvas.getByRole("button", { name: "Précédente" })
@@ -89,7 +110,8 @@ export const Default: Story = {
 }
 
 /** Each dot is a finger-wide target, though it shows as a small circle */
-export const DotsAreFingerWide: Story = {
+export const TestDotsAreFingerWide: Story = {
+  name: "Test: Dots are finger-wide",
   play: async ({ canvasElement }) => {
     for (const dot of within(canvasElement).getAllByRole("button", { name: /^Visite/ })) {
       const { width, height } = dot.getBoundingClientRect()
@@ -103,17 +125,15 @@ export const DotsAreFingerWide: Story = {
   },
 }
 
-export const OnAPhone: Story = {
-  globals: { viewport: { value: "mobile2", isRotated: false } },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   args: { defaultPage: 1 },
   globals: { theme: "dark" },
   play: settled,
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   args: { defaultPage: 1 },
   globals: { contrast: "more" },
   play: settled,

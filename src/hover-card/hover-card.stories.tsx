@@ -26,6 +26,21 @@ function Parcel(props: HoverCard.RootProps) {
   )
 }
 
+const placements = [
+  "top",
+  "top-start",
+  "top-end",
+  "right",
+  "right-start",
+  "right-end",
+  "bottom",
+  "bottom-start",
+  "bottom-end",
+  "left",
+  "left-start",
+  "left-end",
+] as const satisfies readonly NonNullable<HoverCard.PositioningOptions["placement"]>[]
+
 const meta = {
   title: "Components/HoverCard",
   component: Parcel,
@@ -36,10 +51,36 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A card about a parcel, shown under its name once a mouse has rested on it or the keyboard reaches it. Its props are
+ * in the Controls panel.
+ */
+export const Playground: Story = {
+  args: { disabled: false, openDelay: 300, closeDelay: 150 },
+  argTypes: {
+    disabled: { control: "boolean" },
+    openDelay: { control: { type: "number", min: 0, step: 50 } },
+    closeDelay: { control: { type: "number", min: 0, step: 50 } },
+    // `positioning` is an object: the select picks its `placement`
+    positioning: {
+      name: "positioning.placement",
+      control: "select",
+      options: placements,
+      mapping: Object.fromEntries(placements.map((placement) => [placement, { placement }])),
+    },
+  },
+}
+
+export const Open: Story = {
+  args: { defaultOpen: true },
+  play: settled,
+}
+
+/**
  * A mouse resting on the parcel's name shows its card under it, and the card stays while the pointer moves onto it.
  * Leaving both hides it.
  */
-export const Default: Story = {
+export const TestWithAMouse: Story = {
+  name: "Test: With a mouse",
   play: async () => {
     const page = within(document.body)
     const link = page.getByRole("link", { name: "Les Grands Champs" })
@@ -60,7 +101,8 @@ export const Default: Story = {
 }
 
 /** The keyboard reaching the link shows the card too, and leaving the link hides it */
-export const WithTheKeyboard: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   play: async () => {
     const page = within(document.body)
     await userEvent.tab()
@@ -71,17 +113,14 @@ export const WithTheKeyboard: Story = {
   },
 }
 
-export const Open: Story = {
-  args: { defaultOpen: true },
-  play: settled,
-}
-
-export const OpenInDarkTheme: Story = {
+export const TestOpenInDarkTheme: Story = {
+  name: "Test: Open in dark theme",
   ...Open,
   globals: { theme: "dark" },
 }
 
-export const OpenWithMoreContrast: Story = {
+export const TestOpenWithMoreContrast: Story = {
+  name: "Test: Open with more contrast",
   ...Open,
   globals: { contrast: "more" },
 }

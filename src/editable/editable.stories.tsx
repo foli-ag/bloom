@@ -37,10 +37,44 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * The name reads as text with a button beside it. The button turns it into a field, and Enter keeps the new name. Its
+ * props are in the Controls panel.
+ */
+export const Playground: Story = {
+  args: { name: "parcelle", placeholder: "Nom de la parcelle" },
+  argTypes: {
+    name: { control: "text" },
+    placeholder: { control: "text" },
+    activationMode: { control: "select", options: ["focus", "dblclick", "click", "none"] },
+    submitMode: { control: "select", options: ["enter", "blur", "both", "none"] },
+    maxLength: { control: "number" },
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    invalid: { control: "boolean" },
+    required: { control: "boolean" },
+  },
+}
+
+/** Empty, the placeholder shows dimmed in its place */
+export const Empty: Story = {
+  args: { defaultValue: "" },
+}
+
+/** Being changed, to be measured by axe and looked at */
+export const Editing: Story = {
+  args: { defaultEdit: true },
+}
+
+export const Disabled: Story = {
+  args: { disabled: true },
+}
+
+/**
  * The name reads as text with a button beside it. The button turns it into a field named by the label, not by zag's
  * English, and Enter keeps the new name.
  */
-export const Default: Story = {
+export const TestRenamingTheParcel: Story = {
+  name: "Test: Renaming the parcel",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     expect(canvas.getByText("Les Grands Champs")).toBeVisible()
@@ -61,7 +95,8 @@ export const Default: Story = {
 }
 
 /** Escape, or the cancel button, puts the old name back */
-export const Cancelled: Story = {
+export const TestCancellingARename: Story = {
+  name: "Test: Cancelling a rename",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     await userEvent.click(canvas.getByRole("button", { name: "Renommer" }))
@@ -75,29 +110,18 @@ export const Cancelled: Story = {
   },
 }
 
-/** Empty, the placeholder shows dimmed in its place */
-export const Empty: Story = {
-  args: { defaultValue: "" },
-}
-
-/** Being changed, to be measured by axe and looked at */
-export const Editing: Story = {
-  args: { defaultEdit: true },
-}
-
-export const Disabled: Story = {
-  args: { disabled: true },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
 }
 
-export const EditingInDarkTheme: Story = {
+export const TestEditingInDarkTheme: Story = {
+  name: "Test: Editing in dark theme",
   args: { defaultEdit: true },
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
 }

@@ -50,10 +50,28 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * Each title is a 56px button, announced as expanded or collapsed, and one section is open at a time. Its props are in
+ * the Controls panel.
+ */
+export const Playground: Story = {
+  argTypes: {
+    multiple: { control: "boolean" },
+    collapsible: { control: "boolean" },
+    disabled: { control: "boolean" },
+    orientation: { control: "inline-radio", options: ["horizontal", "vertical"] },
+  },
+}
+
+export const Open: Story = {
+  args: { defaultValue: ["eau"] },
+}
+
+/**
  * Each title is a 56px button, announced as expanded or collapsed. One section is open at a time, and the arrow keys
  * move between titles.
  */
-export const Default: Story = {
+export const TestOneSectionOpenAtATime: Story = {
+  name: "Test: One section open at a time",
   args: { collapsible: true },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
@@ -72,7 +90,8 @@ export const Default: Story = {
   },
 }
 
-export const Multiple: Story = {
+export const TestSeveralSectionsOpen: Story = {
+  name: "Test: Several sections open",
   args: { multiple: true, defaultValue: ["semis", "gel"] },
   play: ({ canvasElement }) => {
     const canvas = within(canvasElement)
@@ -85,16 +104,14 @@ export const Multiple: Story = {
   },
 }
 
-export const Open: Story = {
-  args: { defaultValue: ["eau"] },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   globals: { theme: "dark" },
   args: { defaultValue: ["eau"] },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   globals: { contrast: "more" },
   args: { defaultValue: ["eau"] },
 }

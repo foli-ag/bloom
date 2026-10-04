@@ -42,10 +42,28 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * The menu drops down from its trigger, whose chevron turns, and choosing an item reports its value and closes it. Its
+ * props are in the Controls panel.
+ */
+export const Playground: Story = {
+  argTypes: {
+    closeOnSelect: { control: "boolean" },
+    loopFocus: { control: "boolean" },
+    typeahead: { control: "boolean" },
+  },
+}
+
+export const Open: Story = {
+  args: { defaultOpen: true },
+  play: settled,
+}
+
+/**
  * The menu drops down from its trigger, whose chevron turns. Choosing an item reports its value, closes the menu and
  * sends focus back to the trigger. A disabled item is skipped by the arrow keys.
  */
-export const Default: Story = {
+export const TestChoosingAnItem: Story = {
+  name: "Test: Choosing an item",
   play: async ({ args }) => {
     const page = within(document.body)
     const trigger = page.getByRole("button", { name: "Actions" })
@@ -63,7 +81,8 @@ export const Default: Story = {
 }
 
 /** From the keyboard: Enter opens it on the first item, the arrows skip what is disabled, Escape closes it */
-export const WithTheKeyboard: Story = {
+export const TestWithTheKeyboard: Story = {
+  name: "Test: With the keyboard",
   play: async ({ args }) => {
     const page = within(document.body)
     const trigger = page.getByRole("button", { name: "Actions" })
@@ -87,7 +106,8 @@ export const WithTheKeyboard: Story = {
  * On a phone the items rise from the bottom as a sheet, with a close button at its foot that closes it without
  * choosing, and sends focus back to the trigger.
  */
-export const OnAPhone: Story = {
+export const TestOnAPhone: Story = {
+  name: "Test: On a phone",
   globals: { viewport: { value: "mobile2", isRotated: false } },
   play: async ({ args }) => {
     const page = within(document.body)
@@ -106,17 +126,14 @@ export const OnAPhone: Story = {
   },
 }
 
-export const Open: Story = {
-  args: { defaultOpen: true },
-  play: settled,
-}
-
-export const OpenInDarkTheme: Story = {
+export const TestOpenInDarkTheme: Story = {
+  name: "Test: Open in dark theme",
   ...Open,
   globals: { theme: "dark" },
 }
 
-export const OpenWithMoreContrast: Story = {
+export const TestOpenWithMoreContrast: Story = {
+  name: "Test: Open with more contrast",
   ...Open,
   globals: { contrast: "more" },
 }
@@ -150,7 +167,8 @@ function MapOptions() {
 }
 
 /** Settings in a menu: one that is on or off, and one choice among a few. What is on is ticked, and announced so. */
-export const WithSettings: Story = {
+export const TestWithSettings: Story = {
+  name: "Test: With settings",
   render: () => <MapOptions />,
   play: async () => {
     const page = within(document.body)

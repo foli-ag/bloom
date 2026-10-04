@@ -27,10 +27,17 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A button whose words change once the intervention is saved: press it to swap them. The new words pop in where the old
+ * ones fade out, and the button keeps its width. The swap follows the button, so the Controls panel has nothing to set.
+ */
+export const Playground: Story = {}
+
+/**
  * The button's words change once the intervention is saved. The new words pop in where the old ones fade out, and the
  * button keeps its width, as both sets share one cell. Only the words shown name the button.
  */
-export const Default: Story = {
+export const TestSwapOnClick: Story = {
+  name: "Test: Swap on click",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     await document.fonts.ready
@@ -50,7 +57,8 @@ export const Default: Story = {
 }
 
 /** Back the other way, the first words come back the same way */
-export const Back: Story = {
+export const TestBack: Story = {
+  name: "Test: Back to the first words",
   args: { saved: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
@@ -61,7 +69,8 @@ export const Back: Story = {
 }
 
 /** Under reduced motion the words only fade: the incoming ones are at full size from the first frame */
-export const WithReducedMotion: Story = {
+export const TestWithReducedMotion: Story = {
+  name: "Test: With reduced motion",
   globals: { motion: "reduced" },
   play: async ({ canvasElement }) => {
     await userEvent.click(within(canvasElement).getByRole("button"))
@@ -72,12 +81,14 @@ export const WithReducedMotion: Story = {
   },
 }
 
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   args: { saved: true },
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   args: { saved: true },
   globals: { contrast: "more" },
 }

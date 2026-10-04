@@ -38,10 +38,42 @@ function paste(text: string) {
 }
 
 /**
+ * Focus moves on as each digit of the code is typed and back on Backspace, and the whole code goes into the form once
+ * it is complete. Its props are in the Controls panel.
+ */
+export const Playground: Story = {
+  args: { name: "code", otp: true },
+  argTypes: {
+    name: { control: "text" },
+    placeholder: { control: "text" },
+    type: { control: "inline-radio", options: ["numeric", "alphanumeric", "alphabetic"] },
+    otp: { control: "boolean" },
+    mask: { control: "boolean" },
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    invalid: { control: "boolean" },
+    required: { control: "boolean" },
+  },
+}
+
+export const Filled: Story = {
+  render: () => <SmsCode defaultValue={["4", "8", "2", "9", "1", "5"]} />,
+}
+
+export const Invalid: Story = {
+  render: () => <SmsCode defaultValue={["4", "8", "2", "9", "1", "5"]} invalid />,
+}
+
+export const Disabled: Story = {
+  args: { disabled: true },
+}
+
+/**
  * Each box is named in French, not by zag's "pin code 1 of 6". Focus moves on as each digit is typed and back on
  * Backspace, and the whole code goes into the form once it is complete.
  */
-export const Default: Story = {
+export const TestTypingACode: Story = {
+  name: "Test: Typing a code",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const first = canvas.getByRole("textbox", { name: "Chiffre 1 sur 6" })
@@ -64,7 +96,8 @@ export const Default: Story = {
 }
 
 /** Pasting the code from a message fills every box at once */
-export const Pasted: Story = {
+export const TestPastingTheCode: Story = {
+  name: "Test: Pasting the code",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     await userEvent.click(canvas.getByRole("textbox", { name: "Chiffre 1 sur 6" }))
@@ -74,24 +107,14 @@ export const Pasted: Story = {
   },
 }
 
-export const Filled: Story = {
-  render: () => <SmsCode defaultValue={["4", "8", "2", "9", "1", "5"]} />,
-}
-
-export const Invalid: Story = {
-  render: () => <SmsCode defaultValue={["4", "8", "2", "9", "1", "5"]} invalid />,
-}
-
-export const Disabled: Story = {
-  args: { disabled: true },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   render: () => <SmsCode defaultValue={["4", "8", "2", "", "", ""]} />,
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   render: () => <SmsCode defaultValue={["4", "8", "2", "", "", ""]} />,
   globals: { contrast: "more" },
 }

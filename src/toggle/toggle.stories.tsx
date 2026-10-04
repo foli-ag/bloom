@@ -22,10 +22,33 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /**
+ * A filter that stays on until it is pressed again. Pressed, it fills with green and a tick springs in where an empty
+ * space kept its place. Its props are in the Controls panel.
+ */
+export const Playground: Story = {
+  argTypes: {
+    disabled: { control: "boolean" },
+  },
+}
+
+export const Pressed: Story = {
+  args: { defaultPressed: true },
+}
+
+export const Disabled: Story = {
+  args: { disabled: true },
+}
+
+export const DisabledAndPressed: Story = {
+  args: { disabled: true, defaultPressed: true },
+}
+
+/**
  * A filter that stays on until it is pressed again. Its words stay the same, and a screen reader says "pressed".
  * Pressed, it fills with green and a tick springs in where an empty space kept its place.
  */
-export const Default: Story = {
+export const TestTogglesOnClickAndSpace: Story = {
+  name: "Test: Toggles on click and Space",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const toggle = canvas.getByRole("button", { name: "Parcelles irriguées" })
@@ -47,24 +70,14 @@ export const Default: Story = {
   },
 }
 
-export const Pressed: Story = {
-  args: { defaultPressed: true },
-}
-
-export const Disabled: Story = {
-  args: { disabled: true },
-}
-
-export const DisabledAndPressed: Story = {
-  args: { disabled: true, defaultPressed: true },
-}
-
-export const InDarkTheme: Story = {
+export const TestInDarkTheme: Story = {
+  name: "Test: In dark theme",
   args: { defaultPressed: true },
   globals: { theme: "dark" },
 }
 
-export const WithMoreContrast: Story = {
+export const TestWithMoreContrast: Story = {
+  name: "Test: With more contrast",
   args: { defaultPressed: true },
   globals: { contrast: "more" },
 }
