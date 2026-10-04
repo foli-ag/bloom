@@ -72,6 +72,10 @@
       "types": "./dist/slider/index.d.ts",
       "default": "./dist/slider/index.js"
     },
+    "./steps": {
+      "types": "./dist/steps/index.d.ts",
+      "default": "./dist/steps/index.js"
+    },
     "./switch": {
       "types": "./dist/switch/index.d.ts",
       "default": "./dist/switch/index.js"
