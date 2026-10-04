@@ -112,6 +112,10 @@
       "types": "./dist/switch/index.d.ts",
       "default": "./dist/switch/index.js"
     },
+    "./tabs": {
+      "types": "./dist/tabs/index.d.ts",
+      "default": "./dist/tabs/index.js"
+    },
     "./toggle": {
       "types": "./dist/toggle/index.d.ts",
       "default": "./dist/toggle/index.js"
