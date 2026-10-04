@@ -32,6 +32,10 @@
       "types": "./dist/checkbox/index.d.ts",
       "default": "./dist/checkbox/index.js"
     },
+    "./collapsible": {
+      "types": "./dist/collapsible/index.d.ts",
+      "default": "./dist/collapsible/index.js"
+    },
     "./input": {
       "types": "./dist/input/index.d.ts",
       "default": "./dist/input/index.js"

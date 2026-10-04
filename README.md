@@ -15,6 +15,7 @@ does not tree-shake, so a root entry would load every component.
 | `RadioGroup` | `@foliag/bloom/radio-group` | One choice among a few, all in view, stacked or side by side |
 | `ToggleGroup` | `@foliag/bloom/toggle-group` | A row of equal segments pressed like buttons, one at a time or several |
 | `Slider` | `@foliag/bloom/slider` | A value or a range along a line, with a 48px target around each handle |
+| `Collapsible` | `@foliag/bloom/collapsible` | Something shown or hidden by one button |
 | `Avatar` | `@foliag/bloom/avatar` | A photo in a circle, with initials while it loads and when it fails |
 
 ## Use
