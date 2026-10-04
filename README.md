@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/banner-dark.webp">
+  <img alt="@foliag/bloom" src=".github/banner-light.webp">
+</picture>
+
 # @foliag/bloom
 
 Styled Solid 2 components for generic products, built on [`@foliag/seeds`](https://github.com/foli-ag/seeds) and
