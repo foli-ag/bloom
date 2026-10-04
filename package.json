@@ -24,6 +24,10 @@
       "types": "./dist/button/index.d.ts",
       "default": "./dist/button/index.js"
     },
+    "./checkbox": {
+      "types": "./dist/checkbox/index.d.ts",
+      "default": "./dist/checkbox/index.js"
+    },
     "./input": {
       "types": "./dist/input/index.d.ts",
       "default": "./dist/input/index.js"
