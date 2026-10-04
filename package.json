@@ -24,6 +24,10 @@
       "types": "./dist/accordion/index.d.ts",
       "default": "./dist/accordion/index.js"
     },
+    "./angle-slider": {
+      "types": "./dist/angle-slider/index.d.ts",
+      "default": "./dist/angle-slider/index.js"
+    },
     "./avatar": {
       "types": "./dist/avatar/index.d.ts",
       "default": "./dist/avatar/index.js"

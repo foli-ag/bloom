@@ -41,6 +41,7 @@ does not tree-shake, so a root entry would load every component.
 | `Pagination` | `@foliag/bloom/pagination` | Pages of a list as 48px squares, the current one filled |
 | `Carousel` | `@foliag/bloom/carousel` | Slides that scroll a page at a time, with dots and a counter |
 | `Splitter` | `@foliag/bloom/splitter` | Panels resized by a handle with a 48px grip, or the keyboard |
+| `AngleSlider` | `@foliag/bloom/angle-slider` | A dial for a direction in degrees, such as the wind or the rows |
 
 ## Use
 
