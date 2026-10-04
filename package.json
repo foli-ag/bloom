@@ -156,6 +156,10 @@
       "types": "./dist/tooltip/index.d.ts",
       "default": "./dist/tooltip/index.js"
     },
+    "./tree-view": {
+      "types": "./dist/tree-view/index.d.ts",
+      "default": "./dist/tree-view/index.js"
+    },
     "./theme.css": "./dist/theme.css",
     "./fonts.css": "./dist/fonts.css",
     "./package.json": "./package.json"

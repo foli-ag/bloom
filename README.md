@@ -42,6 +42,7 @@ does not tree-shake, so a root entry would load every component.
 | `Carousel` | `@foliag/bloom/carousel` | Slides that scroll a page at a time, with dots and a counter |
 | `Splitter` | `@foliag/bloom/splitter` | Panels resized by a handle with a 48px grip, or the keyboard |
 | `AngleSlider` | `@foliag/bloom/angle-slider` | A dial for a direction in degrees, such as the wind or the rows |
+| `TreeView` | `@foliag/bloom/tree-view` | Nested rows that open and close, such as a farm's blocks and parcels |
 
 ## Use
 
