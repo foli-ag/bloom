@@ -64,6 +64,10 @@
       "types": "./dist/number-input/index.d.ts",
       "default": "./dist/number-input/index.js"
     },
+    "./password-input": {
+      "types": "./dist/password-input/index.d.ts",
+      "default": "./dist/password-input/index.js"
+    },
     "./popover": {
       "types": "./dist/popover/index.d.ts",
       "default": "./dist/popover/index.js"

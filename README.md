@@ -26,6 +26,7 @@ does not tree-shake, so a root entry would load every component.
 | `Accordion` | `@foliag/bloom/accordion` | A stack of sections, each opened by its title |
 | `Avatar` | `@foliag/bloom/avatar` | A photo in a circle, with initials while it loads and when it fails |
 | `NumberInput` | `@foliag/bloom/number-input` | A number typed or stepped with two buttons. `locale` is required, so "2,5" reads right |
+| `PasswordInput` | `@foliag/bloom/password-input` | A password field with a button that shows it as plain text |
 
 ## Use
 
