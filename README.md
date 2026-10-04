@@ -32,6 +32,7 @@ does not tree-shake, so a root entry would load every component.
 | `Clipboard` | `@foliag/bloom/clipboard` | A value with a button that copies it, its words changing once copied |
 | `Toggle` | `@foliag/bloom/toggle` | One button that stays pressed, like a lone `ToggleGroup` segment |
 | `Swap` | `@foliag/bloom/swap` | Two indicators in one place, the change popping in |
+| `Progress` | `@foliag/bloom/progress` | A bar or a ring. With `value={null}` the ring turns: bloom's spinner |
 
 ## Use
 
