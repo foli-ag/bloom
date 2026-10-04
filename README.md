@@ -36,6 +36,7 @@ does not tree-shake, so a root entry would load every component.
 | `Tabs` | `@foliag/bloom/tabs` | Panels shown one at a time from a row of 48px tabs |
 | `RatingGroup` | `@foliag/bloom/rating-group` | A mark given with stars, half marks with `allowHalf` |
 | `Drawer` | `@foliag/bloom/drawer` | A sheet on an edge that follows the finger and closes when swiped away |
+| `Tooltip` | `@foliag/bloom/tooltip` | A label for the mouse and the keyboard. It never opens from a tap |
 
 ## Use
 
