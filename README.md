@@ -19,6 +19,7 @@ does not tree-shake, so a root entry would load every component.
 | `Combobox` | `@foliag/bloom/combobox` | A choice from a long list, narrowed down by typing |
 | `Menu` | `@foliag/bloom/menu` | Actions on one thing behind one button. A dropdown, or a bottom sheet on a phone |
 | `Dialog` | `@foliag/bloom/dialog` | A question or a short task over the page, `role="alertdialog"` for one that interrupts |
+| `Popover` | `@foliag/bloom/popover` | A few words or a small task next to what it is about |
 | `Collapsible` | `@foliag/bloom/collapsible` | Something shown or hidden by one button |
 | `Accordion` | `@foliag/bloom/accordion` | A stack of sections, each opened by its title |
 | `Avatar` | `@foliag/bloom/avatar` | A photo in a circle, with initials while it loads and when it fails |
