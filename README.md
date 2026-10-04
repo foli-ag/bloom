@@ -29,6 +29,7 @@ does not tree-shake, so a root entry would load every component.
 | `PasswordInput` | `@foliag/bloom/password-input` | A password field with a button that shows it as plain text |
 | `PinInput` | `@foliag/bloom/pin-input` | One box per character of a code. The name of each box is the app's |
 | `Editable` | `@foliag/bloom/editable` | Text edited in place, committed with Enter or put back with Escape |
+| `Clipboard` | `@foliag/bloom/clipboard` | A value with a button that copies it, its words changing once copied |
 
 ## Use
 

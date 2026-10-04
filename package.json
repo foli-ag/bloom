@@ -36,6 +36,10 @@
       "types": "./dist/checkbox/index.d.ts",
       "default": "./dist/checkbox/index.js"
     },
+    "./clipboard": {
+      "types": "./dist/clipboard/index.d.ts",
+      "default": "./dist/clipboard/index.js"
+    },
     "./collapsible": {
       "types": "./dist/collapsible/index.d.ts",
       "default": "./dist/collapsible/index.js"
