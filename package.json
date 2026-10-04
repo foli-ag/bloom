@@ -40,6 +40,10 @@
       "types": "./dist/switch/index.d.ts",
       "default": "./dist/switch/index.js"
     },
+    "./toggle-group": {
+      "types": "./dist/toggle-group/index.d.ts",
+      "default": "./dist/toggle-group/index.js"
+    },
     "./theme.css": "./dist/theme.css",
     "./fonts.css": "./dist/fonts.css",
     "./package.json": "./package.json"

@@ -13,6 +13,7 @@ does not tree-shake, so a root entry would load every component.
 | `Checkbox` | `@foliag/bloom/checkbox` | A box and its words as one full-width row, with an indeterminate state |
 | `Switch` | `@foliag/bloom/switch` | A setting that applies at once: words first, the switch at the end of the row |
 | `RadioGroup` | `@foliag/bloom/radio-group` | One choice among a few, all in view, stacked or side by side |
+| `ToggleGroup` | `@foliag/bloom/toggle-group` | A row of equal segments pressed like buttons, one at a time or several |
 
 ## Use
 
