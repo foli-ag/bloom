@@ -48,6 +48,10 @@
       "types": "./dist/radio-group/index.d.ts",
       "default": "./dist/radio-group/index.js"
     },
+    "./select": {
+      "types": "./dist/select/index.d.ts",
+      "default": "./dist/select/index.js"
+    },
     "./slider": {
       "types": "./dist/slider/index.d.ts",
       "default": "./dist/slider/index.js"
