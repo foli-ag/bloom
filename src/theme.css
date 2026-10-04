@@ -1,0 +1,451 @@
+/*
+ * @foliag/bloom tokens.
+ *
+ *   @import "tailwindcss";
+ *   @import "@foliag/bloom/theme.css";
+ *
+ * Components read the semantic tokens (`--color-primary`, `--color-ink`, `--ease-smooth`...). A product
+ * re-skins bloom by redeclaring them on `:root`, usually only the primary scale, `--color-primary-50` to `-950`.
+ * Redeclaring a primitive on a subtree does not reach the semantic tokens below it, they are resolved on `:root`.
+ *
+ * Every text pair is checked for 7:1 (WCAG AAA) in both themes, and every border or ring that has to be seen for 3:1.
+ * `--color-primary` itself is only 2.5:1 on white, so it carries dark ink (`--color-on-primary`, 7.4:1) and never
+ * serves as text. Green text on a light surface uses `--color-primary-text`.
+ */
+
+/* The package ships compiled .jsx and .js under node_modules, where Tailwind does not look. This pulls in the classes
+ * the components use, relative to this file. Styles shared between components, such as a button's, live in .js. */
+@source "./**/*.{js,jsx}";
+
+@theme static {
+  /* Type: Barlow Semi Condensed, loaded by `fonts.css`. Nothing under 16px. */
+  --font-sans:
+    "Barlow Semi Condensed", "Barlow Semi Condensed Fallback", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  --text-*: initial;
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.5rem;
+  --text-base: 1.125rem;
+  --text-base--line-height: 1.75rem;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 2rem;
+  --text-2xl: 1.875rem;
+  --text-2xl--line-height: 2.25rem;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 2.5rem;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 1.1;
+
+  /* A condensed face set at weight 500 and above runs out of room between letters quickly. The Typography story shows
+   * 0, -0.01em and -0.02em side by side. */
+  --tracking-body: -0.01em;
+  --tracking-heading: -0.02em;
+
+  /* Shape: sturdy and soft */
+  --radius-box: 0.5rem;
+  --radius-control: 0.75rem;
+  --radius-card: 1rem;
+  --shadow-overlay: 0 1px 2px oklch(0.2 0.02 135 / 0.12), 0 12px 32px -8px oklch(0.2 0.02 135 / 0.28);
+
+  /* Primary scale, hue 134.8 (the hue of #74b24c). 500 is the brand fill. 700 is 4.8:1 on a light surface, enough
+   * for a border, and 800 is 7.8:1, enough for text. */
+  --color-primary-50: oklch(0.975 0.03 134.8);
+  --color-primary-100: oklch(0.95 0.05 134.8);
+  --color-primary-200: oklch(0.9 0.09 134.8);
+  --color-primary-300: oklch(0.84 0.125 134.8);
+  --color-primary-400: oklch(0.77 0.145 134.8);
+  --color-primary-500: #74b24c;
+  --color-primary-600: oklch(0.62 0.14 134.8);
+  --color-primary-700: oklch(0.53 0.135 134.8);
+  --color-primary-800: oklch(0.42 0.115 134.8);
+  --color-primary-900: oklch(0.33 0.09 134.8);
+  --color-primary-950: oklch(0.24 0.065 134.8);
+
+  /* Surfaces and ink. The neutrals lean toward the primary hue. */
+  --color-surface: light-dark(oklch(0.985 0.005 125), oklch(0.18 0.015 135));
+  --color-raised: light-dark(#fff, oklch(0.22 0.016 135));
+  --color-ink: light-dark(oklch(0.22 0.02 135), oklch(0.95 0.01 125));
+  --color-muted: light-dark(oklch(0.43 0.02 135), oklch(0.76 0.015 130));
+  --color-border: light-dark(oklch(0.88 0.01 125), oklch(0.32 0.015 135));
+  /* The edge of anything you have to find with your finger: inputs, checkboxes, outlined buttons */
+  --color-strong: light-dark(oklch(0.56 0.02 130), oklch(0.62 0.02 130));
+  --color-neutral-soft: light-dark(oklch(0.95 0.008 125), oklch(0.26 0.016 135));
+  --color-disabled: light-dark(oklch(0.92 0.008 125), oklch(0.26 0.012 135));
+  --color-disabled-ink: light-dark(oklch(0.56 0.015 130), oklch(0.58 0.015 130));
+  --color-focus: light-dark(var(--color-primary-900), var(--color-primary-300));
+
+  /* Tones. Each has a fill with its ink, text for a surface, and a soft tint for a banner or a quiet button. */
+  --color-primary: var(--color-primary-500);
+  --color-on-primary: oklch(0.17 0.04 134.8);
+  --color-primary-text: light-dark(var(--color-primary-800), var(--color-primary-300));
+  --color-primary-edge: light-dark(var(--color-primary-700), var(--color-primary-400));
+  --color-primary-soft: light-dark(var(--color-primary-100), oklch(0.27 0.04 134.8));
+
+  --color-danger: light-dark(oklch(0.42 0.17 27), oklch(0.72 0.17 27));
+  --color-on-danger: light-dark(#fff, oklch(0.15 0.04 27));
+  --color-danger-text: light-dark(oklch(0.42 0.17 27), oklch(0.82 0.101 27));
+  --color-danger-soft: light-dark(oklch(0.965 0.017 27), oklch(0.27 0.04 27));
+
+  /* Amber is too light to show against a light surface (1.5:1), so a warning shape carries a `warning-text` edge */
+  --color-warning: oklch(0.86 0.154 85);
+  --color-on-warning: light-dark(oklch(0.2 0.042 85), oklch(0.15 0.032 85));
+  --color-warning-text: light-dark(oklch(0.4 0.082 85), oklch(0.86 0.08 85));
+  --color-warning-soft: light-dark(oklch(0.97 0.03 85), oklch(0.28 0.04 85));
+
+  --color-info: light-dark(oklch(0.44 0.145 255), oklch(0.72 0.148 255));
+  --color-on-info: light-dark(#fff, oklch(0.15 0.04 255));
+  --color-info-text: light-dark(oklch(0.42 0.139 255), oklch(0.82 0.092 255));
+  --color-info-soft: light-dark(oklch(0.96 0.019 255), oklch(0.27 0.04 255));
+
+  /* The dim behind a dialog or a bottom sheet */
+  --color-scrim: light-dark(oklch(0.2 0.02 135 / 0.5), oklch(0 0 0 / 0.65));
+
+  /* Motion. Whatever moves or changes color eases on one smooth spring, so the parts of one change, a knob, its track
+   * and its tick, arrive together, and nothing swings past where it stops. What appears by growing, a dot or a tick,
+   * pops on a livelier spring that goes 4% past its size once. A finger going down is met at once, in 90ms.
+   *
+   * Each spring is a damped oscillator released from rest, sampled into `linear()` until it stays within 0.1% of its
+   * end. The smooth one is critically damped with a 300ms period: half way at 80ms, 90% at 190ms. The pop one has the
+   * same period at a damping ratio of 0.72. */
+  --ease-smooth: linear(
+    0,
+    0.036,
+    0.118,
+    0.222,
+    0.329,
+    0.433,
+    0.527,
+    0.61,
+    0.682,
+    0.742,
+    0.793,
+    0.834,
+    0.868,
+    0.895,
+    0.917,
+    0.935,
+    0.949,
+    0.96,
+    0.969,
+    0.976,
+    0.981,
+    0.985,
+    0.989,
+    0.991,
+    0.993,
+    0.995,
+    0.996,
+    0.997,
+    0.998,
+    0.998,
+    0.999,
+    0.999,
+    1
+  );
+  --ease-pop: linear(
+    0,
+    0.044,
+    0.15,
+    0.286,
+    0.43,
+    0.567,
+    0.689,
+    0.791,
+    0.873,
+    0.935,
+    0.979,
+    1.008,
+    1.026,
+    1.036,
+    1.038,
+    1.037,
+    1.033,
+    1.028,
+    1.023,
+    1.017,
+    1.012,
+    1.008,
+    1.005,
+    1.003,
+    1.001,
+    1,
+    0.999,
+    0.999,
+    0.999,
+    0.999,
+    0.999,
+    0.999,
+    1
+  );
+  --ease-press: cubic-bezier(0, 0, 0.58, 1);
+  --duration-smooth: 450ms;
+  --duration-pop: 490ms;
+  --duration-press: 90ms;
+  /* The smooth spring, quicker for what leaves and slower for a sheet that crosses the screen */
+  --duration-exit: 260ms;
+  --duration-sheet: 560ms;
+
+  /* How far things move. Zeroed under reduced motion, which leaves the fades. */
+  --press-scale: 0.97;
+  --press-scale-small: 0.9;
+  --pop-in-scale: 0.8;
+  --enter-distance: 0.75rem;
+  --overlay-scale: 0.96;
+  --sheet-distance: 100%;
+
+  --animate-pop-in: bloom-pop-in var(--duration-pop) var(--ease-pop) both;
+  --animate-spin-ring: bloom-spin 800ms linear infinite;
+  /* A third of a bar sliding across it, for a progress whose end is not known. Like the spinner it stays under reduced
+   * motion, as it is what tells the farmer something is happening. */
+  --animate-progress-slide: bloom-progress-slide 1.4s var(--ease-smooth) infinite;
+
+  /* What opens and closes. These are keyframes and not transitions because a part that unmounts on exit waits for its
+   * animation to end. Under reduced motion the distances are zero and each one is a fade. */
+  --animate-fade-in: bloom-fade-in var(--duration-smooth) var(--ease-smooth) both;
+  --animate-fade-out: bloom-fade-out var(--duration-exit) var(--ease-smooth) both;
+  --animate-overlay-in: bloom-overlay-in var(--duration-smooth) var(--ease-smooth) both;
+  --animate-overlay-out: bloom-overlay-out var(--duration-exit) var(--ease-smooth) both;
+  --animate-sheet-in: bloom-sheet-in var(--duration-sheet) var(--ease-smooth) both;
+  --animate-sheet-out: bloom-sheet-out var(--duration-exit) var(--ease-smooth) both;
+  --animate-collapse-open: bloom-collapse-open var(--duration-smooth) var(--ease-smooth) both;
+  --animate-collapse-close: bloom-collapse-close var(--duration-exit) var(--ease-smooth) both;
+  /* Changes nothing for as long as an exit takes. A list inside a panel stays mounted until it ends, because a part
+   * is unmounted when its own animation ends, and here it is the panel around it that leaves. */
+  --animate-hold: bloom-hold var(--duration-exit) linear both;
+
+  @keyframes bloom-pop-in {
+    from {
+      opacity: 0;
+      scale: var(--pop-in-scale);
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  @keyframes bloom-spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes bloom-progress-slide {
+    from {
+      translate: -100%;
+    }
+    to {
+      translate: 300%;
+    }
+  }
+
+  @keyframes bloom-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes bloom-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* A floating panel grows a little and drifts the way it opens */
+  @keyframes bloom-overlay-in {
+    from {
+      opacity: 0;
+      scale: var(--overlay-scale);
+      translate: 0 calc(var(--enter-distance) * -0.5);
+    }
+  }
+
+  @keyframes bloom-overlay-out {
+    to {
+      opacity: 0;
+      scale: var(--overlay-scale);
+    }
+  }
+
+  @keyframes bloom-hold {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes bloom-sheet-in {
+    from {
+      opacity: 0;
+      translate: 0 var(--sheet-distance);
+    }
+  }
+
+  @keyframes bloom-sheet-out {
+    to {
+      opacity: 0;
+      translate: 0 var(--sheet-distance);
+    }
+  }
+
+  /* The one animation that is not transform and opacity: a section that opens has to push down what follows it.
+   * `--height` is measured and set by the collapsible machine. Under reduced motion it is swapped for a fade. */
+  @keyframes bloom-collapse-open {
+    from {
+      height: 0;
+      opacity: 0;
+    }
+    to {
+      height: var(--height);
+    }
+  }
+
+  @keyframes bloom-collapse-close {
+    from {
+      height: var(--height);
+    }
+    to {
+      height: 0;
+      opacity: 0;
+    }
+  }
+}
+
+/* The ring that shows where the keyboard or switch access is, 3px and offset so it clears the control's own border */
+@utility focus-ring {
+  &:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+}
+
+/* Anything a finger presses. A quick second tap does not zoom the page, and the browser's grey flash, which would cover
+ * a whole row, gives way to the component's own press. While it is held, it and everything inside it take the press
+ * timing, so a checkbox's box goes down as fast as a button does. */
+@utility pressable {
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    --press-duration: var(--duration-press);
+    --press-ease: var(--ease-press);
+  }
+}
+
+/* How a touched part moves. Its size follows the finger: down in 90ms while held, back up on the pop spring when let
+ * go. Its place and its colors ease on the smooth spring, together. */
+@utility motion-touch {
+  transition:
+    scale var(--press-duration, var(--duration-pop)) var(--press-ease, var(--ease-pop)),
+    translate var(--duration-smooth) var(--ease-smooth),
+    background-color var(--duration-smooth) var(--ease-smooth),
+    border-color var(--duration-smooth) var(--ease-smooth),
+    color var(--duration-smooth) var(--ease-smooth);
+}
+
+/* A control that shrinks under the finger itself, such as a button, with the timing of `motion-touch` */
+@utility motion-press {
+  transition:
+    scale var(--press-duration, var(--duration-pop)) var(--press-ease, var(--ease-pop)),
+    translate var(--duration-smooth) var(--ease-smooth),
+    background-color var(--duration-smooth) var(--ease-smooth),
+    border-color var(--duration-smooth) var(--ease-smooth),
+    color var(--duration-smooth) var(--ease-smooth);
+
+  &:where(:not(:disabled, [aria-disabled="true"], [aria-busy="true"])):active {
+    scale: var(--press-scale);
+  }
+}
+
+@layer base {
+  /* The system's setting, unless `data-theme` on <html> says otherwise. `light-dark()` above follows this. */
+  :root {
+    color-scheme: light dark;
+  }
+
+  :root[data-theme="light"] {
+    color-scheme: light;
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    /* 500 reads better in glare than the thin default */
+    font-weight: 500;
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    letter-spacing: var(--tracking-body);
+    font-synthesis: none;
+  }
+
+  /* No `linear()`: older engines get the nearest cubic curves, the pop one with a little overshoot */
+  @supports not (transition-timing-function: linear(0, 1)) {
+    :root {
+      --ease-smooth: cubic-bezier(0.25, 0.8, 0.25, 1);
+      --ease-pop: cubic-bezier(0.34, 1.3, 0.64, 1);
+    }
+  }
+
+  /* Movement becomes a fade and the pop spring loses its overshoot. Colors, opacity and the spinner stay, because
+   * they tell the farmer something happened. Set `data-motion="reduced"` on <html> for an in-app switch. */
+  @media (prefers-reduced-motion: reduce) {
+    :root:not([data-motion="full"]) {
+      --press-scale: 1;
+      --press-scale-small: 1;
+      --pop-in-scale: 1;
+      --overlay-scale: 1;
+      --sheet-distance: 0px;
+      --enter-distance: 0px;
+      --ease-pop: var(--ease-smooth);
+      --duration-pop: var(--duration-smooth);
+      --animate-collapse-open: var(--animate-fade-in);
+      --animate-collapse-close: var(--animate-fade-out);
+    }
+  }
+
+  :root[data-motion="reduced"] {
+    --press-scale: 1;
+    --press-scale-small: 1;
+    --pop-in-scale: 1;
+    --overlay-scale: 1;
+    --sheet-distance: 0px;
+    --enter-distance: 0px;
+    --ease-pop: var(--ease-smooth);
+    --duration-pop: var(--duration-smooth);
+    --animate-collapse-open: var(--animate-fade-in);
+    --animate-collapse-close: var(--animate-fade-out);
+  }
+
+  /* More contrast: ink goes to black or white and every edge to the strong one. `data-contrast="more"` on <html>
+   * does the same for an in-app switch. */
+  @media (prefers-contrast: more) {
+    :root:not([data-contrast="normal"]) {
+      --color-ink: light-dark(#000, #fff);
+      --color-muted: light-dark(oklch(0.3 0.02 135), oklch(0.9 0.01 125));
+      --color-strong: light-dark(oklch(0.35 0.02 130), oklch(0.82 0.015 130));
+      --color-border: var(--color-strong);
+      --color-primary-text: light-dark(var(--color-primary-900), var(--color-primary-200));
+      --color-primary-edge: light-dark(var(--color-primary-900), var(--color-primary-200));
+      --color-focus: light-dark(#000, #fff);
+    }
+  }
+
+  :root[data-contrast="more"] {
+    --color-ink: light-dark(#000, #fff);
+    --color-muted: light-dark(oklch(0.3 0.02 135), oklch(0.9 0.01 125));
+    --color-strong: light-dark(oklch(0.35 0.02 130), oklch(0.82 0.015 130));
+    --color-border: var(--color-strong);
+    --color-primary-text: light-dark(var(--color-primary-900), var(--color-primary-200));
+    --color-primary-edge: light-dark(var(--color-primary-900), var(--color-primary-200));
+    --color-focus: light-dark(#000, #fff);
+  }
+}

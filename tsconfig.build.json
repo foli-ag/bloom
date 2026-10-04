@@ -2,8 +2,8 @@
   // One module per source file, so that the app's bundler drops the parts and components it does not use
   "extends": "./tsconfig.json",
   "include": ["src"],
-  // Stories are for Storybook and the test run, not for the package
-  "exclude": ["src/**/*.stories.tsx"],
+  // Stories and the foundations they measure with are for Storybook and the test run, not for the package
+  "exclude": ["src/**/*.stories.tsx", "src/foundations"],
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",

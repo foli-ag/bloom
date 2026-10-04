@@ -3,6 +3,7 @@
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
   "formatter": { "indentStyle": "space", "lineWidth": 120 },
   "javascript": { "formatter": { "semicolons": "asNeeded" } },
+  "css": { "parser": { "tailwindDirectives": true } },
   "linter": { "enabled": false },
   "assist": { "enabled": false }
 }

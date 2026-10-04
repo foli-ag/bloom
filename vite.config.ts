@@ -1,8 +1,19 @@
 import solidPlugin from "@solidjs/vite-plugin"
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin"
+import tailwindcss from "@tailwindcss/vite"
 import { playwright } from "@vitest/browser-playwright"
 import { defineConfig } from "vitest/config"
 import pkg from "./package.json" with { type: "json" }
+import seeds from "@foliag/seeds/package.json" with { type: "json" }
+
+// Seeds has no root entry, only one subpath per component, and Fontsource packages are CSS and font files with no
+// script, so neither can be prebundled by name
+const seedsEntries = Object.keys(seeds.exports)
+  .filter((subpath) => subpath !== "./package.json")
+  .map((subpath) => `@foliag/seeds/${subpath.slice(2)}`)
+const scriptDependencies = Object.keys(pkg.dependencies).filter(
+  (name) => name !== "@foliag/seeds" && !name.startsWith("@fontsource/"),
+)
 
 // Positioning, focus trapping and outside clicks need real layout and input, which jsdom lacks. Vitest names the
 // instances in place, so each project gets its own object.
@@ -15,18 +26,18 @@ const browser = () => ({
 })
 
 export default defineConfig({
-  plugins: [solidPlugin()],
+  plugins: [solidPlugin(), tailwindcss()],
   // Vite reloads the page when it finds a dependency to prebundle mid-run, which can fail the test that was running.
   // The cache is always cold in the Nix check, so every dependency is prebundled up front.
   optimizeDeps: {
-    include: Object.keys(pkg.dependencies),
+    include: [...scriptDependencies, ...seedsEntries],
   },
   resolve: {
     conditions: ["development", "browser"],
   },
   test: {
     globals: true,
-    // Bloom has no components yet
+    // Everything so far is tested through its stories, so the components and bundle projects have no files yet
     passWithNoTests: true,
     projects: [
       {

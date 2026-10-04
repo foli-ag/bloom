@@ -1,10 +1,105 @@
 # @foliag/bloom
 
-Styled Solid 2 components for generic products. Nothing is exported yet: `package.json` `exports` lists only
-`./package.json`, and `src/` has a placeholder so that `tsc` has an input.
+Styled Solid 2 components for generic products, built on [`@foliag/seeds`](https://github.com/foli-ag/seeds) and
+Tailwind CSS 4. They are made for apps a farmer uses on a phone, in the sun, with one hand, often on a poor connection.
 
-Each component will be imported from its own subpath, as in `@foliag/seeds`, with no root entry. A server or a dev
-server does not tree-shake, so a root entry would load every component.
+Each component is imported from its own subpath, as in `@foliag/seeds`, with no root entry. A server or a dev server
+does not tree-shake, so a root entry would load every component.
+
+| Component | Import | What it is |
+|---|---|---|
+
+## Use
+
+```sh
+bun add @foliag/bloom tailwindcss
+```
+
+```css
+/* app.css */
+@import "tailwindcss";
+@import "@foliag/bloom/theme.css";
+@import "@foliag/bloom/fonts.css"; /* Barlow Semi Condensed, self-hosted. Leave it out to use another font. */
+```
+
+```tsx
+import { Button } from "@foliag/bloom/button"
+import { Checkbox } from "@foliag/bloom/checkbox"
+
+<Checkbox name="irrigue">Irrigué</Checkbox>
+<Button size="lg" block loading={saving()}>Enregistrer</Button>
+```
+
+The package ships compiled `.jsx`, so the app builds with the Solid compiler (`@solidjs/vite-plugin`). `theme.css`
+tells Tailwind to scan those files, and a `class` on a component wins over the component's own classes
+(`tailwind-merge`).
+
+## Parts that are buttons
+
+A part that only opens, closes or moves something on, such as a dialog's trigger, its close, a stepper's next or a
+select's clear, is a bare button with no look of its own. It takes its look from what it renders as, usually a
+`Button`, and the variants go with it. The same part can render as a link, an avatar or a card the app already has.
+
+```tsx
+<Dialog.Trigger as={Button} tone="danger" variant="outline">Supprimer la parcelle</Dialog.Trigger>
+<Dialog.Close as={Button} tone="neutral" variant="outline">Annuler</Dialog.Close>
+<Steps.Next as={Button}>Suivant</Steps.Next>
+<Menu.Trigger as={Button} variant="outline">Actions <Menu.Indicator /></Menu.Trigger>
+```
+
+Overlays render into `<body>`, so a parent's `overflow` or stacking cannot clip them. Zag still treats them as part
+of what opened them: a select inside a dialog opens over it, and choosing in it leaves the dialog open. Below 640px a select, a menu and a popover rise from the bottom as sheets, each with a close button at
+its foot (`Select.Close`, `Menu.Close`, `Popover.Close`), because a tap on the dim is not obvious to everyone. A
+combobox stays a dropdown, as the keyboard covers the bottom of the screen.
+
+## No words of its own
+
+Bloom ships no strings, in any language. Every word a component shows or announces comes in as `children`:
+`<Button>Enregistrer</Button>`, `<Checkbox>Irrigué</Checkbox>`. Where a screen reader needs a name and there is no
+visible text to take it from, `children` is required in the type. `loading` on a Button only sets `aria-busy` and shows
+a spinner, so the app changes the button's own text, "Enregistrement…". Numbers are formatted by the app too:
+`Slider.ValueText` takes a function of the value, ``{(value) => `${value[0]} %`}``.
+
+Zag gives some buttons English names that would win over their words: "Clear value", "Toggle suggestions", "close".
+Bloom empties them, so a clear button rendered as `<Select.Clear as={Button}>Effacer</Select.Clear>` is named
+"Effacer". `Steps` has no progress bar, because zag's says "50% complete" in English and takes no other text.
+
+## Design rules
+
+These are held by the stories, which run axe and fail on a violation, so a change that breaks one fails `bun run test`.
+
+- **Contrast.** Text is 7:1 (AAA) and every edge or ring that has to be found is 3:1, in light, dark, and with more
+  contrast. `Foundations/Colors/Contrast` measures every pair in the browser in all four settings. `#74b24c` is only
+  2.5:1 on white, so it carries dark ink and never serves as text. Green text uses `--color-primary-text`.
+- **Touch.** Targets are at least 48px, and 56px for the main action of a screen. Sizes use `min-h`, so text that
+  grows with the user's settings does not clip. A checkbox, a radio or a switch is a row the width of its container,
+  so a thumb that misses the words still lands on it. Anything pressed takes the `pressable` utility: no zoom on a
+  quick second tap, and no grey flash from the browser over the component's own press.
+- **Type.** Barlow Semi Condensed at weight 500 and up, 18px body, nothing under 16px, all in `rem`.
+- **Motion.** Smooth before lively. Whatever moves or changes color eases on one critically damped spring
+  (`--ease-smooth`), so the parts of one change arrive together and nothing swings back and forth. What appears by
+  growing pops once, 4% past its size (`--ease-pop`). A finger going down is met in 90ms, so even a quick tap shows,
+  and the control comes back up when it lifts. All CSS, only the transform and opacity of small elements, except a
+  section that opens, which has to push down what follows it. `Foundations/Motion` fails if a curve starts to wobble.
+  Under `prefers-reduced-motion`, movement becomes a fade and nothing overshoots.
+- **Never color alone.** Invalid, danger and warning carry an icon, a second line or text as well.
+
+## Settings
+
+The system's choices apply by default. An app can offer the same as switches by setting an attribute on `<html>`:
+
+| Attribute | Values | Effect |
+|---|---|---|
+| `data-theme` | `light`, `dark` | Forces a theme instead of following the system |
+| `data-contrast` | `more`, `normal` | Stronger text and edges, or turns off `prefers-contrast: more` |
+| `data-motion` | `reduced`, `full` | Removes movement, or turns off `prefers-reduced-motion` |
+
+## Re-skinning
+
+Components read semantic tokens and never a hex value. A product re-skins bloom by redeclaring tokens on `:root` after
+the import, usually the primary scale, `--color-primary-50` to `--color-primary-950`, with `--color-primary` and the
+`--color-on-primary` ink. Check the pairs in `Foundations/Colors/Contrast` against the new colors. A token redeclared on
+a subtree does not reach the tokens defined from it on `:root`.
 
 ## Development
 
@@ -17,7 +112,7 @@ bun run storybook        # previews and docs at http://localhost:6006
 bun run build-storybook  # static site in storybook-static/
 bun run test             # Vitest: tests/ and stories in headless Chromium, bundle checks in Node
 bun run typecheck
-bun run build            # tsc, one module and declaration per source file in dist/
+bun run build            # tsc, one module and declaration per source file in dist/, and the two CSS files
 bun run format           # biome
 ```
 
@@ -30,8 +125,14 @@ jsdom, and files in `tests/*.test.ts` run in Node. Playwright only drives browse
 Storybook is the preview and the documentation site, through [storybook-solidjs-vite](https://github.com/solidjs-community/storybook).
 Stories live next to their component as `src/<component>/<component>.stories.tsx`. The `stories` project in
 `vite.config.ts` runs every story as a test in headless Chromium, so a story with a `play` function is also an
-interaction test. `tsconfig.build.json` leaves stories out of `dist/`. Docs pages are `.mdx` files in `src/`. Add
-`../src/**/*.mdx` to `stories` in `.storybook/main.ts` when the first one exists.
+interaction test. `tsconfig.build.json` leaves stories out of `dist/`.
+
+`src/foundations/` holds the stories for colors, type and motion, and the helper that measures contrast in the browser.
+It stays out of `dist/` too. The toolbar sets `data-theme`, `data-contrast` and `data-motion` on `<html>`. `a11y.test` is
+`error` with the AAA contrast rule on, so axe fails a story in the test run as it does in the browser.
+
+Docs pages are `.mdx` files in `src/`. Add `../src/**/*.mdx` to `stories` in `.storybook/main.ts` when the first one
+exists.
 
 `storybook-solidjs-vite` imports `vite-plugin-solid`, the old name of `@solidjs/vite-plugin`. The `overrides` entry in
 `package.json` points that name at `@solidjs/vite-plugin`, so the stories project uses the Solid 2 plugin. Without it Bun
