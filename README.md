@@ -39,6 +39,7 @@ does not tree-shake, so a root entry would load every component.
 | `Tooltip` | `@foliag/bloom/tooltip` | A label for the mouse and the keyboard. It never opens from a tap |
 | `HoverCard` | `@foliag/bloom/hover-card` | A card next to a link, for the mouse and the keyboard. It never opens from a tap |
 | `Pagination` | `@foliag/bloom/pagination` | Pages of a list as 48px squares, the current one filled |
+| `Carousel` | `@foliag/bloom/carousel` | Slides that scroll a page at a time, with dots and a counter |
 
 ## Use
 
