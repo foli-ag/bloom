@@ -47,7 +47,7 @@ does not tree-shake, so a root entry would load every component.
 | `Card` | `@foliag/bloom/card` | A surface for one thing, outlined, elevated or soft. As a link or a button the whole card is one target |
 | `Badge` | `@foliag/bloom/badge` | A short status or a count in six tones, soft, solid or outlined, with a dot or the tone's mark |
 | `Alert` | `@foliag/bloom/alert` | News in the page with its tone's mark, `urgent` for `role="alert"`. Dismissed, it folds away |
-| `Skeleton` | `@foliag/bloom/skeleton` | Lines, a circle or a rectangle standing in for what loads, with a calm sheen that stops under reduced motion |
+| `Skeleton` | `@foliag/bloom/skeleton` | A tinted box standing in for what loads, sized and shaped by its classes, with a calm sheen that stops under reduced motion |
 | `Separator` | `@foliag/bloom/separator` | A line across or down, with words such as "ou" in the middle, or decorative |
 | `Breadcrumb` | `@foliag/bloom/breadcrumb` | Where the page sits in the app. On a phone a long trail folds its start into one button |
 
@@ -200,8 +200,10 @@ installs `vite-plugin-solid` 2.11, the Solid 1 plugin, which breaks the stories 
 same version as the `@solidjs/vite-plugin` devDependency, and remove it once `storybook-solidjs-vite` imports the new
 name.
 
-`nix flake check` builds the package and runs the typecheck and the tests in the sandbox. After changing `bun.lock`,
-set `outputHash` of `bunDeps` in `nix/package.nix` to `lib.fakeHash`, run `nix build` and paste the hash it reports.
+`nix flake check` builds the package and runs the typecheck and the tests in the sandbox. The build fetches each
+package `bun.lock` pins with the hash the lockfile records for it, through [bun2nix](https://github.com/nix-community/bun2nix),
+so changing dependencies needs nothing beyond `bun install`. Two branches that both add a dependency conflict in
+`bun.lock` at most, and `bun install` resolves it.
 
 CI runs `nix flake check` on pushes to `main` and on pull requests.
 
