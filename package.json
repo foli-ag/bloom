@@ -56,6 +56,10 @@
       "types": "./dist/menu/index.d.ts",
       "default": "./dist/menu/index.js"
     },
+    "./navigation-menu": {
+      "types": "./dist/navigation-menu/index.d.ts",
+      "default": "./dist/navigation-menu/index.js"
+    },
     "./popover": {
       "types": "./dist/popover/index.d.ts",
       "default": "./dist/popover/index.js"

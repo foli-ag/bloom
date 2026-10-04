@@ -21,6 +21,7 @@ does not tree-shake, so a root entry would load every component.
 | `Dialog` | `@foliag/bloom/dialog` | A question or a short task over the page, `role="alertdialog"` for one that interrupts |
 | `Popover` | `@foliag/bloom/popover` | A few words or a small task next to what it is about |
 | `Steps` | `@foliag/bloom/steps` | A form cut into numbered steps, across or down the side |
+| `NavigationMenu` | `@foliag/bloom/navigation-menu` | The sections of an app in a bar, some with a panel of links |
 | `Collapsible` | `@foliag/bloom/collapsible` | Something shown or hidden by one button |
 | `Accordion` | `@foliag/bloom/accordion` | A stack of sections, each opened by its title |
 | `Avatar` | `@foliag/bloom/avatar` | A photo in a circle, with initials while it loads and when it fails |
