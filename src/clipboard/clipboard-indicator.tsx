@@ -13,11 +13,11 @@ export type ClipboardIndicatorProps = Omit<Seed.IndicatorProps<"span">, "class" 
 }
 
 /**
- * The trigger's words, which become `copied`, after a tick, for a moment after a copy. The tick is drawn in as the words
- * change, and both fade back to the first words once the moment is over.
+ * The trigger's words, after two sheets laid one on the other. For a moment after a copy the words become `copied` and
+ * the sheets give way to a tick, drawn in as they fade. Both fade back once the moment is over.
  *
- * Both sets of words are laid out in the same place, so the trigger keeps the width of the longer one and the value
- * beside it never moves.
+ * Both sets of words are laid out in the same place, as are the sheets and the tick, so the trigger keeps the width of
+ * the longer words and the value beside it never moves.
  */
 export function ClipboardIndicator(props: ClipboardIndicatorProps): Element {
   const api = useClipboardContext()
@@ -25,17 +25,25 @@ export function ClipboardIndicator(props: ClipboardIndicatorProps): Element {
   // Seeds swaps its children for `copied` after a copy. Both are these same nodes, built once, so nothing is rebuilt and
   // every change below is a transition that can turn round half way.
   const content = (
-    <span class="grid place-items-center">
-      <span aria-hidden={copied() ? "true" : undefined} class={words({ shown: !copied() })}>
-        {props.children}
+    <>
+      <Mark stroke-width={2.5} class="size-5 shrink-0">
+        <g class={faded({ shown: !copied() })}>
+          <rect x="8.5" y="8.5" width="12.5" height="12.5" rx="2" />
+          <path d={sheet} />
+        </g>
+        <g class={faded({ shown: copied() })}>
+          <path d={tick} pathLength="1" stroke-width={3} class={drawn({ shown: copied() })} />
+        </g>
+      </Mark>
+      <span class="grid">
+        <span aria-hidden={copied() ? "true" : undefined} class={faded({ shown: !copied(), class: words })}>
+          {props.children}
+        </span>
+        <span aria-hidden={copied() ? undefined : "true"} class={faded({ shown: copied(), class: words })}>
+          {props.copied}
+        </span>
       </span>
-      <span aria-hidden={copied() ? undefined : "true"} class={words({ shown: copied(), class: "inline-flex gap-2" })}>
-        <Mark stroke-width={3.5} class="size-5 shrink-0">
-          <path d={tick} pathLength="1" class={drawn({ shown: copied() })} />
-        </Mark>
-        {props.copied}
-      </span>
-    </span>
+    </>
   )
   return (
     <Seed.Indicator
@@ -49,11 +57,16 @@ export function ClipboardIndicator(props: ClipboardIndicatorProps): Element {
   )
 }
 
-const indicator = tv({ base: "inline-flex items-center" })
+// The sheet behind, showing only where it comes out from under the one in front
+const sheet = "M4.5 15.5A1.5 1.5 0 0 1 3 14V5a2 2 0 0 1 2-2h9a1.5 1.5 0 0 1 1.5 1.5"
 
-// The words leaving fade quicker than the ones arriving, so the two never read as one smudge
-const words = tv({
-  base: "col-start-1 row-start-1 items-center transition-[opacity,visibility] ease-smooth",
+const indicator = tv({ base: "inline-flex items-center gap-2" })
+
+const words = "col-start-1 row-start-1 text-center"
+
+// What leaves fades quicker than what arrives, so the two never read as one smudge
+const faded = tv({
+  base: "transition-[opacity,visibility] ease-smooth",
   variants: {
     shown: {
       true: "duration-(--duration-smooth)",
@@ -62,8 +75,8 @@ const words = tv({
   },
 })
 
-// The tick is drawn by moving the dash along it, like a checkbox's. It stays drawn while its words fade out, and is only
-// taken back once they are gone.
+// The tick is drawn by moving the dash along it, like a checkbox's. It stays drawn while it fades out, and is only taken
+// back once it is gone.
 const drawn = tv({
   base: "[stroke-dasharray:1] transition-[stroke-dashoffset] ease-smooth",
   variants: {
