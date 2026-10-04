@@ -1,6 +1,6 @@
 import { AngleSlider as Seed } from "@foliag/seeds/angle-slider"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type AngleSliderMarkerGroupProps = Omit<Seed.MarkerGroupProps, "class"> & {
   class?: string | undefined

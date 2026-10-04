@@ -1,6 +1,6 @@
 import { Select as Seed } from "@foliag/seeds/select"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { fieldBox } from "../internal/field.js"
 
 export type SelectTriggerProps = Omit<Seed.TriggerProps, "class"> & {

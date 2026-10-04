@@ -1,7 +1,7 @@
 import { Tooltip as Seed } from "@foliag/seeds/tooltip"
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { floatingPanel } from "../internal/overlay.js"
 
 export type TooltipContentProps = Omit<Seed.ContentProps, "class" | "children"> & {

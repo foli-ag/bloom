@@ -1,7 +1,7 @@
 import { Pagination as Seed } from "@foliag/seeds/pagination"
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { useCompact } from "./pagination-look.js"
 
 export type PaginationItemProps = Omit<Seed.ItemProps, "class" | "children"> & {

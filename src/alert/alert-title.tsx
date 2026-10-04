@@ -1,7 +1,7 @@
 import { Polymorphic, type PolymorphicProps, type ValidComponent } from "@foliag/seeds/polymorphic"
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type AlertTitleProps<As extends ValidComponent = "p"> = PolymorphicProps<
   As,

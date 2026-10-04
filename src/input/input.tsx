@@ -1,7 +1,7 @@
 import { Polymorphic, type PolymorphicProps, type ValidComponent } from "@foliag/seeds/polymorphic"
 import type { JSX } from "@solidjs/web"
 import { omit, untrack, type Element } from "solid-js"
-import { tv, type VariantProps } from "tailwind-variants"
+import { tv, type VariantProps } from "../internal/variants.js"
 import { fieldBox, fieldFrame, fieldFrameInput } from "../internal/field.js"
 import { forwardRef } from "../internal/pointer.js"
 import { InputEnd } from "./input-end.jsx"

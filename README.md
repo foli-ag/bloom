@@ -74,7 +74,7 @@ import { Checkbox } from "@foliag/bloom/checkbox"
 
 The package ships compiled `.jsx`, so the app builds with the Solid compiler (`@solidjs/vite-plugin`). `theme.css`
 tells Tailwind to scan those files, and a `class` on a component wins over the component's own classes
-(`tailwind-merge`).
+(`cn`).
 
 ## Parts that are buttons
 

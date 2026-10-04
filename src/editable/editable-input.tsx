@@ -1,6 +1,6 @@
 import { Editable as Seed } from "@foliag/seeds/editable"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { fieldFrameInput } from "../internal/field.js"
 
 export type EditableInputProps = Omit<Seed.InputProps, "class"> & {

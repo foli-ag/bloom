@@ -1,6 +1,6 @@
 import { AngleSlider as Seed } from "@foliag/seeds/angle-slider"
 import { omit, untrack, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { createFollowing, forwardRef, notePointer } from "../internal/pointer.js"
 
 export type AngleSliderControlProps = Omit<Seed.ControlProps, "class"> & {

@@ -1,6 +1,6 @@
 import type { JSX } from "@solidjs/web"
 import { onCleanup, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { Chevron } from "../internal/icons.jsx"
 import { useBreadcrumbContext } from "./breadcrumb-context.js"
 

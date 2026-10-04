@@ -1,7 +1,7 @@
 import { ToggleGroup as Seed } from "@foliag/seeds/toggle-group"
 import type { JSX } from "@solidjs/web"
 import { type Accessor, createContext, omit, Show, useContext, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import {
   createPill,
   pill,

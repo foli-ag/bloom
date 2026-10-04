@@ -1,6 +1,6 @@
 import { Editable as Seed } from "@foliag/seeds/editable"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type EditableControlProps = Omit<Seed.ControlProps, "class"> & {
   class?: string | undefined

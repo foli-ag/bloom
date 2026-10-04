@@ -1,7 +1,7 @@
 import { Switch as Seed } from "@foliag/seeds/switch"
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { choiceRow, drawnMark } from "../internal/choice.js"
 import { Mark, tick } from "../internal/icons.jsx"
 

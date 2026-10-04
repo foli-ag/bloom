@@ -1,6 +1,6 @@
 import { Dialog as Seed } from "@foliag/seeds/dialog"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type DialogDescriptionProps = Omit<Seed.DescriptionProps, "class"> & {
   class?: string | undefined

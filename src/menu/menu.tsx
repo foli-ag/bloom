@@ -2,7 +2,7 @@ import { Menu as Seed, useMenuContext } from "@foliag/seeds/menu"
 import type { ValidComponent } from "@foliag/seeds/polymorphic"
 import { Portal, type JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import type { VariantProps } from "tailwind-variants"
+import type { VariantProps } from "../internal/variants.js"
 import { indicatorChevron } from "../internal/disclosure.js"
 import { Chevron, Mark, tick } from "../internal/icons.jsx"
 import {

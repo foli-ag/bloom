@@ -1,6 +1,6 @@
 import { Swap as Seed } from "@foliag/seeds/swap"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type SwapIndicatorProps = Omit<Seed.IndicatorProps, "class"> & {
   class?: string | undefined

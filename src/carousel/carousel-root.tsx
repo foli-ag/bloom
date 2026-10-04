@@ -1,6 +1,6 @@
 import { Carousel as Seed } from "@foliag/seeds/carousel"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { CarouselPeek } from "./carousel-look.js"
 import { translationsFrom, type CarouselTranslations } from "./use-carousel.js"
 

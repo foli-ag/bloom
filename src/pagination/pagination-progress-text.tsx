@@ -1,7 +1,7 @@
 import { usePaginationContext } from "@foliag/seeds/pagination"
 import type { JSX } from "@solidjs/web"
 import { createEffect, createSignal, For, untrack, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { useCompact } from "./pagination-look.js"
 
 export interface PaginationProgressTextDetails {

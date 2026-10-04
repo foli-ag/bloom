@@ -1,7 +1,7 @@
 import { PasswordInput as Seed, usePasswordInputContext } from "@foliag/seeds/password-input"
 import type { JSX } from "@solidjs/web"
 import { createUniqueId, omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { Mark } from "../internal/icons.jsx"
 
 export type PasswordInputIndicatorProps = Omit<Seed.IndicatorProps, "class" | "children" | "fallback"> & {

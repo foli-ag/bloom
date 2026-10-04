@@ -1,7 +1,7 @@
 import { Clipboard as Seed, useClipboardContext } from "@foliag/seeds/clipboard"
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { Mark, tick } from "../internal/icons.jsx"
 
 export type ClipboardIndicatorProps = Omit<Seed.IndicatorProps<"span">, "class" | "children" | "copied" | "as"> & {

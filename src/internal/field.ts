@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants"
+import { tv } from "./variants.js"
 
 /** A field's parts stacked: its label, the field, and what the app puts under it */
 export const fieldRoot = tv({ base: "grid gap-2" })

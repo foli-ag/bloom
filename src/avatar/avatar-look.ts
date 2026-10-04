@@ -1,5 +1,5 @@
 import { createContext, useContext } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type AvatarSize = "sm" | "md" | "lg"
 export type AvatarShape = "circle" | "square"

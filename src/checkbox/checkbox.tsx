@@ -1,7 +1,7 @@
 import { Checkbox as Seed, useCheckboxContext } from "@foliag/seeds/checkbox"
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import {
   type ChoiceParts,
   ChoicePartsContext,

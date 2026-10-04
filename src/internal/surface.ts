@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants"
+import { tv } from "./variants.js"
 
 /**
  * The look of a card: a raised surface, the rounded corners of a card and a 2px edge. A card, a collapsible drawn as a

@@ -10,7 +10,7 @@ import {
   useContext,
   type Element,
 } from "solid-js"
-import { tv, type VariantProps } from "tailwind-variants"
+import { tv, type VariantProps } from "./variants.js"
 import { badgeLook } from "./badge.js"
 import { cross, Mark } from "./icons.jsx"
 

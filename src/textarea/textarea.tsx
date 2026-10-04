@@ -1,6 +1,6 @@
 import { Polymorphic, type PolymorphicProps, type ValidComponent } from "@foliag/seeds/polymorphic"
 import { createEffect, omit, onSettled, untrack, type Element } from "solid-js"
-import { tv, type VariantProps } from "tailwind-variants"
+import { tv, type VariantProps } from "../internal/variants.js"
 import { fieldBox } from "../internal/field.js"
 import { forwardRef } from "../internal/pointer.js"
 

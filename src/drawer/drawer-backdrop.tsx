@@ -1,7 +1,7 @@
 import { Drawer as Seed } from "@foliag/seeds/drawer"
 import { Portal } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type DrawerBackdropProps = Omit<Seed.BackdropProps, "class"> & {
   /** Merged after the component's own classes, and wins over them */

@@ -1,6 +1,6 @@
 import type { JSX } from "@solidjs/web"
 import type { Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { useBreadcrumbContext } from "./breadcrumb-context.js"
 
 export interface BreadcrumbListProps {

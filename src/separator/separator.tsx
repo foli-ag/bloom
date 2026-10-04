@@ -1,6 +1,6 @@
 import type { JSX } from "@solidjs/web"
 import { children, createUniqueId, omit, Show, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type SeparatorProps = Omit<JSX.HTMLAttributes<HTMLDivElement>, "children" | "class" | "role"> & {
   /** Across, the default, or `vertical` between things in a row */

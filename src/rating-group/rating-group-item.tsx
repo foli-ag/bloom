@@ -1,6 +1,6 @@
 import { RatingGroup as Seed } from "@foliag/seeds/rating-group"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { Mark } from "../internal/icons.jsx"
 
 export type RatingGroupItemProps = Omit<Seed.ItemProps, "class" | "children"> & {

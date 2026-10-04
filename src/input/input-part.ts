@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 /**
  * `Input.Start` and `Input.End`, placed by `order` so the app can write them in any order, on logical sides that swap in

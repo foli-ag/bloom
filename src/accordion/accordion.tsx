@@ -1,7 +1,7 @@
 import { Accordion as Seed } from "@foliag/seeds/accordion"
 import type { JSX } from "@solidjs/web"
 import { createContext, omit, useContext, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { disclosureContent, triggerChevron } from "../internal/disclosure.js"
 import { Chevron } from "../internal/icons.jsx"
 import { cardSurface } from "../internal/surface.js"

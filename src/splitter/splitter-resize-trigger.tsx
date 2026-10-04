@@ -1,6 +1,6 @@
 import { Splitter as Seed } from "@foliag/seeds/splitter"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type SplitterResizeTriggerProps = Omit<Seed.ResizeTriggerProps, "class" | "aria-label"> & {
   /**

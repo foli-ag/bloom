@@ -1,7 +1,7 @@
 import { HoverCard as Seed } from "@foliag/seeds/hover-card"
 import { Portal } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { floatingPositioner } from "../internal/overlay.js"
 
 export type HoverCardPositionerProps = Omit<Seed.PositionerProps, "class"> & {

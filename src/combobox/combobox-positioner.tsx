@@ -1,7 +1,7 @@
 import { Combobox as Seed, useComboboxContext } from "@foliag/seeds/combobox"
 import { Portal, type JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { dropdownPanel, floatingPositioner } from "../internal/overlay.js"
 
 export type ComboboxPositionerProps = Omit<Seed.PositionerProps, "class" | "children"> & {

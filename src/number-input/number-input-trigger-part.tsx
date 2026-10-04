@@ -1,5 +1,5 @@
 import type { JSX } from "@solidjs/web"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { Mark } from "../internal/icons.jsx"
 
 /**

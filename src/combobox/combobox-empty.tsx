@@ -1,7 +1,7 @@
 import { useComboboxContext } from "@foliag/seeds/combobox"
 import type { JSX } from "@solidjs/web"
 import { Show, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { useListLoading } from "../internal/list-loading.jsx"
 
 export interface ComboboxEmptyProps {

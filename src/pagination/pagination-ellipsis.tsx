@@ -1,6 +1,6 @@
 import { Pagination as Seed } from "@foliag/seeds/pagination"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { Mark } from "../internal/icons.jsx"
 import { useCompact } from "./pagination-look.js"
 

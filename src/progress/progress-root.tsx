@@ -1,6 +1,6 @@
 import { Progress as Seed } from "@foliag/seeds/progress"
 import { createSignal, omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { ProgressLabelled } from "./progress-labelled.js"
 import { ProgressLookContext, toneColors, type ProgressLook, type ProgressTone } from "./progress-look.js"
 import type { ProgressTranslations } from "./use-progress.js"

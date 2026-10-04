@@ -1,6 +1,6 @@
 import { Progress as Seed } from "@foliag/seeds/progress"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type ProgressCircleRangeProps = Omit<Seed.CircleRangeProps, "class"> & {
   class?: string | undefined

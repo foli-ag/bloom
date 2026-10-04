@@ -1,7 +1,7 @@
 import { Avatar as Seed } from "@foliag/seeds/avatar"
 import type { JSX } from "@solidjs/web"
 import { createEffect, createSignal, omit, Show, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { avatarTile, entry, useAvatarGroup, type AvatarShape, type AvatarSize } from "./avatar-look.js"
 
 export type AvatarProps = Omit<Seed.RootProps, "children" | "class"> & {

@@ -1,6 +1,6 @@
 import { TreeView as Seed } from "@foliag/seeds/tree-view"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type TreeViewBranchIndentGuideProps = Omit<Seed.BranchIndentGuideProps, "class" | "children"> & {
   class?: string | undefined

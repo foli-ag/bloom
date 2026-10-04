@@ -1,6 +1,6 @@
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { AvatarGroupContext, type AvatarSize } from "./avatar-look.js"
 
 export interface AvatarGroupProps extends Omit<JSX.HTMLAttributes<HTMLUListElement>, "class" | "children"> {

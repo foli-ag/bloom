@@ -1,6 +1,6 @@
 import { Splitter as Seed } from "@foliag/seeds/splitter"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type SplitterPanelProps = Omit<Seed.PanelProps, "class"> & {
   class?: string | undefined

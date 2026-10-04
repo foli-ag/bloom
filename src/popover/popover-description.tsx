@@ -1,6 +1,6 @@
 import { Popover as Seed } from "@foliag/seeds/popover"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type PopoverDescriptionProps = Omit<Seed.DescriptionProps, "class"> & {
   class?: string | undefined

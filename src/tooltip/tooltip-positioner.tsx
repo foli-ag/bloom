@@ -1,7 +1,7 @@
 import { Tooltip as Seed } from "@foliag/seeds/tooltip"
 import { Portal } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { floatingPositioner } from "../internal/overlay.js"
 
 export type TooltipPositionerProps = Omit<Seed.PositionerProps, "class"> & {

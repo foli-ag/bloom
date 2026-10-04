@@ -2,7 +2,7 @@ import type { ValidComponent } from "@foliag/seeds/polymorphic"
 import { Steps as Seed, useStepsContext, useStepsItemContext } from "@foliag/seeds/steps"
 import type { JSX } from "@solidjs/web"
 import { createMemo, omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { Mark, tick } from "../internal/icons.jsx"
 
 export type RootProps = Omit<Seed.RootProps, "class"> & {

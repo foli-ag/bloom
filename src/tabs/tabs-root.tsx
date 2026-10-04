@@ -1,6 +1,6 @@
 import { Tabs as Seed } from "@foliag/seeds/tabs"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { type TabsVariant, TabsVariantContext } from "./tabs-variant.js"
 
 export type TabsRootProps = Omit<Seed.RootProps, "class"> & {

@@ -1,6 +1,6 @@
 import { TreeView as Seed } from "@foliag/seeds/tree-view"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { indicatorChevron } from "../internal/disclosure.js"
 import { Chevron, Mark } from "../internal/icons.jsx"
 

@@ -1,7 +1,7 @@
 import { Toggle as Seed } from "@foliag/seeds/toggle"
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type ToggleRootProps = Omit<Seed.RootProps, "class" | "children"> & {
   /**

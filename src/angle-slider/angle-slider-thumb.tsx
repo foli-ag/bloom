@@ -1,6 +1,6 @@
 import { AngleSlider as Seed, useAngleSliderContext } from "@foliag/seeds/angle-slider"
 import { createMemo, omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type AngleSliderThumbProps = Omit<Seed.ThumbProps, "class" | "children"> & {
   /**

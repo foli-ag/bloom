@@ -1,6 +1,6 @@
 import { Combobox as Seed, useComboboxContext } from "@foliag/seeds/combobox"
 import { omit, untrack, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { fieldFrameInput } from "../internal/field.js"
 import { forwardRef } from "../internal/pointer.js"
 

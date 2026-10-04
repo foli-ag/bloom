@@ -1,6 +1,6 @@
 import type { JSX } from "@solidjs/web"
 import type { Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { actions } from "../internal/overlay.js"
 import { useDialogLook } from "./dialog-look.js"
 

@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants"
+import { tv } from "./variants.js"
 
 /**
  * The look of a badge, shared with the chips of a select and a combobox, so a status in a list and a choice in a field

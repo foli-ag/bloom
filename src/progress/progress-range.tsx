@@ -1,6 +1,6 @@
 import { Progress as Seed, useProgressContext } from "@foliag/seeds/progress"
 import { createMemo, omit, Repeat, Show, untrack, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { useProgressLook } from "./progress-look.js"
 
 export type ProgressRangeProps = Omit<Seed.RangeProps, "class"> & {

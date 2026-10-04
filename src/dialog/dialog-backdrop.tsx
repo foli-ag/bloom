@@ -1,7 +1,7 @@
 import { Dialog as Seed } from "@foliag/seeds/dialog"
 import { Portal } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type DialogBackdropProps = Omit<Seed.BackdropProps, "class"> & {
   /** Merged after the component's own classes, and wins over them */

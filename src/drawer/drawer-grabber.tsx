@@ -1,6 +1,6 @@
 import { Drawer as Seed } from "@foliag/seeds/drawer"
 import { omit, untrack, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type DrawerGrabberProps = Omit<Seed.GrabberProps, "class"> & {
   /** A `Grabber.Indicator` */

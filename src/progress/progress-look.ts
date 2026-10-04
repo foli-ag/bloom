@@ -1,5 +1,5 @@
 import { createContext, useContext, type Accessor } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 /** What the fill says about how things are going. The words that say it are the app's, in the label and the value. */
 export type ProgressTone = "primary" | "success" | "warning" | "danger"

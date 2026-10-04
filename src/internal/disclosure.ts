@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants"
+import { tv } from "./variants.js"
 
 /**
  * The chevron of an `Indicator` part: a collapsible's, an accordion item's, a select's, a menu's, a popover's. It

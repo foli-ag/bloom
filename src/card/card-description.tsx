@@ -1,7 +1,7 @@
 import { Polymorphic, type PolymorphicProps, type ValidComponent } from "@foliag/seeds/polymorphic"
 import type { JSX } from "@solidjs/web"
 import { omit, onCleanup, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { useCardContext } from "./card-context.js"
 
 export type CardDescriptionProps<As extends ValidComponent = "p"> = PolymorphicProps<

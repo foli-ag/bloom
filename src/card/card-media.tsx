@@ -1,7 +1,7 @@
 import { Polymorphic } from "@foliag/seeds/polymorphic"
 import type { JSX } from "@solidjs/web"
 import type { Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { useCardContext } from "./card-context.js"
 
 export interface CardMediaProps {

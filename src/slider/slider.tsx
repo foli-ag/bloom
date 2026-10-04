@@ -1,7 +1,7 @@
 import { Slider as Seed, useSliderContext } from "@foliag/seeds/slider"
 import type { JSX } from "@solidjs/web"
 import { createMemo, createUniqueId, For, omit, Show, untrack, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { createFollowing, forwardRef, notePointer } from "../internal/pointer.js"
 
 export type RootProps = Omit<Seed.RootProps, "class"> & {

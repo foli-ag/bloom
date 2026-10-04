@@ -2,7 +2,7 @@ import { NavigationMenu as Seed, useNavigationMenuContext } from "@foliag/seeds/
 import type { ValidComponent } from "@foliag/seeds/polymorphic"
 import type { JSX } from "@solidjs/web"
 import { createContext, createSignal, omit, Show, useContext, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { triggerChevron } from "../internal/disclosure.js"
 import { Chevron } from "../internal/icons.jsx"
 

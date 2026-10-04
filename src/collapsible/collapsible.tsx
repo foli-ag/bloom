@@ -1,7 +1,7 @@
 import { Collapsible as Seed } from "@foliag/seeds/collapsible"
 import type { JSX } from "@solidjs/web"
 import { createContext, omit, Show, useContext, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { disclosureContent, triggerChevron } from "../internal/disclosure.js"
 import { Chevron } from "../internal/icons.jsx"
 import { cardSurface } from "../internal/surface.js"

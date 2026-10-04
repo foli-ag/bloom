@@ -1,6 +1,6 @@
 import { Progress as Seed, useProgressContext } from "@foliag/seeds/progress"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { useProgressLabelled } from "./progress-labelled.js"
 import { useProgressLook } from "./progress-look.js"
 

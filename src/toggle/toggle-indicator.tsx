@@ -1,7 +1,7 @@
 import { Toggle as Seed } from "@foliag/seeds/toggle"
 import type { JSX } from "@solidjs/web"
 import { omit, Show, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { Mark, tick } from "../internal/icons.jsx"
 
 export type ToggleIndicatorProps = Omit<Seed.IndicatorProps<"span">, "class" | "children" | "fallback" | "as"> & {

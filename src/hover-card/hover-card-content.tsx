@@ -1,6 +1,6 @@
 import { HoverCard as Seed } from "@foliag/seeds/hover-card"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { floatingPanel } from "../internal/overlay.js"
 
 export type HoverCardContentProps = Omit<Seed.ContentProps, "class"> & {

@@ -1,6 +1,6 @@
 import { TreeView as Seed, type TreeNode } from "@foliag/seeds/tree-view"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { translations } from "./use-tree-view.js"
 
 export type TreeViewRootProps<T extends TreeNode = TreeNode> = Omit<

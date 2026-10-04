@@ -1,7 +1,7 @@
 import { usePresence } from "@foliag/seeds/presence"
 import type { JSX } from "@solidjs/web"
 import { createSignal, omit, Show, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import type { StatusTone } from "../internal/icons.jsx"
 import { AlertContext } from "./alert-context.js"
 

@@ -1,6 +1,6 @@
 import type { JSX } from "@solidjs/web"
 import { omit, Repeat, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type SkeletonProps = Omit<JSX.HTMLAttributes<HTMLDivElement>, "children" | "class"> & {
   /**

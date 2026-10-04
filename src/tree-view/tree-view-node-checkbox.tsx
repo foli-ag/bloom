@@ -1,7 +1,7 @@
 import { TreeView as Seed } from "@foliag/seeds/tree-view"
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type TreeViewNodeCheckboxProps = Omit<Seed.NodeCheckboxProps<"span">, "class" | "as" | "aria-label"> & {
   /** The node's words again, such as "Les Grands Champs". A box takes no name from the row, so it is required. */

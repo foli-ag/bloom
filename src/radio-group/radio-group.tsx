@@ -1,7 +1,7 @@
 import { RadioGroup as Seed, useRadioGroupContext } from "@foliag/seeds/radio-group"
 import type { JSX } from "@solidjs/web"
 import { type Accessor, createContext, omit, useContext, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import {
   ChoicePartsContext,
   choiceDescription,

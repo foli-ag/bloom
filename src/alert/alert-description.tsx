@@ -1,6 +1,6 @@
 import type { JSX } from "@solidjs/web"
 import type { Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export interface AlertDescriptionProps {
   /** What it means and what to do, such as "Vos saisies sont gardées sur le téléphone." */

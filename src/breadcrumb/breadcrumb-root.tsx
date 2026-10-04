@@ -1,6 +1,6 @@
 import type { JSX } from "@solidjs/web"
 import { createSignal, omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { BreadcrumbContext } from "./breadcrumb-context.js"
 
 type Named =

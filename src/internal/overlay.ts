@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants"
+import { tv } from "./variants.js"
 
 /**
  * What the floating parts share. Positioning is zag's: it sets `position`, `top`, `left` and a `transform` on the

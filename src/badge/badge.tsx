@@ -1,7 +1,7 @@
 import { Polymorphic, type PolymorphicProps, type ValidComponent } from "@foliag/seeds/polymorphic"
 import type { JSX } from "@solidjs/web"
 import { omit, Show, type Element } from "solid-js"
-import { tv, type VariantProps } from "tailwind-variants"
+import { tv, type VariantProps } from "../internal/variants.js"
 import { badgeLook } from "../internal/badge.js"
 import { StatusMark } from "../internal/icons.jsx"
 

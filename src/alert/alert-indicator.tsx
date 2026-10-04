@@ -1,5 +1,5 @@
 import type { Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { StatusMark } from "../internal/icons.jsx"
 import { useAlertContext } from "./alert-context.js"
 

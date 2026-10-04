@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants"
+import { tv } from "./variants.js"
 
 /**
  * A row of the tree, a branch's control or an item: 48px tall, stepped in by 24px a level from the `--depth` zag sets

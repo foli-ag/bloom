@@ -8,7 +8,7 @@ import {
   type Setter,
   useContext,
 } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "./variants.js"
 import { cardSurface } from "./surface.js"
 
 /**

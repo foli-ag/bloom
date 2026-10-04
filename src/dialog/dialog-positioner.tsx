@@ -1,7 +1,7 @@
 import { Dialog as Seed } from "@foliag/seeds/dialog"
 import { Portal } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { useDialogLook } from "./dialog-look.js"
 
 export type DialogPositionerProps = Omit<Seed.PositionerProps, "class"> & {

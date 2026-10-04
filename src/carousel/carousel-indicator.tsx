@@ -1,6 +1,6 @@
 import { Carousel as Seed, useCarouselContext } from "@foliag/seeds/carousel"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type CarouselIndicatorProps = Omit<Seed.IndicatorProps, "class" | "children"> & {
   class?: string | undefined

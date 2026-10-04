@@ -1,7 +1,7 @@
 import { Tabs as Seed } from "@foliag/seeds/tabs"
 import type { JSX } from "@solidjs/web"
 import { omit, Show, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { segment, segmentWords } from "../internal/choice.js"
 import { useTabsVariant } from "./tabs-variant.js"
 

@@ -1,6 +1,6 @@
 import { PinInput as Seed } from "@foliag/seeds/pin-input"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { fieldBox } from "../internal/field.js"
 
 export type PinInputInputProps = Omit<Seed.InputProps, "class"> & {

@@ -1,6 +1,6 @@
 import { Clipboard as Seed } from "@foliag/seeds/clipboard"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { fieldBox } from "../internal/field.js"
 
 export type ClipboardInputProps = Omit<Seed.InputProps, "class"> & {

@@ -1,7 +1,7 @@
 import { Popover as Seed } from "@foliag/seeds/popover"
 import type { JSX } from "@solidjs/web"
 import { omit, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 export type PopoverTitleProps = Omit<Seed.TitleProps, "class" | "children"> & {
   /** What the popover is about. It names the popover for a screen reader. */

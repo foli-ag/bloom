@@ -1,6 +1,6 @@
 import { NumberInput as Seed, useNumberInputContext } from "@foliag/seeds/number-input"
 import { createEffect, omit, untrack, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { fieldBox, fieldFrameInput } from "../internal/field.js"
 import { forwardRef } from "../internal/pointer.js"
 import { useNumberInputVariant } from "./number-input-variant.js"

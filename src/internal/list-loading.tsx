@@ -1,6 +1,6 @@
 import type { JSX } from "@solidjs/web"
 import { createContext, Repeat, Show, useContext, type Accessor, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "./variants.js"
 
 /** Whether a select's or a combobox's options are being fetched, as its `Root` was told with `loading` */
 export const ListLoadingContext = /* @__PURE__ */ createContext<Accessor<boolean>>(() => false)

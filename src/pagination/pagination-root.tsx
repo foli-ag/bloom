@@ -1,6 +1,6 @@
 import { Pagination as Seed } from "@foliag/seeds/pagination"
 import { omit, untrack, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { forwardRef } from "../internal/pointer.js"
 import { keepFocus, PaginationLook, type PaginationCompact } from "./pagination-look.js"
 import { translationsFrom, type PaginationTranslations } from "./use-pagination.js"

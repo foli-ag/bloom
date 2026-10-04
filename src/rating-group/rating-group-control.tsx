@@ -1,7 +1,7 @@
 import { RatingGroup as Seed, useRatingGroupContext } from "@foliag/seeds/rating-group"
 import type { JSX } from "@solidjs/web"
 import { For, omit, Show, untrack, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { forwardRef, notePointer } from "../internal/pointer.js"
 import { RatingGroupItem } from "./rating-group-item.jsx"
 

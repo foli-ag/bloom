@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 
 /** The mark of an appearing button fades in as the button grows, on `motion-press`'s pop spring */
 export const editableTriggerMark =

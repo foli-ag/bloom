@@ -2,7 +2,7 @@ import { Progress as Seed, useProgressContext } from "@foliag/seeds/progress"
 import { Presence } from "@foliag/seeds/presence"
 import type { JSX } from "@solidjs/web"
 import { createMemo, For, omit, untrack, type Element } from "solid-js"
-import { tv } from "tailwind-variants"
+import { tv } from "../internal/variants.js"
 import { Mark, tick } from "../internal/icons.jsx"
 import { useProgressLook, type ProgressTone } from "./progress-look.js"
 
