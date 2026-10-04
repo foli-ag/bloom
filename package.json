@@ -44,6 +44,10 @@
       "types": "./dist/combobox/index.d.ts",
       "default": "./dist/combobox/index.js"
     },
+    "./dialog": {
+      "types": "./dist/dialog/index.d.ts",
+      "default": "./dist/dialog/index.js"
+    },
     "./input": {
       "types": "./dist/input/index.d.ts",
       "default": "./dist/input/index.js"
