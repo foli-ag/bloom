@@ -13,7 +13,8 @@ export type PinInputRootProps = Omit<Seed.RootProps, "class" | "translations"> &
 /**
  * A short code typed one character to a box, such as the one an SMS sends. Focus moves on as each is typed and back on
  * Backspace, and pasting the whole code fills every box. `otp` lets a phone offer the code from the SMS it just
- * received. Digits only by default, with the phone's number pad.
+ * received. Digits only by default, with the phone's number pad. An empty box is blank, not zag's circle, unless
+ * `placeholder` sets a character.
  *
  * Its parts stack with even gaps. `HiddenInput` carries the code into a form as one string, under `name`.
  *
@@ -27,5 +28,5 @@ export type PinInputRootProps = Omit<Seed.RootProps, "class" | "translations"> &
  * </PinInput.Root>
  */
 export function PinInputRoot(props: PinInputRootProps): Element {
-  return <Seed.Root {...omit(props, "class")} class={fieldRoot({ class: props.class })} />
+  return <Seed.Root placeholder="" {...omit(props, "class")} class={fieldRoot({ class: props.class })} />
 }

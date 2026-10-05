@@ -14,7 +14,10 @@ export interface PinInputTranslations {
 
 export type UsePinInputProps = Omit<SeedsProps, "translations"> & { translations: PinInputTranslations }
 
-/** Seeds' `usePinInput`, for a `PinInput.RootProvider`, with the names of the boxes required as `PinInput.Root` does */
+/**
+ * Seeds' `usePinInput`, for a `PinInput.RootProvider`, with the names of the boxes required and empty boxes left blank
+ * as `PinInput.Root` does
+ */
 export function usePinInput(props: UsePinInputProps | (() => UsePinInputProps)): UsePinInputReturn {
-  return useSeedsPinInput(props)
+  return useSeedsPinInput(() => ({ placeholder: "", ...(typeof props === "function" ? props() : props) }))
 }
