@@ -1,6 +1,6 @@
 ---
 name: bloom-parts
-description: How the parts of @foliag/bloom components are named, styled, split into files and exported. Each one is the seeds part of the same name with bloom's look, button-like parts take their look from `as={Button}`, and no part ships words. Use when adding a component or a part to bloom, translating a seeds or Ark UI example to bloom, or reviewing a bloom API.
+description: How the parts of @foliag/bloom components are named, styled, split into files and exported, and what state a part may keep (no signal zag or CSS already holds, no write while rendering, ARIA ids pointed at unconditionally). Each one is the seeds part of the same name with bloom's look, button-like parts take their look from `as={Button}`, and no part ships words. Use when adding a component or a part to bloom, translating a seeds or Ark UI example to bloom, or reviewing a bloom API.
 ---
 
 # Bloom parts
@@ -42,6 +42,53 @@ look from what it renders as, usually a `Button`, and the variants go with it:
 Never copy `Button`'s props onto a part. The same part can then render as a link, an avatar or a card the app already
 has. A part whose look is the component's own, a select's field, an accordion's title row, a step's button, a
 navigation entry, is styled.
+
+## State: only what CSS and zag cannot know
+
+A part renders on the server and hydrates, so what it shows comes from its props, zag's `api()` and CSS, and a signal
+is the last resort:
+
+1. **A signal holds a fact nothing else holds, and bloom reads it.** Zag already holds the value, the open state and
+   the focus, and puts them on the parts (`data-state`, `data-highlighted`, `aria-*`): read `api()` or style on those,
+   never mirror them in a signal.
+2. **No part writes a signal while it renders.** The component body also runs during a server render, where Solid
+   reports the write (`SERVER_WRITE`) and will refuse it. A signal is written from an event, an effect, `onSettled` or
+   a frame.
+3. **A part never reports itself to its root.** What depends on which parts are there or how many comes from CSS on the
+   root: `:has()`, a sibling chain, `group-*`, or a variant in `theme.css` (`trail-folded` folds a breadcrumb of four
+   items or more). It then holds from the server's HTML on, where a count kept in a signal only lands after hydration.
+4. **An ARIA link points at the part's id whether or not the part is there.** A card that is a link names itself by
+   `aria-labelledby={titleId}`, a progress bar by its label's id, a checkbox is described by its description's id, as
+   zag itself points a checkbox's input at its label's id. Without the part, the id is nowhere on the page, the browser
+   skips the reference and falls back (the row's `<label>`, the bar's value), and axe reports it for review, not as a
+   violation.
+5. **A `data-*` attribute or a class computed in JS carries a fact CSS cannot see**, and says which: time since mount,
+   an image the browser already had, a measured box, the direction of a change, a toggle zag does not hold. A look
+   that follows zag's state reads zag's attribute on the part or an ancestor instead: `in-data-copied:` for the
+   clipboard's indicator, `group-data-[state=visible]/indicator:` for the password's, `group-data-[state=open]/control:`
+   for the combobox's chevron, `group-has-[…[data-state=on]]/track:` for the toggle group's pill.
+
+What passes these rules, and why, so a review does not undo it:
+
+- **A root's variant passed down in a context** where a CSS ancestor selector would also match an outer root of the
+  same kind (accordion, collapsible, radio group, toggle group, tabs, navigation menu nest), or where the variant
+  changes which elements render (`NumberInput`'s stepper, a segmented progress, an avatar in a group, a drawer's root
+  that renders no element).
+- **Signals for facts only the browser knows:** a measured box (the pill's), a change's direction or timing
+  (`Steps.useArrival`, the angle slider's turn, the pagination's pages rolling out), the frames since mount (`settled`
+  in chips, the editable area and the pill, the navigation menu's `data-initial`), an image already cached (`Avatar`),
+  a pointer that travelled past a tap (`createFollowing`), the element a card renders as (`Card.Root`'s `target`,
+  read in `onSettled`), a toggle zag does not hold (`Breadcrumb`'s `expanded`, `Alert`'s own open state).
+- **Attributes set from an event** on the element itself: the input modality (`data-pointer`), a dialog's swell on a
+  press outside, a drawer's grab under a finger.
+- **A wrapper bloom adds that copies zag's open state as `data-state`, as a plain expression from `api()`**, where zag
+  puts none on it (the menu's, select's, popover's and combobox's positioners), so the `presence-*` utilities can key
+  on it.
+- **ARIA read from `api()`**: `aria-hidden` swaps between two sets of words, the carousel indicator's `aria-current`.
+- **A context that carries an action** (`AlertContext.close`, `BreadcrumbContext.expand`, a chip's `leave`), never a
+  raw setter.
+- **`ownedWrite` is not used.** Writes from `onSettled`, an observer, a frame or `transitionend` need no opt-in, and
+  the option would also hide a write made while rendering.
 
 ## Words: none
 
