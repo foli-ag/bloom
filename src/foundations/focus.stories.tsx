@@ -93,6 +93,8 @@ export const TestRingsStayInside: Story = {
     const seen = new Set<Element>()
     for (;;) {
       await userEvent.tab()
+      // A toggle group's root takes the focus first and hands it to its first item on the next frame
+      await new Promise(requestAnimationFrame)
       const focused = document.activeElement
       if (!focused || !canvasElement.contains(focused) || seen.has(focused)) break
       seen.add(focused)
