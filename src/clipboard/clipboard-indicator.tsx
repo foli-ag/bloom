@@ -27,19 +27,19 @@ export function ClipboardIndicator(props: ClipboardIndicatorProps): Element {
   const content = (
     <>
       <Mark stroke-width={2.5} class="size-5 shrink-0">
-        <g class={faded({ shown: !copied() })}>
+        <g class={uncopied()}>
           <rect x="8.5" y="8.5" width="12.5" height="12.5" rx="2" />
           <path d={sheet} />
         </g>
-        <g class={faded({ shown: copied() })}>
-          <path d={tick} pathLength="1" stroke-width={3} class={drawn({ shown: copied() })} />
+        <g class={copiedLook()}>
+          <path d={tick} pathLength="1" stroke-width={3} class={drawn()} />
         </g>
       </Mark>
       <span class="grid">
-        <span aria-hidden={copied() ? "true" : undefined} class={faded({ shown: !copied(), class: words })}>
+        <span aria-hidden={copied() ? "true" : undefined} class={uncopied({ class: words })}>
           {props.children}
         </span>
-        <span aria-hidden={copied() ? undefined : "true"} class={faded({ shown: copied(), class: words })}>
+        <span aria-hidden={copied() ? undefined : "true"} class={copiedLook({ class: words })}>
           {props.copied}
         </span>
       </span>
@@ -64,25 +64,27 @@ const indicator = tv({ base: "inline-flex items-center gap-2" })
 
 const words = "col-start-1 row-start-1 text-center"
 
-// What leaves fades quicker than what arrives, so the two never read as one smudge
-const faded = tv({
-  base: "transition-[opacity,visibility] ease-smooth",
-  variants: {
-    shown: {
-      true: "duration-(--duration-smooth)",
-      false: "invisible opacity-0 duration-(--duration-exit)",
-    },
-  },
+// What leaves fades quicker than what arrives, so the two never read as one smudge. Zag marks the trigger, and the
+// root, `data-copied` for the moment after a copy.
+const uncopied = tv({
+  base: [
+    "transition-[opacity,visibility] duration-(--duration-smooth) ease-smooth",
+    "in-data-copied:invisible in-data-copied:opacity-0 in-data-copied:duration-(--duration-exit)",
+  ],
+})
+
+const copiedLook = tv({
+  base: [
+    "invisible opacity-0 transition-[opacity,visibility] duration-(--duration-exit) ease-smooth",
+    "in-data-copied:visible in-data-copied:opacity-100 in-data-copied:duration-(--duration-smooth)",
+  ],
 })
 
 // The tick is drawn by moving the dash along it, like a checkbox's. It stays drawn while it fades out, and is only taken
 // back once it is gone.
 const drawn = tv({
-  base: "[stroke-dasharray:1] transition-[stroke-dashoffset] ease-smooth",
-  variants: {
-    shown: {
-      true: "[stroke-dashoffset:0] duration-(--duration-smooth)",
-      false: "[stroke-dashoffset:1] duration-0 delay-(--duration-exit)",
-    },
-  },
+  base: [
+    "[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-0 delay-(--duration-exit) ease-smooth",
+    "in-data-copied:[stroke-dashoffset:0] in-data-copied:duration-(--duration-smooth) in-data-copied:delay-0",
+  ],
 })

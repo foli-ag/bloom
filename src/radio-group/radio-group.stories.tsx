@@ -206,7 +206,7 @@ export const TestPlainWordsName: Story = {
   name: "Test: Plain words name the choice",
   play: ({ canvasElement }) => {
     const mais = within(canvasElement).getByRole("radio", { name: "Maïs" })
-    expect(mais).not.toHaveAttribute("aria-describedby")
+    expect(mais).not.toHaveAccessibleDescription()
   },
 }
 

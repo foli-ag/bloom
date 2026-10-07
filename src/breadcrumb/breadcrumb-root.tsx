@@ -35,11 +35,9 @@ export type BreadcrumbRootProps = Omit<JSX.HTMLAttributes<HTMLElement>, "class" 
  */
 export function BreadcrumbRoot(props: BreadcrumbRootProps): Element {
   const rest = omit(props, "class", "children")
-  // Items count themselves as they mount, a write from inside a component, the one place this is wanted
-  const [items, setItems] = createSignal(0, { ownedWrite: true })
   const [expanded, setExpanded] = createSignal(false)
   return (
-    <BreadcrumbContext value={{ items, setItems, expanded, expand: () => setExpanded(true) }}>
+    <BreadcrumbContext value={{ expanded, expand: () => setExpanded(true) }}>
       <nav {...rest} data-scope="breadcrumb" data-part="root" class={root({ class: props.class })}>
         {props.children}
       </nav>

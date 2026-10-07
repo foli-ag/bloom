@@ -1,5 +1,4 @@
-import { type Accessor, createContext, createSignal, createUniqueId, onCleanup, onSettled, useContext } from "solid-js"
-import { createPresence, type Mark } from "./presence.js"
+import { createContext, createSignal, onSettled } from "solid-js"
 import { tv } from "./variants.js"
 import { cardSurface } from "./surface.js"
 
@@ -120,36 +119,12 @@ export const choiceMedia = tv({
 })
 
 /**
- * What the words of a choice are made of, shared by its row or tile and the parts inside it. A title part (a radio's
- * `Item.Text`, a checkbox's `Label`) says it is there, and the control is then named by it alone, where it would
- * otherwise be named by the whole column: with a description in the column, the description would be read in the name.
- * A `Description` says it is there, and the control is described by it. Both mark themselves as they mount
- * (`createPresence`).
+ * The id a choice's `Description` takes, which its control is always described by. Zag names the control by the id of
+ * its title part (a radio's `Item.Text`, a checkbox's `Label`), so with one it is named by it alone. Without one that
+ * id is nowhere on the page, and the control is named by the row, the `<label>` it sits in: the whole column of words,
+ * a description in it included.
  */
-export interface ChoiceParts {
-  titled: Accessor<boolean>
-  setTitled: Mark
-  described: Accessor<boolean>
-  setDescribed: Mark
-  descriptionId: string
-}
-
-export const ChoicePartsContext = /* @__PURE__ */ createContext<ChoiceParts | undefined>(undefined)
-
-export function createChoiceParts(): ChoiceParts {
-  const [titled, setTitled] = createPresence()
-  const [described, setDescribed] = createPresence()
-  return { titled, setTitled, described, setDescribed, descriptionId: createUniqueId() }
-}
-
-/** Marks a title or a description as there for as long as it is */
-export function useChoicePart(kind: "title" | "description"): ChoiceParts | undefined {
-  const parts = useContext(ChoicePartsContext)
-  const set = kind === "title" ? parts?.setTitled : parts?.setDescribed
-  set?.(true)
-  onCleanup(() => set?.(false))
-  return parts
-}
+export const ChoiceDescriptionId = /* @__PURE__ */ createContext<string | undefined>(undefined)
 
 /**
  * The track of a segmented control, a toggle group's or the tabs': a 2px edge that reaches 3:1 against the page,
@@ -251,13 +226,15 @@ export const pillMiddle = tv({
 
 /**
  * Behind the pill of a control zag gives no indicator, a toggle group's: it fades the pill out when nothing is chosen
- * and in where the next choice lands, without sliding from where it was. It fades only once the control has been on
+ * and in where the next choice lands, without sliding from where it was. Whether an item is on is read from the items
+ * zag marks `data-state="on"`, inside the track marked `group/track`. It fades only once the control has been on
  * the screen for two frames, so a pill there from the start is simply there.
  */
 export const pillPresence = tv({
   base: [
-    "pointer-events-none absolute inset-0 -z-10 opacity-0 data-[state=on]:opacity-100",
-    "data-settled:[transition:opacity_var(--duration-exit)_var(--ease-smooth)] data-settled:data-[state=on]:[transition:opacity_var(--duration-smooth)_var(--ease-smooth)]",
+    "pointer-events-none absolute inset-0 -z-10 opacity-0 group-has-[[data-scope=toggle-group][data-part=item][data-state=on]]/track:opacity-100",
+    "data-settled:[transition:opacity_var(--duration-exit)_var(--ease-smooth)]",
+    "data-settled:group-has-[[data-scope=toggle-group][data-part=item][data-state=on]]/track:[transition:opacity_var(--duration-smooth)_var(--ease-smooth)]",
   ],
 })
 
@@ -276,13 +253,11 @@ interface Box {
  */
 export function createPill(find: (track: HTMLElement) => HTMLElement | null) {
   const [box, setBox] = createSignal<Box | null>(null, {
-    ownedWrite: true,
     equals: (a, b) =>
       a === b || (!!a && !!b && a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height),
   })
-  const [moving, setMoving] = createSignal(false, { ownedWrite: true })
-  const [settled, setSettled] = createSignal(false, { ownedWrite: true })
-  const [shown, setShown] = createSignal(false, { ownedWrite: true })
+  const [moving, setMoving] = createSignal(false)
+  const [settled, setSettled] = createSignal(false)
   let presence: HTMLElement | undefined
   let shape: HTMLElement | undefined
   onSettled(() => {
@@ -300,7 +275,6 @@ export function createPill(find: (track: HTMLElement) => HTMLElement | null) {
       }
       measured = true
       for (const child of track.children) resize.observe(child)
-      setShown(next !== null)
       if (next) setBox({ x: next.offsetLeft, y: next.offsetTop, width: next.offsetWidth, height: next.offsetHeight })
     }
     const mutations = new MutationObserver(measure)
@@ -324,7 +298,6 @@ export function createPill(find: (track: HTMLElement) => HTMLElement | null) {
   return {
     presence: (element: HTMLElement) => (presence = element),
     shape: (element: HTMLElement) => (shape = element),
-    shown,
     settled,
     style: (): Record<string, string> => {
       const at = box()

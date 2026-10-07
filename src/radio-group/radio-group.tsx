@@ -1,16 +1,14 @@
-import { RadioGroup as Seed, useRadioGroupContext } from "@foliag/seeds/radio-group"
+import { RadioGroup as Seed } from "@foliag/seeds/radio-group"
 import type { JSX } from "@solidjs/web"
-import { type Accessor, createContext, omit, useContext, type Element } from "solid-js"
+import { type Accessor, createContext, createUniqueId, omit, useContext, type Element } from "solid-js"
 import { tv } from "../internal/variants.js"
 import {
-  ChoicePartsContext,
+  ChoiceDescriptionId,
   choiceDescription,
   choiceMedia,
   choiceRow,
   choiceTile,
   choiceWords,
-  createChoiceParts,
-  useChoicePart,
 } from "../internal/choice.js"
 
 type Variant = "row" | "card"
@@ -92,27 +90,17 @@ export type ItemProps = Omit<Seed.ItemProps, "class" | "children"> & {
 function ItemRoot(props: ItemProps): Element {
   const rest = omit(props, "class", "children")
   const variant = useContext(RootVariant)
-  const api = useRadioGroupContext()
-  const parts = createChoiceParts()
-  // Plain words are the title themselves, so the column takes the id zag names the radio by
-  const text = () => (parts.titled() ? undefined : api().getItemTextProps({ value: props.value }))
+  const descriptionId = createUniqueId()
   return (
     <Seed.Item
       {...rest}
       class={variant() === "card" ? choiceTile({ class: props.class }) : choiceRow({ class: props.class })}
     >
       <Seed.Item.Control class={control({ variant: variant() })} />
-      <ChoicePartsContext value={parts}>
-        <span
-          id={text()?.id}
-          data-scope={text() && "radio-group"}
-          data-part={text() && "item-text"}
-          class={choiceWords({ variant: variant() })}
-        >
-          {props.children}
-        </span>
-      </ChoicePartsContext>
-      <Seed.Item.HiddenInput aria-describedby={parts.described() ? parts.descriptionId : undefined} />
+      <ChoiceDescriptionId value={descriptionId}>
+        <span class={choiceWords({ variant: variant() })}>{props.children}</span>
+      </ChoiceDescriptionId>
+      <Seed.Item.HiddenInput aria-describedby={descriptionId} />
     </Seed.Item>
   )
 }
@@ -125,7 +113,6 @@ export type ItemTextProps = Omit<Seed.ItemTextProps, "class" | "children"> & {
 
 /** The title of a choice that has a description under it. The radio is named by it alone. */
 function ItemText(props: ItemTextProps): Element {
-  useChoicePart("title")
   return <Seed.Item.Text {...omit(props, "class")} class={props.class} />
 }
 
@@ -137,11 +124,10 @@ export type ItemDescriptionProps = JSX.HTMLAttributes<HTMLSpanElement> & {
 
 /** A sentence under the title that explains the choice, muted but at 7:1, and read out after the radio's name */
 function ItemDescription(props: ItemDescriptionProps): Element {
-  const parts = useChoicePart("description")
   return (
     <span
       {...omit(props, "class")}
-      id={parts?.descriptionId}
+      id={useContext(ChoiceDescriptionId)}
       data-scope="radio-group"
       data-part="item-description"
       class={choiceDescription({ class: props.class })}

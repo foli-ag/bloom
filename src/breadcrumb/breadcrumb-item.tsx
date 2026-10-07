@@ -1,8 +1,7 @@
-import { isServer, type JSX } from "@solidjs/web"
-import { onCleanup, type Element } from "solid-js"
+import type { JSX } from "@solidjs/web"
+import type { Element } from "solid-js"
 import { tv } from "../internal/variants.js"
 import { Chevron } from "../internal/icons.jsx"
-import { useBreadcrumbContext } from "./breadcrumb-context.js"
 
 export interface BreadcrumbItemProps {
   /** A `Link`, or the current page as a `Link` marked `current` */
@@ -15,13 +14,6 @@ export interface BreadcrumbItemProps {
  * hidden from assistive technology, which hears a list of links.
  */
 export function BreadcrumbItem(props: BreadcrumbItemProps): Element {
-  const trail = useBreadcrumbContext()
-  // In the browser only: the list reads the count before its items render, so a server render, which may not write a
-  // signal, never folds the trail anyway
-  if (!isServer) {
-    trail.setItems((count) => count + 1)
-    onCleanup(() => trail.setItems((count) => count - 1))
-  }
   return (
     <li data-scope="breadcrumb" data-part="item" class={item({ class: props.class })}>
       <span aria-hidden="true" data-part="separator" class={separator()}>

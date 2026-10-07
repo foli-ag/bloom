@@ -32,19 +32,19 @@ export function PasswordInputIndicator(props: PasswordInputIndicatorProps): Elem
         {/* The line cuts a gap through the eye as it is drawn, so it reads as a line across and not a scratch on top */}
         <mask id={cut}>
           <rect width="24" height="24" fill="white" stroke="none" />
-          <path d={strike} pathLength="1" stroke="black" stroke-width="6" class={line({ shown: visible() })} />
+          <path d={strike} pathLength="1" stroke="black" stroke-width="6" class={line()} />
         </mask>
         <g mask={`url(#${cut})`}>
           <path d="M2.5 12C4.5 7.6 8 5.5 12 5.5s7.5 2.1 9.5 6.5c-2 4.4-5.5 6.5-9.5 6.5S4.5 16.4 2.5 12Z" />
           <circle cx="12" cy="12" r="3" />
         </g>
-        <path d={strike} pathLength="1" class={line({ shown: visible() })} />
+        <path d={strike} pathLength="1" class={line()} />
       </Mark>
       <span class="grid">
-        <span aria-hidden={visible() ? undefined : "true"} class={words({ shown: visible() })}>
+        <span aria-hidden={visible() ? undefined : "true"} class={shownWords()}>
           {props.children}
         </span>
-        <span aria-hidden={visible() ? "true" : undefined} class={words({ shown: !visible() })}>
+        <span aria-hidden={visible() ? "true" : undefined} class={hiddenWords()}>
           {props.fallback}
         </span>
       </span>
@@ -65,23 +65,31 @@ export function PasswordInputIndicator(props: PasswordInputIndicatorProps): Elem
 
 const strike = "M4 4 20 20"
 
-const indicator = tv({ base: "inline-flex items-center gap-2" })
+// Zag marks the indicator `data-state="visible"` while the password shows, and `hidden` otherwise
+const indicator = tv({ base: "group/indicator inline-flex items-center gap-2" })
 
 // A line is drawn by moving the dash along its path, which takes a repaint of a 20px glyph and no layout
 const line = tv({
-  base: "[stroke-dasharray:1] transition-[stroke-dashoffset] duration-(--duration-smooth) ease-smooth",
-  variants: {
-    shown: { true: "[stroke-dashoffset:0]", false: "[stroke-dashoffset:1]" },
-  },
+  base: [
+    "[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-(--duration-smooth) ease-smooth",
+    "group-data-[state=visible]/indicator:[stroke-dashoffset:0]",
+  ],
 })
 
 // The words leaving fade quicker than the ones arriving, so the two never read as one smudge
-const words = tv({
-  base: "col-start-1 row-start-1 text-center transition-[opacity,visibility] ease-smooth",
-  variants: {
-    shown: {
-      true: "duration-(--duration-smooth)",
-      false: "invisible opacity-0 duration-(--duration-exit)",
-    },
-  },
+const shownWords = tv({
+  base: [
+    "col-start-1 row-start-1 text-center transition-[opacity,visibility] ease-smooth",
+    "invisible opacity-0 duration-(--duration-exit)",
+    "group-data-[state=visible]/indicator:visible group-data-[state=visible]/indicator:opacity-100",
+    "group-data-[state=visible]/indicator:duration-(--duration-smooth)",
+  ],
+})
+
+const hiddenWords = tv({
+  base: [
+    "col-start-1 row-start-1 text-center transition-[opacity,visibility] duration-(--duration-smooth) ease-smooth",
+    "group-data-[state=visible]/indicator:invisible group-data-[state=visible]/indicator:opacity-0",
+    "group-data-[state=visible]/indicator:duration-(--duration-exit)",
+  ],
 })

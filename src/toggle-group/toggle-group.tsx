@@ -75,7 +75,6 @@ function Pill(props: { orientation: "horizontal" | "vertical"; disabled: boolean
     <span
       ref={place.presence}
       aria-hidden="true"
-      data-state={place.shown() ? "on" : "off"}
       data-settled={place.settled() ? "" : undefined}
       class={pillPresence()}
     >
@@ -138,7 +137,7 @@ const root = tv({
   variants: {
     variant: {
       outline: "data-[orientation=horizontal]:ps-0.5 data-[orientation=vertical]:pt-0.5",
-      segmented: [segmentedTrack(), "data-disabled:border-disabled data-disabled:bg-disabled"],
+      segmented: [segmentedTrack(), "group/track data-disabled:border-disabled data-disabled:bg-disabled"],
     },
   },
 })

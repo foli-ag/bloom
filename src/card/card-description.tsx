@@ -1,6 +1,6 @@
 import { Polymorphic, type PolymorphicProps, type ValidComponent } from "@foliag/seeds/polymorphic"
 import type { JSX } from "@solidjs/web"
-import { omit, onCleanup, type Element } from "solid-js"
+import { omit, type Element } from "solid-js"
 import { tv } from "../internal/variants.js"
 import { useCardContext } from "./card-context.js"
 
@@ -20,8 +20,6 @@ export function CardDescription<As extends ValidComponent = "p">(props: CardDesc
   const id = card?.descriptionId
   // A view made once: spread straight from `omit(…)`, the compiler would wrap it in a memo that Polymorphic reads untracked
   const rest = omit(props, "class")
-  card?.setDescribed(true)
-  onCleanup(() => card?.setDescribed(false))
   return (
     <Polymorphic
       as={tag}

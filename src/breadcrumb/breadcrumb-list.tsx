@@ -16,7 +16,6 @@ export function BreadcrumbList(props: BreadcrumbListProps): Element {
     <ol
       data-scope="breadcrumb"
       data-part="list"
-      data-folded={trail.items() >= 4 && !trail.expanded() ? "" : undefined}
       data-expanded={trail.expanded() ? "" : undefined}
       class={list({ class: props.class })}
     >
@@ -25,10 +24,11 @@ export function BreadcrumbList(props: BreadcrumbListProps): Element {
   )
 }
 
-// Folded, every item but the last two is left out on a phone
+// Folded (`trail-folded`, four items or more until the ellipsis unfolds them), every item but the last two is left
+// out on a phone
 const list = tv({
   base: [
     "group/trail flex min-w-0 flex-wrap items-center",
-    "max-sm:data-folded:flex-nowrap max-sm:data-folded:[&>[data-part=item]:nth-last-child(n+3)]:hidden",
+    "max-sm:trail-folded:flex-nowrap max-sm:trail-folded:[&>[data-part=item]:nth-last-child(n+3)]:hidden",
   ],
 })

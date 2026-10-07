@@ -677,6 +677,10 @@
  * is disabled, read-only or busy. They take their pressed colors under it, as a phone has no hover to show one first. */
 @custom-variant pressing (&:active:not(:disabled, [aria-disabled="true"], [aria-busy="true"], [data-disabled], [data-readonly]));
 
+/* A breadcrumb list of four items or more that its ellipsis has not unfolded (`Breadcrumb.List`), read from the list
+ * itself, so the trail is folded from the server's HTML on */
+@custom-variant trail-folded (&:not([data-expanded]):has(> [data-part=item] ~ [data-part=item] ~ [data-part=item] ~ [data-part=item]));
+
 @layer base {
   /* The system's setting, unless `data-theme` on <html> says otherwise. `light-dark()` above follows this. */
   :root {

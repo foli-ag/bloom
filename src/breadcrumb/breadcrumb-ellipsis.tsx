@@ -36,7 +36,7 @@ export function BreadcrumbEllipsis(props: BreadcrumbEllipsisProps): Element {
   )
 }
 
-const item = tv({ base: "hidden shrink-0 max-sm:group-data-folded/trail:flex" })
+const item = tv({ base: "hidden shrink-0 max-sm:group-trail-folded/trail:flex" })
 
 const trigger = tv({
   base: [

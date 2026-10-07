@@ -3,7 +3,6 @@ import type { JSX } from "@solidjs/web"
 import { createSignal, createUniqueId, omit, onSettled, untrack, type Element } from "solid-js"
 import { tv, type VariantProps } from "../internal/variants.js"
 import { forwardRef } from "../internal/pointer.js"
-import { createPresence } from "../internal/presence.js"
 import { cardSurface } from "../internal/surface.js"
 import { CardContext } from "./card-context.js"
 
@@ -46,10 +45,7 @@ interface CardRootOwnProps extends VariantProps<typeof root> {
  */
 export function CardRoot<As extends ValidComponent = "div">(props: CardRootProps<As>): Element {
   const rest = omit(props, "variant", "class", "children")
-  // The parts say they are there as they mount
-  const [titled, setTitled] = createPresence()
-  const [described, setDescribed] = createPresence()
-  const [target, setTarget] = createSignal(false, { ownedWrite: true })
+  const [target, setTarget] = createSignal(false)
   const titleId = createUniqueId()
   const descriptionId = createUniqueId()
   let element: HTMLElement | undefined
@@ -59,9 +55,7 @@ export function CardRoot<As extends ValidComponent = "div">(props: CardRootProps
   })
   const own = props as { "aria-labelledby"?: string; "aria-describedby"?: string }
   return (
-    <CardContext
-      value={{ phrasing: untrack(() => props.as === "button"), titleId, descriptionId, setTitled, setDescribed }}
-    >
+    <CardContext value={{ phrasing: untrack(() => props.as === "button"), titleId, descriptionId }}>
       <Polymorphic
         as="div"
         // A button in a form submits it, so an app opts in with type="submit"
@@ -69,8 +63,8 @@ export function CardRoot<As extends ValidComponent = "div">(props: CardRootProps
         {...rest}
         data-scope="card"
         data-part="root"
-        aria-labelledby={own["aria-labelledby"] ?? (target() && titled() ? titleId : undefined)}
-        aria-describedby={own["aria-describedby"] ?? (target() && described() ? descriptionId : undefined)}
+        aria-labelledby={own["aria-labelledby"] ?? (target() ? titleId : undefined)}
+        aria-describedby={own["aria-describedby"] ?? (target() ? descriptionId : undefined)}
         ref={(node: HTMLElement) => {
           element = node
           forwardRef(

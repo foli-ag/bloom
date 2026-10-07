@@ -1,7 +1,6 @@
 import { Progress as Seed, useProgressContext } from "@foliag/seeds/progress"
 import { omit, type Element } from "solid-js"
 import { tv } from "../internal/variants.js"
-import { useProgressLabelled } from "./progress-labelled.js"
 import { useProgressLook } from "./progress-look.js"
 
 export type ProgressTrackProps = Omit<Seed.TrackProps, "class"> & {
@@ -26,14 +25,14 @@ export function ProgressTrack(props: ProgressTrackProps): Element {
 }
 
 /**
- * Zag names the bar by its value. With a `Label` the bar is named by it instead, and the value is its value text, so a
- * screen reader says "Envoi des photos, 40 %" and not "40 %" alone.
+ * Zag names the bar by its value. The bar points at the `Label`'s id, so with one it is named by it instead, and the
+ * value is its value text: a screen reader says "Envoi des photos, 40 %" and not "40 %" alone. Without one the id is
+ * nowhere on the page, and the name stays the value.
  */
 export function useBarName() {
   const api = useProgressContext()
-  const labelled = useProgressLabelled()
   return {
-    labelledBy: () => (labelled?.[0]() ? api().getLabelProps().id : undefined),
+    labelledBy: () => api().getLabelProps().id,
     valueText: () => api().valueAsString,
   }
 }

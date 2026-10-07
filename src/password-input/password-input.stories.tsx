@@ -74,6 +74,12 @@ export const TestShowingAndHidingThePassword: Story = {
 
     await userEvent.click(canvas.getByRole("button", { name: "Afficher" }))
     await waitFor(() => expect(field).toHaveAttribute("type", "text"))
+    // The words swap and the line strikes the eye through, from the indicator's `data-state`
+    const toggle = await canvas.findByRole("button", { name: "Masquer" })
+    const strike = toggle.querySelectorAll<SVGPathElement>("path[pathLength]")[1]!
+    await waitFor(() => expect(within(toggle).getByText("Masquer")).toBeVisible())
+    await waitFor(() => expect(within(toggle).getByText("Afficher")).not.toBeVisible())
+    await waitFor(() => expect(Number.parseFloat(getComputedStyle(strike).strokeDashoffset)).toBe(0))
     await waitFor(() => expect(field).toHaveFocus())
     expect(field.getBoundingClientRect().width).toBe(width)
     expect(args.onVisibilityChange).toHaveBeenLastCalledWith({ visible: true })

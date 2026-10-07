@@ -240,6 +240,9 @@ export const TestTapToOpen: Story = {
     await userEvent.click(page.getByRole("combobox", { name: "Commune" }))
     const list = await page.findByRole("listbox")
     expect(within(list).getAllByRole("option")).toHaveLength(communes.length)
+    // The chevron turns with the control's `data-state`
+    const chevron = document.querySelector("[data-scope=combobox][data-part=indicator]")!
+    await waitFor(() => expect(getComputedStyle(chevron).rotate).toBe("180deg"))
   },
 }
 

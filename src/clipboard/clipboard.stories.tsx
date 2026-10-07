@@ -82,6 +82,10 @@ export const TestCopyingTheLink: Story = {
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(link)
     expect(args.onStatusChange).toHaveBeenCalledWith({ copied: true })
     expect(await canvas.findByRole("button", { name: "Copié" })).toBeVisible()
+    // The words and the sheets give way to "Copié" and a tick, from the trigger's `data-copied`
+    const trigger = canvas.getByRole("button", { name: "Copié" })
+    await waitFor(() => expect(within(trigger).getByText("Copié")).toBeVisible())
+    await waitFor(() => expect(within(trigger).getByText("Copier")).not.toBeVisible())
     expect(field.getBoundingClientRect().width).toBe(width)
     await waitFor(() => expect(canvas.getByRole("button", { name: "Copier" })).toBeVisible(), { timeout: 2000 })
   },

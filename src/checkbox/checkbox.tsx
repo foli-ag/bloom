@@ -1,18 +1,15 @@
-import { Checkbox as Seed, useCheckboxContext } from "@foliag/seeds/checkbox"
+import { Checkbox as Seed } from "@foliag/seeds/checkbox"
 import type { JSX } from "@solidjs/web"
-import { omit, type Element } from "solid-js"
+import { createUniqueId, omit, useContext, type Element } from "solid-js"
 import { tv } from "../internal/variants.js"
 import {
-  type ChoiceParts,
-  ChoicePartsContext,
+  ChoiceDescriptionId,
   choiceDescription,
   choiceMedia,
   choiceRow,
   choiceTile,
   choiceWords,
-  createChoiceParts,
   drawnMark,
-  useChoicePart,
 } from "../internal/choice.js"
 import { Mark, tick } from "../internal/icons.jsx"
 
@@ -50,7 +47,7 @@ export type CheckboxProps = Omit<Seed.RootProps, "children" | "class"> & {
  */
 function CheckboxRoot(props: CheckboxProps): Element {
   const rest = omit(props, "children", "class", "variant")
-  const parts = createChoiceParts()
+  const descriptionId = createUniqueId()
   const variant = () => props.variant ?? "row"
   return (
     <Seed.Root
@@ -63,30 +60,11 @@ function CheckboxRoot(props: CheckboxProps): Element {
           <path d="M6 12h12" pathLength="1" class={drawnMark({ shown: "indeterminate" })} />
         </Mark>
       </Seed.Control>
-      <ChoicePartsContext value={parts}>
-        <Words parts={parts} variant={variant()}>
-          {props.children}
-        </Words>
-      </ChoicePartsContext>
-      <Seed.HiddenInput aria-describedby={parts.described() ? parts.descriptionId : undefined} />
+      <ChoiceDescriptionId value={descriptionId}>
+        <span class={choiceWords({ variant: variant() })}>{props.children}</span>
+      </ChoiceDescriptionId>
+      <Seed.HiddenInput aria-describedby={descriptionId} />
     </Seed.Root>
-  )
-}
-
-// Plain words are the title themselves, so the column takes the id zag names the box by. Inside the root, where the
-// checkbox's own context is.
-function Words(props: { parts: ChoiceParts; variant: "row" | "card"; children: JSX.Element }): Element {
-  const api = useCheckboxContext()
-  const label = () => (props.parts.titled() ? undefined : api().getLabelProps())
-  return (
-    <span
-      id={label()?.id}
-      data-scope={label() && "checkbox"}
-      data-part={label() && "label"}
-      class={choiceWords({ variant: props.variant })}
-    >
-      {props.children}
-    </span>
   )
 }
 
@@ -98,7 +76,6 @@ export type LabelProps = Omit<Seed.LabelProps, "class" | "children"> & {
 
 /** The title of a choice that has a description under it. The box is named by it alone. */
 function Label(props: LabelProps): Element {
-  useChoicePart("title")
   return <Seed.Label {...omit(props, "class")} class={props.class} />
 }
 
@@ -110,11 +87,10 @@ export type DescriptionProps = JSX.HTMLAttributes<HTMLSpanElement> & {
 
 /** A sentence under the title that explains the choice, muted but at 7:1, and read out after the box's name */
 function Description(props: DescriptionProps): Element {
-  const parts = useChoicePart("description")
   return (
     <span
       {...omit(props, "class")}
-      id={parts?.descriptionId}
+      id={useContext(ChoiceDescriptionId)}
       data-scope="checkbox"
       data-part="description"
       class={choiceDescription({ class: props.class })}

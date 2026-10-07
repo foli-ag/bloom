@@ -118,7 +118,7 @@ export const TestLongLabel: Story = {
   ),
   play: ({ canvasElement }) => {
     const box = canvasElement.querySelector("[data-part=control]")!.getBoundingClientRect()
-    const label = canvasElement.querySelector("[data-part=label]")!.getBoundingClientRect()
+    const label = canvasElement.querySelector("[data-part=control]")!.nextElementSibling!.getBoundingClientRect()
     expect(label.height).toBeGreaterThan(box.height * 2)
     expect(Math.abs(box.top - label.top)).toBeLessThanOrEqual(1)
   },
