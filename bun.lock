@@ -5,7 +5,7 @@
     "": {
       "name": "@foliag/seeds",
       "dependencies": {
-        "@foliag/seeds": "^0.2.0",
+        "@foliag/seeds": "^0.3.0",
         "@fontsource-variable/newsreader": "5.3.0",
         "@fontsource/barlow-semi-condensed": "5.3.0",
         "cn": "0.4.0",
@@ -172,7 +172,7 @@
 
     "@floating-ui/utils": ["@floating-ui/utils@0.2.12", "", {}, "sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww=="],
 
-    "@foliag/seeds": ["@foliag/seeds@0.2.0", "", { "dependencies": { "@foliag/zag": "^0.1.1", "@zag-js/accordion": "1.44.0", "@zag-js/angle-slider": "1.44.0", "@zag-js/avatar": "1.44.0", "@zag-js/carousel": "1.44.0", "@zag-js/checkbox": "1.44.0", "@zag-js/clipboard": "1.44.0", "@zag-js/collapsible": "1.44.0", "@zag-js/collection": "1.44.0", "@zag-js/combobox": "1.44.0", "@zag-js/core": "1.44.0", "@zag-js/dialog": "1.44.0", "@zag-js/dom-query": "1.44.0", "@zag-js/drawer": "1.44.0", "@zag-js/editable": "1.44.0", "@zag-js/hover-card": "1.44.0", "@zag-js/menu": "1.44.0", "@zag-js/navigation-menu": "1.44.0", "@zag-js/number-input": "1.44.0", "@zag-js/pagination": "1.44.0", "@zag-js/password-input": "1.44.0", "@zag-js/pin-input": "1.44.0", "@zag-js/popover": "1.44.0", "@zag-js/presence": "1.44.0", "@zag-js/progress": "1.44.0", "@zag-js/radio-group": "1.44.0", "@zag-js/rating-group": "1.44.0", "@zag-js/select": "1.44.0", "@zag-js/slider": "1.44.0", "@zag-js/splitter": "1.44.0", "@zag-js/steps": "1.44.0", "@zag-js/switch": "1.44.0", "@zag-js/tabs": "1.44.0", "@zag-js/toggle": "1.44.0", "@zag-js/toggle-group": "1.44.0", "@zag-js/tooltip": "1.44.0", "@zag-js/tree-view": "1.44.0", "@zag-js/types": "1.44.0", "@zag-js/utils": "1.44.0" }, "peerDependencies": { "@solidjs/web": "^2.0.0-rc.9", "solid-js": "^2.0.0-rc.9" } }, "sha512-6/jmcveIyzqO4/d1QcmmCEDAT+OZBkgogRZ3SDSKaWuzAvMGuiTXxCmoQ/4NUF+lKROYpl/iJYDMgS8eFM2/DQ=="],
+    "@foliag/seeds": ["@foliag/seeds@0.3.0", "", { "dependencies": { "@foliag/zag": "^0.1.1", "@zag-js/accordion": "1.44.0", "@zag-js/angle-slider": "1.44.0", "@zag-js/avatar": "1.44.0", "@zag-js/carousel": "1.44.0", "@zag-js/checkbox": "1.44.0", "@zag-js/clipboard": "1.44.0", "@zag-js/collapsible": "1.44.0", "@zag-js/collection": "1.44.0", "@zag-js/combobox": "1.44.0", "@zag-js/core": "1.44.0", "@zag-js/dialog": "1.44.0", "@zag-js/dom-query": "1.44.0", "@zag-js/drawer": "1.44.0", "@zag-js/editable": "1.44.0", "@zag-js/hover-card": "1.44.0", "@zag-js/i18n-utils": "1.44.0", "@zag-js/menu": "1.44.0", "@zag-js/navigation-menu": "1.44.0", "@zag-js/number-input": "1.44.0", "@zag-js/pagination": "1.44.0", "@zag-js/password-input": "1.44.0", "@zag-js/pin-input": "1.44.0", "@zag-js/popover": "1.44.0", "@zag-js/presence": "1.44.0", "@zag-js/progress": "1.44.0", "@zag-js/radio-group": "1.44.0", "@zag-js/rating-group": "1.44.0", "@zag-js/select": "1.44.0", "@zag-js/slider": "1.44.0", "@zag-js/splitter": "1.44.0", "@zag-js/steps": "1.44.0", "@zag-js/switch": "1.44.0", "@zag-js/tabs": "1.44.0", "@zag-js/toggle": "1.44.0", "@zag-js/toggle-group": "1.44.0", "@zag-js/tooltip": "1.44.0", "@zag-js/tree-view": "1.44.0", "@zag-js/types": "1.44.0", "@zag-js/utils": "1.44.0" }, "peerDependencies": { "@solidjs/web": "^2.0.0-rc.9", "solid-js": "^2.0.0-rc.9" } }, "sha512-+fHaSxXnavdz0avr2ygW0yL+dEfN0zGQffO/ChlsTBvqOX7PO4Uns8NPcx2uKP0i4m4ZE3IHpe5QOCq3cr45oA=="],
 
     "@foliag/zag": ["@foliag/zag@0.1.1", "", { "dependencies": { "@zag-js/core": "^1.44.0", "@zag-js/types": "^1.44.0", "@zag-js/utils": "^1.44.0" }, "peerDependencies": { "@solidjs/web": "^2.0.0-rc.9", "solid-js": "^2.0.0-rc.9" } }, "sha512-VbzX1SILYlPZs90uEb6c5gn52T3hRLzs4hUsAXqHLKOpIHlsSdNaxPHqkUx58qifAXH1YBDyHCdnbZOQOUuyKw=="],
 
@@ -481,6 +481,8 @@
     "@zag-js/focus-visible": ["@zag-js/focus-visible@1.44.0", "", { "dependencies": { "@zag-js/dom-query": "1.44.0" } }, "sha512-uw/MjetjFP16IiOQLr3snfnEd5772lXPuQR8mct432t4AyPEAskZBwO9MTDbWukNXQ20VKpcorMZm+QXG3NY4g=="],
 
     "@zag-js/hover-card": ["@zag-js/hover-card@1.44.0", "", { "dependencies": { "@zag-js/anatomy": "1.44.0", "@zag-js/core": "1.44.0", "@zag-js/dismissable": "1.44.0", "@zag-js/dom-query": "1.44.0", "@zag-js/popper": "1.44.0", "@zag-js/types": "1.44.0", "@zag-js/utils": "1.44.0" } }, "sha512-tVp81zAl97iYYaJYnsTl7OnTzCFZLFZifVo7gORk9VjD1Iw2px1/vfNNO8HpTTiXQZiGQWx3VOWTf7fEiWjr+w=="],
+
+    "@zag-js/i18n-utils": ["@zag-js/i18n-utils@1.44.0", "", { "dependencies": { "@zag-js/dom-query": "1.44.0" } }, "sha512-UGYpkpnEowFqeBkSIw4dtRJCf5O/4JH3eDT0BXKFHMFAptwCM/4+lHD8dnxkUgjFN8H5OELUtBWZDrM71VlrcA=="],
 
     "@zag-js/interact-outside": ["@zag-js/interact-outside@1.44.0", "", { "dependencies": { "@zag-js/dom-query": "1.44.0", "@zag-js/utils": "1.44.0" } }, "sha512-yFX3eHamp82kax65xIYLemXNH8kD9MvXm7lHttnwlp/XZoAgDTR2l+iLJYU6pLZsuSM9GsrnWQrfHaHWBhyNWw=="],
 

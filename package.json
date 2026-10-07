@@ -209,7 +209,7 @@
     "prepublishOnly": "bun run build"
   },
   "dependencies": {
-    "@foliag/seeds": "^0.2.0",
+    "@foliag/seeds": "^0.3.0",
     "@fontsource-variable/newsreader": "5.3.0",
     "@fontsource/barlow-semi-condensed": "5.3.0",
     "cn": "0.4.0",
