@@ -11,6 +11,14 @@ type Variant = "menu" | "bottom"
 // The variant of the `Root` around a part. A context and not a selector, so a part reads its own menu's.
 const VariantContext = /* @__PURE__ */ createContext<() => Variant>(() => "menu")
 
+// The section a click, a tap or a key has opened, or "" while the open one was opened by hovering, or none is. Plain
+// state, read and written within one click, which nothing draws from.
+interface Opened {
+  byClick: string
+}
+
+const OpenedContext = /* @__PURE__ */ createContext<Opened>({ byClick: "" })
+
 export type RootProps = Omit<Seed.RootProps, "class" | "translations"> & {
   /** What the menu leads through, such as "Navigation principale", when the page has more than one */
   "aria-label"?: string | undefined
@@ -75,17 +83,22 @@ function Menu(props: RootProps): Element {
   // Marked until the first change, while panels have no transition: a section open from the first render, such as the
   // current one in a side bar, is drawn open instead of opening as the page loads
   const [changed, setChanged] = createSignal(false)
+  const opened: Opened = { byClick: "" }
   return (
-    <Seed.Root
-      {...omit(props, "class", "variant", "disableHoverTrigger", "onValueChange")}
-      disableHoverTrigger={props.disableHoverTrigger ?? props.orientation === "vertical"}
-      onValueChange={(details) => {
-        setChanged(true)
-        props.onValueChange?.(details)
-      }}
-      data-initial={changed() ? undefined : ""}
-      class={root({ variant: props.variant ?? "menu", class: props.class })}
-    />
+    <OpenedContext value={opened}>
+      <Seed.Root
+        {...omit(props, "class", "variant", "disableHoverTrigger", "onValueChange")}
+        disableHoverTrigger={props.disableHoverTrigger ?? props.orientation === "vertical"}
+        onValueChange={(details) => {
+          setChanged(true)
+          // Hovering, leaving, Escape or a click outside changed it: the section open now was not clicked
+          if (details.value !== opened.byClick) opened.byClick = ""
+          props.onValueChange?.(details)
+        }}
+        data-initial={changed() ? undefined : ""}
+        class={root({ variant: props.variant ?? "menu", class: props.class })}
+      />
+    </OpenedContext>
   )
 }
 
@@ -109,19 +122,53 @@ function ItemRoot(props: ItemProps): Element {
   return <Seed.Item as="li" {...omit(props, "class")} class={item({ variant: variant(), class: props.class })} />
 }
 
-export type ItemTriggerProps = Omit<Seed.ItemTriggerProps, "class" | "children"> & {
+export type ItemTriggerProps = Omit<Seed.ItemTriggerProps, "class" | "children" | "as"> & {
   /** The section's name, such as "Parcelles" */
   children: JSX.Element
   class?: string | undefined
 }
 
-/** Opens the panel of its section, and is announced as expanded or collapsed. Its chevron turns as it opens. */
+/**
+ * Opens the panel of its section, and is announced as expanded or collapsed. Its chevron turns as it opens. A click on
+ * a section that hovering has just opened keeps its panel open, where it would close it under the mouse of someone
+ * who clicks out of habit; the next click closes it.
+ */
 function ItemTrigger(props: ItemTriggerProps): Element {
   return (
-    <Seed.Item.Trigger {...omit(props, "class", "children")} class={entry({ class: ["group/trigger", props.class] })}>
+    <Seed.Item.Trigger
+      {...omit(props, "class", "children")}
+      as={TriggerButton}
+      class={entry({ class: ["group/trigger", props.class] })}
+    >
       {props.children}
       <Chevron class={triggerChevron({ class: "-me-1" })} />
     </Seed.Item.Trigger>
+  )
+}
+
+type TriggerButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+  "data-value"?: string | undefined
+  "data-state"?: string | undefined
+}
+
+// The trigger's button, which sees a click before zag, whose own click toggles the section
+function TriggerButton(props: TriggerButtonProps): Element {
+  const opened = useContext(OpenedContext)
+  return (
+    <button
+      {...omit(props, "onClick")}
+      onClick={(event) => {
+        const value = props["data-value"] ?? ""
+        const open = props["data-state"] === "open"
+        if (open && opened.byClick !== value) {
+          opened.byClick = value
+          return
+        }
+        const toggle = props.onClick as ((event: MouseEvent) => void) | undefined
+        toggle?.(event)
+        opened.byClick = open ? "" : value
+      }}
+    />
   )
 }
 

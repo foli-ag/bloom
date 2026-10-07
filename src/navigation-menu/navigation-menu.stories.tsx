@@ -203,6 +203,30 @@ export const TestOpeningASection: Story = {
 }
 
 /**
+ * A click on a section that hovering has opened keeps its panel open, as someone who hovers and then clicks out of
+ * habit means to open it. The next click closes it.
+ */
+export const TestClickingASectionHoveringOpened: Story = {
+  name: "Test: Clicking a section hovering opened",
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const parcels = canvas.getByRole("button", { name: "Parcelles" })
+    await userEvent.hover(parcels)
+    await waitFor(() => expect(parcels).toHaveAttribute("aria-expanded", "true"))
+    // Clicks of a mouse that stays put: `userEvent.click` would enter the section again, which opens it by hovering
+    parcels.click()
+    await settled()
+    expect(parcels).toHaveAttribute("aria-expanded", "true")
+    expect(canvas.getByRole("link", { name: "Carte des parcelles" })).toBeVisible()
+
+    parcels.click()
+    await waitFor(() => expect(parcels).toHaveAttribute("aria-expanded", "false"))
+    await settled()
+    expect(parcels).toHaveAttribute("aria-expanded", "false")
+  },
+}
+
+/**
  * Opened from nothing, the panel appears in its own size and place: its card fades and grows, and neither its size nor
  * its place slides, even when the last panel shown was another one.
  */
