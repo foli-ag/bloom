@@ -3,6 +3,7 @@ import type { JSX } from "@solidjs/web"
 import { createSignal, createUniqueId, omit, onSettled, untrack, type Element } from "solid-js"
 import { tv, type VariantProps } from "../internal/variants.js"
 import { forwardRef } from "../internal/pointer.js"
+import { createPresence } from "../internal/presence.js"
 import { cardSurface } from "../internal/surface.js"
 import { CardContext } from "./card-context.js"
 
@@ -45,9 +46,9 @@ interface CardRootOwnProps extends VariantProps<typeof root> {
  */
 export function CardRoot<As extends ValidComponent = "div">(props: CardRootProps<As>): Element {
   const rest = omit(props, "variant", "class", "children")
-  // The parts say they are there as they mount, a write from inside a component, the one place this is wanted
-  const [titled, setTitled] = createSignal(false, { ownedWrite: true })
-  const [described, setDescribed] = createSignal(false, { ownedWrite: true })
+  // The parts say they are there as they mount
+  const [titled, setTitled] = createPresence()
+  const [described, setDescribed] = createPresence()
   const [target, setTarget] = createSignal(false, { ownedWrite: true })
   const titleId = createUniqueId()
   const descriptionId = createUniqueId()

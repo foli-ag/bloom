@@ -1,4 +1,4 @@
-import type { JSX } from "@solidjs/web"
+import { isServer, type JSX } from "@solidjs/web"
 import { onCleanup, type Element } from "solid-js"
 import { tv } from "../internal/variants.js"
 import { Chevron } from "../internal/icons.jsx"
@@ -16,8 +16,12 @@ export interface BreadcrumbItemProps {
  */
 export function BreadcrumbItem(props: BreadcrumbItemProps): Element {
   const trail = useBreadcrumbContext()
-  trail.setItems((count) => count + 1)
-  onCleanup(() => trail.setItems((count) => count - 1))
+  // In the browser only: the list reads the count before its items render, so a server render, which may not write a
+  // signal, never folds the trail anyway
+  if (!isServer) {
+    trail.setItems((count) => count + 1)
+    onCleanup(() => trail.setItems((count) => count - 1))
+  }
   return (
     <li data-scope="breadcrumb" data-part="item" class={item({ class: props.class })}>
       <span aria-hidden="true" data-part="separator" class={separator()}>

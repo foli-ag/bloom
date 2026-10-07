@@ -1,13 +1,5 @@
-import {
-  type Accessor,
-  createContext,
-  createSignal,
-  createUniqueId,
-  onCleanup,
-  onSettled,
-  type Setter,
-  useContext,
-} from "solid-js"
+import { type Accessor, createContext, createSignal, createUniqueId, onCleanup, onSettled, useContext } from "solid-js"
+import { createPresence, type Mark } from "./presence.js"
 import { tv } from "./variants.js"
 import { cardSurface } from "./surface.js"
 
@@ -131,22 +123,22 @@ export const choiceMedia = tv({
  * What the words of a choice are made of, shared by its row or tile and the parts inside it. A title part (a radio's
  * `Item.Text`, a checkbox's `Label`) says it is there, and the control is then named by it alone, where it would
  * otherwise be named by the whole column: with a description in the column, the description would be read in the name.
- * A `Description` says it is there, and the control is described by it. Both write as they mount, from inside a
- * component, which is why their signals allow it.
+ * A `Description` says it is there, and the control is described by it. Both mark themselves as they mount
+ * (`createPresence`).
  */
 export interface ChoiceParts {
   titled: Accessor<boolean>
-  setTitled: Setter<boolean>
+  setTitled: Mark
   described: Accessor<boolean>
-  setDescribed: Setter<boolean>
+  setDescribed: Mark
   descriptionId: string
 }
 
 export const ChoicePartsContext = /* @__PURE__ */ createContext<ChoiceParts | undefined>(undefined)
 
 export function createChoiceParts(): ChoiceParts {
-  const [titled, setTitled] = createSignal(false, { ownedWrite: true })
-  const [described, setDescribed] = createSignal(false, { ownedWrite: true })
+  const [titled, setTitled] = createPresence()
+  const [described, setDescribed] = createPresence()
   return { titled, setTitled, described, setDescribed, descriptionId: createUniqueId() }
 }
 

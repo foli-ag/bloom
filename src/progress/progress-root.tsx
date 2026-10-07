@@ -1,6 +1,7 @@
 import { Progress as Seed } from "@foliag/seeds/progress"
-import { createSignal, omit, type Element } from "solid-js"
+import { omit, type Element } from "solid-js"
 import { tv } from "../internal/variants.js"
+import { createPresence } from "../internal/presence.js"
 import { ProgressLabelled } from "./progress-labelled.js"
 import { ProgressLookContext, toneColors, type ProgressLook, type ProgressTone } from "./progress-look.js"
 import type { ProgressTranslations } from "./use-progress.js"
@@ -57,7 +58,7 @@ export type ProgressRootProps = Omit<Seed.RootProps, "class" | "translations"> &
 export function ProgressRoot(props: ProgressRootProps): Element {
   return (
     // A `Label` sets it as it mounts, which is a write from inside a component, the one place this is wanted
-    <ProgressLabelled value={createSignal(false, { ownedWrite: true })}>
+    <ProgressLabelled value={createPresence()}>
       <ProgressLookContext value={lookOf(props)}>
         <Seed.Root
           {...omit(props, "class", "tone", "segmented")}
