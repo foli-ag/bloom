@@ -48,11 +48,11 @@
   --radius-box: 0.5rem;
   --radius-control: 0.75rem;
   --radius-card: 1rem;
-  --shadow-overlay: 0 1px 2px oklch(0.2 0.02 135 / 0.12), 0 12px 32px -8px oklch(0.2 0.02 135 / 0.28);
+  --shadow-overlay: 0 1px 2px oklch(0.2 0 0 / 0.12), 0 12px 32px -8px oklch(0.2 0 0 / 0.28);
   /* A card that stands off the page (`Card.Root variant="elevated"`), and the lift it takes under the pointer when it
    * is a link or a button. Lower and softer than an overlay's, as it stays in the page. */
-  --shadow-card: 0 1px 2px oklch(0.2 0.02 135 / 0.1), 0 4px 12px -4px oklch(0.2 0.02 135 / 0.18);
-  --shadow-card-lift: 0 2px 4px oklch(0.2 0.02 135 / 0.1), 0 12px 24px -8px oklch(0.2 0.02 135 / 0.24);
+  --shadow-card: 0 1px 2px oklch(0.2 0 0 / 0.1), 0 4px 12px -4px oklch(0.2 0 0 / 0.18);
+  --shadow-card-lift: 0 2px 4px oklch(0.2 0 0 / 0.1), 0 12px 24px -8px oklch(0.2 0 0 / 0.24);
 
   /* Primary scale, hue 134.8 (the hue of #74b24c). 500 is the brand fill. 700 is 4.8:1 on a light surface, enough
    * for a border, and 800 is 7.8:1, enough for text. */
@@ -68,17 +68,18 @@
   --color-primary-900: oklch(0.33 0.09 134.8);
   --color-primary-950: oklch(0.24 0.065 134.8);
 
-  /* Surfaces and ink. The neutrals lean toward the primary hue. */
-  --color-surface: light-dark(oklch(0.985 0.005 125), oklch(0.18 0.015 135));
-  --color-raised: light-dark(#fff, oklch(0.22 0.016 135));
-  --color-ink: light-dark(oklch(0.22 0.02 135), oklch(0.95 0.01 125));
-  --color-muted: light-dark(oklch(0.43 0.02 135), oklch(0.76 0.015 130));
-  --color-border: light-dark(oklch(0.88 0.01 125), oklch(0.32 0.015 135));
+  /* Surfaces and ink, neutral gray with no hue: green is the brand's, and a tint of it on a page reads as olive in the
+   * dark. Each step up, page, card, hover, edge, is far enough from the last to be seen. */
+  --color-surface: light-dark(oklch(0.985 0 0), oklch(0.165 0 0));
+  --color-raised: light-dark(#fff, oklch(0.21 0 0));
+  --color-ink: light-dark(oklch(0.22 0 0), oklch(0.96 0 0));
+  --color-muted: light-dark(oklch(0.43 0 0), oklch(0.77 0 0));
+  --color-border: light-dark(oklch(0.88 0 0), oklch(0.31 0 0));
   /* The edge of anything you have to find with your finger: inputs, checkboxes, outlined buttons */
-  --color-strong: light-dark(oklch(0.56 0.02 130), oklch(0.62 0.02 130));
-  --color-neutral-soft: light-dark(oklch(0.95 0.008 125), oklch(0.26 0.016 135));
-  --color-disabled: light-dark(oklch(0.92 0.008 125), oklch(0.26 0.012 135));
-  --color-disabled-ink: light-dark(oklch(0.56 0.015 130), oklch(0.58 0.015 130));
+  --color-strong: light-dark(oklch(0.56 0 0), oklch(0.62 0 0));
+  --color-neutral-soft: light-dark(oklch(0.95 0 0), oklch(0.26 0 0));
+  --color-disabled: light-dark(oklch(0.92 0 0), oklch(0.26 0 0));
+  --color-disabled-ink: light-dark(oklch(0.56 0 0), oklch(0.58 0 0));
   --color-focus: light-dark(var(--color-primary-900), var(--color-primary-300));
 
   /* Tones. Each has a fill with its ink, text for a surface, and a soft tint for a banner or a quiet button. */
@@ -114,7 +115,7 @@
   --color-success-text: light-dark(oklch(0.42 0.1 150), oklch(0.84 0.1 150));
 
   /* The dim behind a dialog or a bottom sheet */
-  --color-scrim: light-dark(oklch(0.2 0.02 135 / 0.5), oklch(0 0 0 / 0.65));
+  --color-scrim: light-dark(oklch(0.2 0 0 / 0.5), oklch(0 0 0 / 0.65));
 
   /* Motion. Whatever moves or changes color eases on one smooth spring, so the parts of one change, a knob, its track
    * and its tick, arrive together, and nothing swings past where it stops. What appears by growing, a dot or a tick,
@@ -760,8 +761,8 @@
   @media (prefers-contrast: more) {
     :root:not([data-contrast="normal"]) {
       --color-ink: light-dark(#000, #fff);
-      --color-muted: light-dark(oklch(0.3 0.02 135), oklch(0.9 0.01 125));
-      --color-strong: light-dark(oklch(0.35 0.02 130), oklch(0.82 0.015 130));
+      --color-muted: light-dark(oklch(0.3 0 0), oklch(0.9 0 0));
+      --color-strong: light-dark(oklch(0.35 0 0), oklch(0.82 0 0));
       --color-border: var(--color-strong);
       --color-primary-text: light-dark(var(--color-primary-900), var(--color-primary-200));
       --color-primary-edge: light-dark(var(--color-primary-900), var(--color-primary-200));
@@ -771,8 +772,8 @@
 
   :root[data-contrast="more"] {
     --color-ink: light-dark(#000, #fff);
-    --color-muted: light-dark(oklch(0.3 0.02 135), oklch(0.9 0.01 125));
-    --color-strong: light-dark(oklch(0.35 0.02 130), oklch(0.82 0.015 130));
+    --color-muted: light-dark(oklch(0.3 0 0), oklch(0.9 0 0));
+    --color-strong: light-dark(oklch(0.35 0 0), oklch(0.82 0 0));
     --color-border: var(--color-strong);
     --color-primary-text: light-dark(var(--color-primary-900), var(--color-primary-200));
     --color-primary-edge: light-dark(var(--color-primary-900), var(--color-primary-200));
