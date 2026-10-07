@@ -40,7 +40,7 @@ export const toggleRoot = tv({
     "px-5 py-2 text-base font-semibold tracking-body text-ink has-[>span>[data-part=indicator]]:px-8",
     "motion-press hover:border-ink focus-ring",
     "not-disabled:data-[state=on]:border-primary-edge not-disabled:data-[state=on]:bg-primary",
-    "not-disabled:data-[state=on]:text-on-primary not-disabled:data-[state=on]:hover:bg-primary-400",
+    "not-disabled:data-[state=on]:text-on-primary not-disabled:data-[state=on]:hover:bg-primary-hover",
     "disabled:cursor-not-allowed disabled:border-disabled disabled:bg-disabled disabled:text-disabled-ink",
   ],
 })

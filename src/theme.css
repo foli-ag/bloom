@@ -5,7 +5,8 @@
  *   @import "@foliag/bloom/theme.css";
  *
  * Components read the semantic tokens (`--color-primary`, `--color-ink`, `--ease-smooth`...). A product
- * re-skins bloom by redeclaring them on `:root`, usually only the primary scale, `--color-primary-50` to `-950`.
+ * re-skins bloom with `ThemeProvider` from `@foliag/bloom/theme`, which sets them on `:root` in this file's `theme`
+ * layer, or by redeclaring them on `:root` itself, usually only the primary scale, `--color-primary-50` to `-950`.
  * Redeclaring a primitive on a subtree does not reach the semantic tokens below it, they are resolved on `:root`.
  *
  * Every text pair is checked for 7:1 (WCAG AAA) in both themes, and every border or ring that has to be seen for 3:1.
@@ -90,6 +91,10 @@
   --color-primary-text: light-dark(var(--color-primary-800), var(--color-primary-300));
   --color-primary-edge: light-dark(var(--color-primary-700), var(--color-primary-400));
   --color-primary-soft: light-dark(var(--color-primary-100), oklch(0.27 0.04 134.8));
+  /* The fill under a pointer and under a finger. Lighter here, as the ink on it is dark. A theme with a dark primary
+   * under light ink makes them darker. */
+  --color-primary-hover: var(--color-primary-400);
+  --color-primary-pressed: var(--color-primary-300);
 
   --color-danger: light-dark(oklch(0.42 0.17 27), oklch(0.72 0.17 27));
   --color-on-danger: light-dark(#fff, oklch(0.15 0.04 27));

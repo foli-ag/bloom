@@ -107,7 +107,7 @@ const button = tv({
       tone: "primary",
       variant: "solid",
       class:
-        "border-primary-edge bg-primary text-on-primary hover:bg-primary-400 aria-expanded:bg-primary-400 pressing:bg-primary-300",
+        "border-primary-edge bg-primary text-on-primary hover:bg-primary-hover aria-expanded:bg-primary-hover pressing:bg-primary-pressed",
     },
     {
       tone: "primary",

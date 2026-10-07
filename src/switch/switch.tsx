@@ -53,7 +53,7 @@ const control = tv({
     "flex h-8 w-14 shrink-0 items-center rounded-full border-2 border-strong bg-raised px-0.5",
     "transition-[color,background-color,border-color] duration-(--duration-smooth) ease-smooth group-hover/row:border-ink",
     "not-data-disabled:data-[state=checked]:border-primary-edge not-data-disabled:data-[state=checked]:bg-primary",
-    "group-hover/row:not-data-disabled:not-data-readonly:data-[state=checked]:bg-primary-400",
+    "group-hover/row:not-data-disabled:not-data-readonly:data-[state=checked]:bg-primary-hover",
     "focus-ring data-invalid:[--color-focus:var(--color-danger-text)]",
     "data-invalid:border-danger-text data-invalid:shadow-[inset_0_0_0_1px_var(--color-danger-text)]",
     "data-disabled:border-disabled data-disabled:bg-disabled",

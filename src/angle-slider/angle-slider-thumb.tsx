@@ -70,8 +70,8 @@ const knob = tv({
   base: [
     "pointer-events-auto absolute start-1/2 top-1 size-7 -translate-x-1/2 cursor-grab rounded-full",
     "border-2 border-primary-edge bg-primary",
-    "motion-touch group-hover/thumb:bg-primary-400",
-    "group-data-dragging/thumb:scale-(--hold-scale) group-data-dragging/thumb:cursor-grabbing group-data-dragging/thumb:bg-primary-300",
+    "motion-touch group-hover/thumb:bg-primary-hover",
+    "group-data-dragging/thumb:scale-(--hold-scale) group-data-dragging/thumb:cursor-grabbing group-data-dragging/thumb:bg-primary-pressed",
     "group-data-dragging/thumb:[--press-duration:var(--duration-press)] group-data-dragging/thumb:[--press-ease:var(--ease-press)]",
     "group-data-readonly/thumb:cursor-default group-data-disabled/thumb:cursor-not-allowed group-data-disabled/thumb:border-disabled group-data-disabled/thumb:bg-disabled-ink",
     "group-data-invalid/thumb:border-danger-text",

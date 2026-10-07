@@ -157,7 +157,7 @@ const item = tv({
     "focus-ring focus-visible:z-20",
     "data-[state=on]:z-10 not-data-disabled:data-[state=on]:border-primary-edge not-data-disabled:data-[state=on]:bg-primary",
     "not-data-disabled:data-[state=on]:text-on-primary",
-    "not-data-disabled:data-[state=on]:hover:bg-primary-400 data-[state=on]:active:bg-primary-300",
+    "not-data-disabled:data-[state=on]:hover:bg-primary-hover data-[state=on]:active:bg-primary-pressed",
     "data-disabled:cursor-not-allowed data-disabled:border-disabled data-disabled:bg-disabled data-disabled:text-disabled-ink",
     "data-[orientation=horizontal]:-ms-0.5 data-[orientation=horizontal]:first:rounded-s-control data-[orientation=horizontal]:last:rounded-e-control",
     "data-[orientation=vertical]:-mt-0.5 data-[orientation=vertical]:first:rounded-t-control data-[orientation=vertical]:last:rounded-b-control",

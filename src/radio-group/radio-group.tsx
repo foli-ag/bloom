@@ -191,7 +191,7 @@ const control = tv({
     "not-data-disabled:data-[state=checked]:border-primary-edge not-data-disabled:data-[state=checked]:bg-primary",
     "data-[state=checked]:after:scale-100 data-[state=checked]:after:opacity-100",
     "data-[state=checked]:after:[transition:scale_var(--duration-pop)_var(--ease-pop),opacity_var(--duration-exit)_var(--ease-smooth)]",
-    "group-hover/row:not-data-disabled:not-data-readonly:data-[state=checked]:bg-primary-400",
+    "group-hover/row:not-data-disabled:not-data-readonly:data-[state=checked]:bg-primary-hover",
     "data-invalid:border-danger-text data-invalid:shadow-[inset_0_0_0_1px_var(--color-danger-text)]",
     "data-disabled:border-disabled data-disabled:bg-disabled data-disabled:after:bg-disabled-ink",
   ],

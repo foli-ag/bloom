@@ -1,6 +1,6 @@
 ---
 name: bloom
-description: How to build an app with @foliag/bloom, the styled Solid 2 components on @foliag/seeds and Tailwind CSS 4. Covers setup, imports, composing parts, triggers rendered as a Button, forms, overlays and phone sheets, words and numbers, overriding classes, theme tokens and utilities, settings and re-skinning. Use when writing or reviewing app code that imports @foliag/bloom, choosing a bloom component for a screen, or wiring bloom into a new app.
+description: How to build an app with @foliag/bloom, the styled Solid 2 components on @foliag/seeds and Tailwind CSS 4. Covers setup, imports, composing parts, triggers rendered as a Button, forms, overlays and phone sheets, words and numbers, overriding classes, theme tokens and utilities, settings and re-skinning with ThemeProvider. Use when writing or reviewing app code that imports @foliag/bloom, choosing a bloom component for a screen, or wiring bloom into a new app.
 ---
 
 # Using bloom
@@ -146,7 +146,7 @@ Write app styles with bloom's tokens, never a hex value: `bg-surface`, `bg-raise
 
 The system's theme, contrast and motion apply by default. To offer them as switches, set an attribute on `<html>`: `data-theme` (`light`, `dark`), `data-contrast` (`more`, `normal`), `data-motion` (`reduced`, `full`).
 
-A product re-skins bloom by redeclaring tokens on `:root` after the import, usually the primary scale `--color-primary-50` to `--color-primary-950`, with `--color-primary` and `--color-on-primary`. Check the new pairs for 7:1 text and 3:1 edges. A token redeclared on a subtree does not reach the tokens computed from it on `:root`.
+A product re-skins bloom with `<ThemeProvider theme={theme}>` from `@foliag/bloom/theme`, near the top of the app. A `Theme` maps token names without `--color-` to any CSS color or `{ light, dark }`: `{ primary: "#1a3a6b", "on-primary": "#fff", "primary-800": "#344d74" }`. Tokens left out keep bloom's values, the theme reaches overlays, and a new `theme` applies in place. Bloom checks nothing: the theme's pairs have to reach 7:1 for text and 3:1 for edges. A dark primary under light ink also sets `primary-hover` and `primary-pressed` darker. A fixed brand can redeclare the tokens on `:root` in CSS instead. A token redeclared on a subtree does not reach the tokens computed from it on `:root`.
 
 ## Related skills
 

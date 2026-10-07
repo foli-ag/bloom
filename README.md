@@ -156,10 +156,40 @@ The system's choices apply by default. An app can offer the same as switches by 
 
 ## Re-skinning
 
-Components read semantic tokens and never a hex value. A product re-skins bloom by redeclaring tokens on `:root` after
-the import, usually the primary scale, `--color-primary-50` to `--color-primary-950`, with `--color-primary` and the
-`--color-on-primary` ink. Check the pairs in `Foundations/Colors/Contrast` against the new colors. A token redeclared on
-a subtree does not reach the tokens defined from it on `:root`.
+Components read semantic tokens and never a hex value, so another product's colors are a set of token values.
+`ThemeProvider` takes them as a `Theme`, keyed by token name without `--color-`, and a token left out keeps bloom's
+value. A value is any CSS color, or `{ light, dark }` for one per theme.
+
+```tsx
+import { ThemeProvider, type Theme } from "@foliag/bloom/theme"
+
+const acme: Theme = {
+  "primary-100": "#e5efff",
+  "primary-300": "#acccfe",
+  "primary-400": "#91b6ee",
+  "primary-700": "#4d6c9c",
+  "primary-800": "#344d74",
+  "primary-900": "#233652",
+  primary: "#1a3a6b",
+  "on-primary": "#fff",
+  "primary-hover": "#0f2f5f",
+  "primary-pressed": "#042352",
+  "primary-soft": { light: "#e5efff", dark: "#1f2733" },
+}
+
+<ThemeProvider theme={tenant().theme}>
+  <App />
+</ThemeProvider>
+```
+
+The theme applies to the whole page, overlays included, and changes in place when `theme` does. Without one, bloom's
+green is back. It replaces theme.css's values and nothing else, so more contrast still turns text and edges to the
+theme's 900 and 200. Bloom takes the colors as given: check the pairs in `Foundations/Colors/Contrast` for 7:1 text and
+3:1 edges. A dark primary under light ink also sets `primary-hover` and `primary-pressed` darker, as theme.css makes
+them lighter. `Foundations/Theme` shows a navy theme next to the green.
+
+An app with one fixed brand can instead redeclare the tokens on `:root` in its CSS, after the import. A token
+redeclared on a subtree does not reach the tokens defined from it on `:root`.
 
 ## Development
 

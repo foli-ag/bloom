@@ -24,7 +24,7 @@ const item = tv({
     "motion-press focus-ring",
     "hover:border-strong hover:bg-neutral-soft pressing:border-strong pressing:bg-neutral-soft",
     "data-selected:border-primary-edge data-selected:bg-primary data-selected:text-on-primary",
-    "data-selected:hover:bg-primary-400 data-selected:pressing:border-primary-edge data-selected:pressing:bg-primary-300",
+    "data-selected:hover:bg-primary-hover data-selected:pressing:border-primary-edge data-selected:pressing:bg-primary-pressed",
   ],
   variants: { compact: { row: "", always: "hidden", phone: "max-sm:hidden" } },
 })

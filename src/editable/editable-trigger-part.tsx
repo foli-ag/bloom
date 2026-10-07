@@ -20,7 +20,7 @@ export const editableTrigger = tv({
   variants: {
     tone: {
       edit: "bg-primary-soft px-3 text-primary-text hover:border-primary-edge pressing:border-primary-edge",
-      submit: "bg-primary text-on-primary hover:bg-primary-400 pressing:bg-primary-300",
+      submit: "bg-primary text-on-primary hover:bg-primary-hover pressing:bg-primary-pressed",
       cancel: "bg-neutral-soft text-ink hover:border-strong pressing:border-strong",
     },
   },

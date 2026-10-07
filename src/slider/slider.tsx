@@ -206,7 +206,7 @@ const thumb = tv({
     "pointer-events-auto size-7 -translate-x-1/2 rounded-full border-2 border-primary-edge bg-primary rtl:translate-x-1/2",
     "before:absolute before:-inset-2.5 before:content-['']",
     "motion-touch data-dragging:[--press-duration:var(--duration-press)] data-dragging:[--press-ease:var(--ease-press)]",
-    "hover:bg-primary-400 data-dragging:scale-(--hold-scale) data-dragging:bg-primary-300",
+    "hover:bg-primary-hover data-dragging:scale-(--hold-scale) data-dragging:bg-primary-pressed",
     "focus-ring",
     "data-disabled:border-disabled data-disabled:bg-disabled-ink",
     "group-data-invalid/control:border-danger-text group-data-invalid/control:shadow-[inset_0_0_0_1px_var(--color-danger-text)]",
