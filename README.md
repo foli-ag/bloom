@@ -66,7 +66,7 @@ bun add @foliag/bloom tailwindcss
 /* app.css */
 @import "tailwindcss";
 @import "@foliag/bloom/theme.css";
-@import "@foliag/bloom/fonts.css"; /* Barlow Semi Condensed, self-hosted. Leave it out to use another font. */
+@import "@foliag/bloom/fonts.css"; /* Barlow Semi Condensed and Newsreader, self-hosted. Leave it out to use other fonts. */
 ```
 
 ```tsx

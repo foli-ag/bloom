@@ -1,11 +1,14 @@
 /*
- * Barlow Semi Condensed for `--font-sans`, served from the app's own origin so it loads on a poor connection and
- * works offline. Latin only: it holds French, with the accents and the "œ". 500 is the body, 600 the labels, 700 the
- * headings. A product with another font leaves this file out and sets `--font-sans` itself.
+ * Barlow Semi Condensed for `--font-sans` and Newsreader for `--font-serif`, served from the app's own origin so they
+ * load on a poor connection and work offline. Barlow is latin only: it holds French, with the accents and the "œ". 500
+ * is the body, 600 the labels, 700 the headings. Newsreader is the landing's serif, a variable font whose optical size
+ * follows the font size, so one file covers titles and body copy. A product with other fonts leaves this file out and
+ * sets `--font-sans` and `--font-serif` itself.
  */
 @import "@fontsource/barlow-semi-condensed/latin-500.css";
 @import "@fontsource/barlow-semi-condensed/latin-600.css";
 @import "@fontsource/barlow-semi-condensed/latin-700.css";
+@import "@fontsource-variable/newsreader/opsz.css";
 
 /* What shows until the font arrives: Arial, or what the system calls Arial, narrowed to Barlow's width and given Barlow's
  * line box, so the text does not jump when the swap happens. Measured in Chromium on a French paragraph at weight 500:

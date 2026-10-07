@@ -12,7 +12,7 @@ const seedsEntries = Object.keys(seeds.exports)
   .filter((subpath) => subpath !== "./package.json")
   .map((subpath) => `@foliag/seeds/${subpath.slice(2)}`)
 const scriptDependencies = Object.keys(pkg.dependencies).filter(
-  (name) => name !== "@foliag/seeds" && !name.startsWith("@fontsource/"),
+  (name) => name !== "@foliag/seeds" && !name.startsWith("@fontsource"),
 )
 
 // Positioning, focus trapping and outside clicks need real layout and input, which jsdom lacks. Vitest names the

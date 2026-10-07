@@ -17,7 +17,7 @@ bun add @foliag/bloom tailwindcss
 /* app.css */
 @import "tailwindcss";
 @import "@foliag/bloom/theme.css";
-@import "@foliag/bloom/fonts.css"; /* Barlow Semi Condensed, self-hosted. Leave it out to use another font. */
+@import "@foliag/bloom/fonts.css"; /* Barlow Semi Condensed and Newsreader, self-hosted. Leave it out to use other fonts. */
 ```
 
 - The package ships compiled `.jsx`, so the app builds with the Solid compiler: `@solidjs/vite-plugin` with Solid 2 (`solid-js` and `@solidjs/web` are peer dependencies).

@@ -22,6 +22,8 @@
   --font-sans:
     "Barlow Semi Condensed", "Barlow Semi Condensed Fallback", system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
+  /* Serif for storytelling text, as on the landing: Newsreader, also loaded by `fonts.css`. */
+  --font-serif: "Newsreader Variable", ui-serif, Georgia, serif;
 
   --text-*: initial;
   --text-sm: 1rem;
